@@ -1,0 +1,130 @@
+[
+  {
+    "id": "s001",
+    "query": "why can't I return this SoundPods Pro? it's broken!",
+    "expected_answer": "If the SoundPods Pro is defective, you can process a return outside of the standard return window. Just follow the warranty claim process or do a refund if the defect is confirmed.",
+    "expected_source": "15_slack_support_chat.md",
+    "difficulty": "easy",
+    "category": "returns",
+    "persona": "frustrated",
+    "critique": {
+      "id": "s001",
+      "realism": 4,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "Natural customer frustration about a broken product."
+    }
+  },
+  {
+    "id": "s002",
+    "query": "I bought this phone 40 days ago, so why the heck can't I return it for a refund?",
+    "expected_answer": "Since you're a Premium Silver member, you can return the phone within 45 days regardless of the sale. Go ahead and process the return without any promo restrictions.",
+    "expected_source": "15_slack_support_chat.md",
+    "difficulty": "easy",
+    "category": "returns",
+    "persona": "frustrated",
+    "critique": {
+      "id": "s002",
+      "realism": 5,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "Common question regarding return policies after a purchase."
+    }
+  },
+  {
+    "id": "s003",
+    "query": "are you kidding me? why can't I just get my money back in my wallet instead of waiting for days?",
+    "expected_answer": "Only Gold members can get instant wallet credit refunds. Silver members have to wait for the standard 2-day processing for refunds back to their original payment method.",
+    "expected_source": "15_slack_support_chat.md",
+    "difficulty": "medium",
+    "category": "refunds",
+    "persona": "frustrated",
+    "critique": {
+      "id": "s003",
+      "realism": 4,
+      "difficulty": 3,
+      "flag": "rewrite",
+      "note": "Phrasing is informal; could be more straightforward."
+    }
+  },
+  {
+    "id": "s004",
+    "query": "I missed the return window by a day! can’t you just take this laptop back?",
+    "expected_answer": "Since it's only one day over, if there's a manufacturing defect, we can consider a return as a goodwill exception. Use your judgment on this.",
+    "expected_source": "15_slack_support_chat.md",
+    "difficulty": "medium",
+    "category": "returns",
+    "persona": "frustrated",
+    "critique": {
+      "id": "s004",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "Realistic scenario about missing a return window."
+    }
+  },
+  {
+    "id": "s005",
+    "query": "why in the world did you charge me a restocking fee? this is ridiculous!",
+    "expected_answer": "As a Premium member, you shouldn't be charged a restocking fee for returns. They're exempt from promotional restrictions and fees.",
+    "expected_source": "15_slack_support_chat.md",
+    "difficulty": "easy",
+    "category": "refunds",
+    "persona": "frustrated",
+    "critique": {
+      "id": "s005",
+      "realism": 4,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "Customer expressing frustration over unexpected fees."
+    }
+  },
+  {
+    "id": "s006",
+    "query": "this product is defective and I want my money back now, what’s taking so long?",
+    "expected_answer": "If the product is confirmed defective, you can get a refund as a goodwill gesture. Just make sure to document everything clearly in the ticket.",
+    "expected_source": "15_slack_support_chat.md",
+    "difficulty": "medium",
+    "category": "returns",
+    "persona": "frustrated",
+    "critique": {
+      "id": "s006",
+      "realism": 4,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "Urgency in wanting a refund for a defective product."
+    }
+  },
+  {
+    "id": "s007",
+    "query": "I thought I could return stuff anytime as a Premium member. why the hassle?",
+    "expected_answer": "As a Premium member, you have more flexibility with returns, but there are still guidelines for promotional purchases. In your case, you can return it within the 45-day window.",
+    "expected_source": "15_slack_support_chat.md",
+    "difficulty": "medium",
+    "category": "returns",
+    "persona": "frustrated",
+    "critique": {
+      "id": "s007",
+      "realism": 4,
+      "difficulty": 3,
+      "flag": "rewrite",
+      "note": "Could be clearer; needs more context about Premium membership."
+    }
+  },
+  {
+    "id": "s008",
+    "query": "how is it fair that I have to wait for a refund when I got a faulty product?",
+    "expected_answer": "If the product is faulty, that's covered under warranty. Depending on the situation, we can expedite a refund if the defect is confirmed.",
+    "expected_source": "15_slack_support_chat.md",
+    "difficulty": "medium",
+    "category": "refunds",
+    "persona": "frustrated",
+    "critique": {
+      "id": "s008",
+      "realism": 5,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "Fairness question regarding refunds for faulty products."
+    }
+  }
+]
