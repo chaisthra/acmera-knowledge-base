@@ -128,7 +128,28 @@ def generate_questions(doc_name: str, doc_text: str, persona: str = "standard", 
 
     TODO: Implement in Session 2.
     """
-    pass
+    prompt_template = PERSONA_PROMPTS[persona]
+    prompt = prompt_template.format(
+        doc_name=doc_name,
+        doc_text=doc_text[:3000],
+        count=count,
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.8,
+        max_tokens=2000,
+    )
+    raw = response.choices[0].message.content.strip()
+    raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+    questions = json.loads(raw)
+
+    for q in questions:
+        q["expected_source"] = doc_name
+        q["persona"] = persona
+
+    return questions
 
 
 def assign_ids(questions: list, existing_dataset: list, prefix: str = "s") -> list:
@@ -143,7 +164,15 @@ def assign_ids(questions: list, existing_dataset: list, prefix: str = "s") -> li
 
     TODO: Implement in Session 2.
     """
-    pass
+    existing_ids = {entry["id"] for entry in existing_dataset}
+    counter = 1
+    for q in questions:
+        while f"{prefix}{counter:03d}" in existing_ids:
+            counter += 1
+        q["id"] = f"{prefix}{counter:03d}"
+        existing_ids.add(q["id"])
+        counter += 1
+    return questions
 
 
 def load_golden_dataset() -> list:
@@ -178,7 +207,62 @@ def critique_questions(questions: list) -> list:
 
     TODO: Implement in Session 2 (stretch).
     """
-    pass
+    prompt = """You are a quality reviewer for a RAG evaluation dataset.
+
+For each question below, rate it and decide whether to keep, rewrite, or drop it.
+
+Criteria:
+- realism (1-5): Does it sound like something a real customer would actually ask?
+  5 = completely natural, 1 = sounds like a test case written by an engineer
+- difficulty (1-5): How hard is it for a RAG system to answer correctly?
+  5 = requires multi-hop reasoning or inference, 1 = direct keyword lookup
+- flag:
+  "keep"    — good question, ready to use
+  "rewrite" — valid intent but phrasing needs improvement
+  "drop"    — too vague, unanswerable, duplicate, or tests nothing useful
+
+Questions:
+{questions}
+
+Respond ONLY with a valid JSON array, one object per question, in the same order:
+[{{"id": "...", "realism": 1-5, "difficulty": 1-5, "flag": "keep|rewrite|drop", "note": "one line"}}]"""
+
+    formatted = "\n".join(
+        f'{i+1}. [id={q["id"]}] {q["query"]}' for i, q in enumerate(questions)
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt.format(questions=formatted)}],
+        temperature=0.0,
+        max_tokens=1000,
+    )
+    raw = response.choices[0].message.content.strip()
+    raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+    critiques = json.loads(raw)
+
+    # Attach critique to each question by matching id
+    critique_by_id = {c["id"]: c for c in critiques}
+    for q in questions:
+        q["critique"] = critique_by_id.get(q["id"], {})
+
+    # Print critique table
+    print(f"\n{'ID':<8} {'Flag':<9} {'Real':>5} {'Diff':>5}  Note")
+    print("-" * 70)
+    for q in questions:
+        c = q["critique"]
+        flag = c.get("flag", "?")
+        colour = "\033[92m" if flag == "keep" else ("\033[93m" if flag == "rewrite" else "\033[91m")
+        reset = "\033[0m"
+        print(f"  {q['id']:<6} {colour}{flag:<9}{reset} {c.get('realism','?'):>5} {c.get('difficulty','?'):>5}  {c.get('note','')[:55]}")
+
+    kept     = [q for q in questions if q.get("critique", {}).get("flag") == "keep"]
+    rewrites = [q for q in questions if q.get("critique", {}).get("flag") == "rewrite"]
+    drops    = [q for q in questions if q.get("critique", {}).get("flag") == "drop"]
+    print(f"\n  keep={len(kept)}  rewrite={len(rewrites)}  drop={len(drops)}  "
+          f"(drop rate: {len(drops)/len(questions):.0%})")
+
+    return questions
 
 
 # =========================================================================
@@ -196,9 +280,50 @@ def main():
     parser.add_argument("--merge", action="store_true", help="Merge into golden_dataset.json")
     args = parser.parse_args()
 
-    print("Synthetic generator skeleton loaded.")
-    print("Functions to implement: generate_questions, assign_ids, critique_questions")
-    print("\nWe'll build these together in Session 2.")
+    # Collect docs to process
+    if args.doc:
+        doc_paths = [os.path.join(CORPUS_DIR, args.doc)]
+    elif args.all_docs:
+        doc_paths = sorted(glob.glob(os.path.join(CORPUS_DIR, "*.md")))
+    else:
+        parser.print_help()
+        sys.exit(1)
+
+    existing = load_golden_dataset()
+    all_new = []
+
+    for doc_path in doc_paths:
+        doc_name = os.path.basename(doc_path)
+        with open(doc_path) as f:
+            doc_text = f.read()
+
+        print(f"\nGenerating {args.count} questions from {doc_name} (persona={args.persona})...")
+        questions = generate_questions(doc_name, doc_text, persona=args.persona, count=args.count)
+        questions = assign_ids(questions, existing + all_new)
+
+        for q in questions:
+            print(f"  [{q['id']}] [{q['difficulty']}] {q['query'][:70]}")
+
+        if args.critique:
+            questions = critique_questions(questions)
+            before = len(questions)
+            questions = [q for q in questions if q.get("critique", {}).get("flag") != "drop"]
+            dropped = before - len(questions)
+            if dropped:
+                print(f"  Removed {dropped} dropped question(s). {len(questions)} remaining.")
+
+        all_new.extend(questions)
+
+    print(f"\nGenerated {len(all_new)} questions total.")
+
+    if args.merge:
+        combined = existing + all_new
+        save_golden_dataset(combined)
+    else:
+        out_path = os.path.join(SCRIPT_DIR, "synthetic_questions.json")
+        with open(out_path, "w") as f:
+            json.dump(all_new, f, indent=2, ensure_ascii=False)
+        print(f"Saved to {out_path} (use --merge to add to golden_dataset.json)")
 
 
 if __name__ == "__main__":

@@ -38,5 +38,205 @@
     "expected_source": "01_return_policy.md",
     "difficulty": "easy",
     "category": "returns"
+  },
+  {
+    "id": "q06",
+    "query": "Will I get a refund if my returned product fails inspection?",
+    "expected_answer": "No. Refunds are processed only after the returned item is received and inspected at the warehouse. If the item fails inspection due to signs of wear, damage, or missing accessories, the refund will not be issued.",
+    "expected_source": "01_return_policy.md",
+    "difficulty": "medium",
+    "category": "returns"
+  },
+  {
+    "id": "q07",
+    "query": "What shipping options does Acmera offer?",
+    "expected_answer": "Acmera offers three options: Standard Shipping (5-7 business days, free over ₹999, else ₹99), Express Shipping (2-3 business days, ₹199, free for Premium Gold members), and Same-Day Delivery (select metro cities, orders before 12 PM delivered by 9 PM, ₹399).",
+    "expected_source": "03_shipping_policy.md",
+    "difficulty": "easy",
+    "category": "shipping"
+  },
+  {
+    "id": "q08",
+    "query": "I want to use Acmera for Diwali gifting for my company. How can I go about it?",
+    "expected_answer": "Acmera has a Corporate Gifting program for businesses with a valid GST number. Bulk discounts apply: 10% for 10-49 units, 15% for 50-99, 20% + free express for 100+. Orders of 50+ units can include logo customization and branded packaging. You can set up a corporate account with centralized billing and net-30 payment terms. Contact corporate@acmera.com for large orders.",
+    "expected_source": "12_corporate_gifting.md",
+    "difficulty": "medium",
+    "category": "business"
+  },
+  {
+    "id": "q09",
+    "query": "Is Acmera sustainable?",
+    "expected_answer": "Yes. Acmera ships in 100% recyclable packaging, has eliminated single-use plastics since January 2025, and offsets 100% of shipping-related carbon emissions. They also offer a trade-in program for electronics and sell refurbished products through Acmera Renewed. Customers who choose standard shipping get a ₹10 Acmera Wallet credit.",
+    "expected_source": "18_sustainability.md",
+    "difficulty": "easy",
+    "category": "sustainability"
+  },
+  {
+    "id": "q10",
+    "query": "Is the Acmera app safe to use?",
+    "expected_answer": "Yes. Acmera uses two-factor authentication (2FA) for all logins via SMS or app-based authentication. Passwords must be at least 12 characters. Suspicious login attempts trigger an automatic account lock. Payment details are stored as tokenized data, not raw card numbers.",
+    "expected_source": "10_account_management.md",
+    "difficulty": "easy",
+    "category": "account"
+  },
+  {
+    "id": "q11",
+    "query": "What is the Acmera referral program?",
+    "expected_answer": "Existing customers can refer friends using a unique referral code. When the referred person signs up and makes a first purchase of ₹1,000+, the referrer gets ₹500 Acmera Wallet credit and the referee gets ₹300 off their first order. Premium Silver members earn ₹750 per referral, Premium Gold earn ₹1,000. Up to 20 referrals per calendar year.",
+    "expected_source": "16_referral_program.md",
+    "difficulty": "easy",
+    "category": "rewards"
+  },
+  {
+    "id": "q12",
+    "query": "Will I get a discount if 4 people join Acmera because of my referral?",
+    "expected_answer": "You won't get a discount — you earn Acmera Wallet credit per referral. For 4 successful referrals, a standard customer earns ₹500 × 4 = ₹2,000 in wallet credits. The referred friends each get ₹300 off their first order. Referral wallet credits have a 90-day expiry.",
+    "expected_source": "16_referral_program.md",
+    "difficulty": "medium",
+    "category": "rewards"
+  },
+  {
+    "id": "q13",
+    "query": "My Acmera ProBook is not charging. What should I do?",
+    "expected_answer": "Connect the charger and wait 15 minutes before trying to power on. Check if the charging LED is lit — if not, try a different power outlet. You can also do a hard reset by holding the power button for 15 seconds. If the issue persists, it may be a hardware defect covered under warranty — contact Acmera support.",
+    "expected_source": "14_probook_troubleshooting.md",
+    "difficulty": "easy",
+    "category": "products"
+  },
+  {
+    "id": "q14",
+    "query": "My laptop charger was bitten by a mouse and is damaged. Where do I go for help?",
+    "expected_answer": "Physical damage to accessories is not covered under warranty. You would need to purchase a replacement charger. You can contact Acmera support to discuss paid repair or replacement options, but this will not be covered for free.",
+    "expected_source": "04_warranty_policy.md",
+    "difficulty": "medium",
+    "category": "warranty"
+  },
+  {
+    "id": "q15",
+    "query": "Will warranty apply if my laptop is stolen?",
+    "expected_answer": "No. The Acmera warranty only covers defects in materials and workmanship under normal use. Theft is not a manufacturing defect and is not covered under the standard warranty or any extended warranty plan.",
+    "expected_source": "04_warranty_policy.md",
+    "difficulty": "hard",
+    "category": "warranty"
+  },
+  {
+    "id": "q16",
+    "query": "My screen has green lines and it has been 5 months since purchase. Can I get a replacement?",
+    "expected_answer": "Yes, likely. Display issues not caused by physical damage are covered under the standard 1-year warranty. Green lines on screen indicate a hardware defect. Since 5 months is within the warranty period, you can file a warranty claim through Acmera support. Repair or replacement typically takes 7-14 business days.",
+    "expected_source": "04_warranty_policy.md",
+    "difficulty": "medium",
+    "category": "warranty"
+  },
+  {
+    "id": "q17",
+    "query": "I bought an Acmera product second-hand. Will the service center service it for free under warranty?",
+    "expected_answer": "Extended warranty plans are explicitly non-transferable. The standard warranty terms do not mention transferability, so coverage on a second-hand device is uncertain. It is best to contact Acmera support with the original order details to check if the standard warranty still applies.",
+    "expected_source": "04_warranty_policy.md",
+    "difficulty": "hard",
+    "category": "warranty"
+  },
+  {
+    "id": "q18",
+    "query": "I use my laptop at a cafe and my Wi-Fi adapter was compromised in a network attack, damaging my system. How can I protect my laptop?",
+    "expected_answer": "The ProBook troubleshooting guide recommends keeping Wi-Fi drivers updated via Device Manager and restarting the router. For security on public networks, ensure your OS and firmware are up to date. If the Wi-Fi hardware itself is malfunctioning after the incident, contact Acmera support — though note that damage from unauthorized network activity may not be covered under standard warranty.",
+    "expected_source": "14_probook_troubleshooting.md",
+    "difficulty": "hard",
+    "category": "products"
+  },
+  {
+    "id": "q19",
+    "query": "Can I get a refund if I return my product after 9 months?",
+    "expected_answer": "No. The standard return window is 30 calendar days from delivery (45 days for Premium Silver, 60 days for Premium Gold). After 9 months, the return window is long closed. If the product has a defect, you would need to file a warranty claim instead.",
+    "expected_source": "01_return_policy.md",
+    "difficulty": "easy",
+    "category": "returns"
+  },
+  {
+    "id": "q20",
+    "query": "Can I buy a laptop on no-cost EMI?",
+    "expected_answer": "Yes. No-cost EMI is available on select products for orders above ₹5,000. It is supported on credit cards from HDFC, ICICI, SBI, Axis, and Kotak banks. Tenure options are 3, 6, 9, or 12 months depending on the product and card issuer.",
+    "expected_source": "05_payment_methods.md",
+    "difficulty": "easy",
+    "category": "payments"
+  },
+  {
+    "id": "q21",
+    "query": "My payment failed but money got deducted from my account. What happens now?",
+    "expected_answer": "If an amount is debited but the order is not confirmed, a refund is initiated automatically within 24 hours. Bank processing may take an additional 5-7 business days. You do not need to contact support — the refund is automatic.",
+    "expected_source": "05_payment_methods.md",
+    "difficulty": "medium",
+    "category": "payments"
+  },
+  {
+    "id": "q22",
+    "query": "Is Cash on Delivery available and are there any charges?",
+    "expected_answer": "Yes. COD is available for orders between ₹200 and ₹25,000. A ₹49 convenience fee applies. COD is not available for same-day delivery orders or orders to remote pin codes.",
+    "expected_source": "05_payment_methods.md",
+    "difficulty": "easy",
+    "category": "payments"
+  },
+  {
+    "id": "q23",
+    "query": "Can I change my delivery address after placing an order?",
+    "expected_answer": "Only if the order has not yet been shipped. Contact support immediately with your order number. Once the package is handed to the carrier, the delivery address cannot be changed.",
+    "expected_source": "06_support_faq.md",
+    "difficulty": "easy",
+    "category": "orders"
+  },
+  {
+    "id": "q24",
+    "query": "My product arrived damaged. What should I do?",
+    "expected_answer": "Report the damage within 48 hours of delivery through the app or by contacting support. Include photos of the damaged product and packaging. Acmera will arrange a free replacement or full refund — in most cases you do not need to return the damaged item.",
+    "expected_source": "06_support_faq.md",
+    "difficulty": "easy",
+    "category": "orders"
+  },
+  {
+    "id": "q25",
+    "query": "I bought a product 5 days ago and it just went on sale. Can I get the lower price?",
+    "expected_answer": "Yes, standard customers can request a one-time price adjustment if the item goes on sale within 7 days of purchase. Premium members can request price adjustments within 14 days. Price matching is not available during or after promotional events themselves.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "medium",
+    "category": "promotions"
+  },
+  {
+    "id": "q26",
+    "query": "What is the return window for items bought during a flash sale?",
+    "expected_answer": "Items bought during flash sales have a reduced 15-day return window and a 10% restocking fee. Premium members (Silver and Gold) are exempt from both — their standard extended return window applies and no restocking fee is charged.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "medium",
+    "category": "promotions"
+  },
+  {
+    "id": "q27",
+    "query": "Can I withdraw my Acmera Wallet balance to my bank account?",
+    "expected_answer": "No. Wallet balance cannot be withdrawn as cash or transferred to a bank account. It can only be used for purchases on the Acmera platform. If you delete your account, any remaining wallet balance is forfeited.",
+    "expected_source": "13_acmera_wallet.md",
+    "difficulty": "medium",
+    "category": "payments"
+  },
+  {
+    "id": "q28",
+    "query": "Do referral wallet credits expire?",
+    "expected_answer": "Yes. Promotional wallet credits — including referral rewards — expire 90 days from the date of issue. They are applied before your regular wallet balance during checkout.",
+    "expected_source": "13_acmera_wallet.md",
+    "difficulty": "easy",
+    "category": "rewards"
+  },
+  {
+    "id": "q29",
+    "query": "I am a Premium Gold member. Can I return an opened laptop?",
+    "expected_answer": "Yes. Premium members (both Silver and Gold) can return opened electronics within their extended return window, provided the item is in functional condition with all original accessories included. For Premium Gold, the return window is 60 days from delivery.",
+    "expected_source": "02_premium_membership.md",
+    "difficulty": "medium",
+    "category": "membership"
+  },
+  {
+    "id": "q30",
+    "query": "How quickly do Premium members get their refunds processed?",
+    "expected_answer": "Premium members' refunds are processed within 2 business days of the item being received at the warehouse, compared to 5-7 business days for standard customers. Premium Gold members can also request instant store credit, issued immediately upon return shipment tracking confirmation.",
+    "expected_source": "02_premium_membership.md",
+    "difficulty": "easy",
+    "category": "membership"
   }
 ]

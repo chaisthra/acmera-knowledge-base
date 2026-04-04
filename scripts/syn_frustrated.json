@@ -1,0 +1,47 @@
+[
+  {
+    "id": "s001",
+    "query": "why is there a restocking fee? that's so unfair!",
+    "expected_answer": "We charge a 10% restocking fee on returns for promotional items to cover the costs of processing and restocking these items. However, if you are a Premium member, you're exempt from this fee.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "medium",
+    "category": "Return Policy",
+    "persona": "frustrated"
+  },
+  {
+    "id": "s002",
+    "query": "i can't believe these clearance items are final sale! what gives?",
+    "expected_answer": "Some clearance items are marked as 'Final Sale' and cannot be returned or exchanged. This is clearly labeled at the time of purchase to avoid confusion.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "easy",
+    "category": "Return Policy",
+    "persona": "frustrated"
+  },
+  {
+    "id": "s003",
+    "query": "they say no price matching during sales, but that's ridiculous!",
+    "expected_answer": "During promotional events, we do not offer price matching, and discounts cannot be combined. If you buy something and it goes on sale within a certain timeframe, you may be eligible for a price adjustment if you're a standard customer or a more extended period if you're a Premium member.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "medium",
+    "category": "Pricing",
+    "persona": "frustrated"
+  },
+  {
+    "id": "s004",
+    "query": "why can't i cancel my order after it shipped?!",
+    "expected_answer": "Once an order has shipped, you can't cancel it. However, you can still return the item according to our promotional return policy.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "easy",
+    "category": "Cancellations",
+    "persona": "frustrated"
+  },
+  {
+    "id": "s005",
+    "query": "what do you mean sold out? i wanted that item!",
+    "expected_answer": "Promotional items are available while supplies last, and once they are sold out, they are removed from the sale, and back-orders are not accepted during these events.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "easy",
+    "category": "Inventory and Stock",
+    "persona": "frustrated"
+  }
+]
