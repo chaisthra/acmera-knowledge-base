@@ -150,5 +150,93 @@
     "expected_source": "01_return_policy.md",
     "difficulty": "easy",
     "category": "returns"
+  },
+  {
+    "id": "q20",
+    "query": "Can I buy a laptop on no-cost EMI?",
+    "expected_answer": "Yes. No-cost EMI is available on select products for orders above ₹5,000. It is supported on credit cards from HDFC, ICICI, SBI, Axis, and Kotak banks. Tenure options are 3, 6, 9, or 12 months depending on the product and card issuer.",
+    "expected_source": "05_payment_methods.md",
+    "difficulty": "easy",
+    "category": "payments"
+  },
+  {
+    "id": "q21",
+    "query": "My payment failed but money got deducted from my account. What happens now?",
+    "expected_answer": "If an amount is debited but the order is not confirmed, a refund is initiated automatically within 24 hours. Bank processing may take an additional 5-7 business days. You do not need to contact support — the refund is automatic.",
+    "expected_source": "05_payment_methods.md",
+    "difficulty": "medium",
+    "category": "payments"
+  },
+  {
+    "id": "q22",
+    "query": "Is Cash on Delivery available and are there any charges?",
+    "expected_answer": "Yes. COD is available for orders between ₹200 and ₹25,000. A ₹49 convenience fee applies. COD is not available for same-day delivery orders or orders to remote pin codes.",
+    "expected_source": "05_payment_methods.md",
+    "difficulty": "easy",
+    "category": "payments"
+  },
+  {
+    "id": "q23",
+    "query": "Can I change my delivery address after placing an order?",
+    "expected_answer": "Only if the order has not yet been shipped. Contact support immediately with your order number. Once the package is handed to the carrier, the delivery address cannot be changed.",
+    "expected_source": "06_support_faq.md",
+    "difficulty": "easy",
+    "category": "orders"
+  },
+  {
+    "id": "q24",
+    "query": "My product arrived damaged. What should I do?",
+    "expected_answer": "Report the damage within 48 hours of delivery through the app or by contacting support. Include photos of the damaged product and packaging. Acmera will arrange a free replacement or full refund — in most cases you do not need to return the damaged item.",
+    "expected_source": "06_support_faq.md",
+    "difficulty": "easy",
+    "category": "orders"
+  },
+  {
+    "id": "q25",
+    "query": "I bought a product 5 days ago and it just went on sale. Can I get the lower price?",
+    "expected_answer": "Yes, standard customers can request a one-time price adjustment if the item goes on sale within 7 days of purchase. Premium members can request price adjustments within 14 days. Price matching is not available during or after promotional events themselves.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "medium",
+    "category": "promotions"
+  },
+  {
+    "id": "q26",
+    "query": "What is the return window for items bought during a flash sale?",
+    "expected_answer": "Items bought during flash sales have a reduced 15-day return window and a 10% restocking fee. Premium members (Silver and Gold) are exempt from both — their standard extended return window applies and no restocking fee is charged.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "medium",
+    "category": "promotions"
+  },
+  {
+    "id": "q27",
+    "query": "Can I withdraw my Acmera Wallet balance to my bank account?",
+    "expected_answer": "No. Wallet balance cannot be withdrawn as cash or transferred to a bank account. It can only be used for purchases on the Acmera platform. If you delete your account, any remaining wallet balance is forfeited.",
+    "expected_source": "13_acmera_wallet.md",
+    "difficulty": "medium",
+    "category": "payments"
+  },
+  {
+    "id": "q28",
+    "query": "Do referral wallet credits expire?",
+    "expected_answer": "Yes. Promotional wallet credits — including referral rewards — expire 90 days from the date of issue. They are applied before your regular wallet balance during checkout.",
+    "expected_source": "13_acmera_wallet.md",
+    "difficulty": "easy",
+    "category": "rewards"
+  },
+  {
+    "id": "q29",
+    "query": "I am a Premium Gold member. Can I return an opened laptop?",
+    "expected_answer": "Yes. Premium members (both Silver and Gold) can return opened electronics within their extended return window, provided the item is in functional condition with all original accessories included. For Premium Gold, the return window is 60 days from delivery.",
+    "expected_source": "02_premium_membership.md",
+    "difficulty": "medium",
+    "category": "membership"
+  },
+  {
+    "id": "q30",
+    "query": "How quickly do Premium members get their refunds processed?",
+    "expected_answer": "Premium members' refunds are processed within 2 business days of the item being received at the warehouse, compared to 5-7 business days for standard customers. Premium Gold members can also request instant store credit, issued immediately upon return shipment tracking confirmation.",
+    "expected_source": "02_premium_membership.md",
+    "difficulty": "easy",
+    "category": "membership"
   }
 ]
