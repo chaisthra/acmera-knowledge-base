@@ -1,0 +1,47 @@
+[
+  {
+    "id": "s001",
+    "query": "What is the timeframe for sending it back for items bought during promotional events?",
+    "expected_answer": "15 calendar days from delivery",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "medium",
+    "category": "Return Policy",
+    "persona": "mismatch"
+  },
+  {
+    "id": "s002",
+    "query": "Can I switch my purchase for something else if it says 'Final Sale'?",
+    "expected_answer": "No, these items are not eligible for return or exchange.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "easy",
+    "category": "Return Policy",
+    "persona": "mismatch"
+  },
+  {
+    "id": "s003",
+    "query": "How long do flash sales typically last?",
+    "expected_answer": "6-24 hours",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "easy",
+    "category": "Promotional Events",
+    "persona": "mismatch"
+  },
+  {
+    "id": "s004",
+    "query": "If I buy something during a sale and it goes cheaper later, how can I get my cash back?",
+    "expected_answer": "Request a one-time price adjustment within 7 days for standard customers, or within 14 days for Premium members.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "medium",
+    "category": "Pricing",
+    "persona": "mismatch"
+  },
+  {
+    "id": "s005",
+    "query": "Are there any restrictions on how many discounted items I can buy?",
+    "expected_answer": "Yes, Acmera reserves the right to limit quantities per customer.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "hard",
+    "category": "Inventory and Stock",
+    "persona": "mismatch"
+  }
+]

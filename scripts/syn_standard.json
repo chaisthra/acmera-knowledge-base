@@ -1,0 +1,47 @@
+[
+  {
+    "id": "s001",
+    "query": "How long do the seasonal sales typically last?",
+    "expected_answer": "Seasonal sales typically last for 5-7 days.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "easy",
+    "category": "promotions",
+    "persona": "standard"
+  },
+  {
+    "id": "s002",
+    "query": "What happens if I purchase an item during a promotional event and it goes on sale again within a week?",
+    "expected_answer": "Standard customers can request a one-time price adjustment if an item goes on sale within 7 days of purchase.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "medium",
+    "category": "payments",
+    "persona": "standard"
+  },
+  {
+    "id": "s003",
+    "query": "Can I return a clearance item that is marked as 'Final Sale'?",
+    "expected_answer": "No, items marked as 'Final Sale' are not eligible for return or exchange.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "medium",
+    "category": "returns",
+    "persona": "standard"
+  },
+  {
+    "id": "s004",
+    "query": "What is the return window for promotional items for standard customers?",
+    "expected_answer": "The return window for promotional items for standard customers is 15 calendar days from delivery.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "hard",
+    "category": "returns",
+    "persona": "standard"
+  },
+  {
+    "id": "s005",
+    "query": "Are there any discounts available for Premium members during promotional events?",
+    "expected_answer": "Yes, Premium members can access Premium-Exclusive Sales which feature curated selections with exclusive pricing.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "medium",
+    "category": "membership",
+    "persona": "standard"
+  }
+]
