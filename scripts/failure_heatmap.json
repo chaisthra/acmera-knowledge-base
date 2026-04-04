@@ -1,0 +1,174 @@
+{
+  "description": "Category \u00d7 Difficulty correctness heat map. score_pct = (avg correctness / 5) \u00d7 100.",
+  "colour_key": {
+    "green": ">=80%",
+    "yellow": "60-79%",
+    "red": "<60%",
+    "null": "no data"
+  },
+  "heatmap": {
+    "account": {
+      "easy": {
+        "score_pct": 60.0,
+        "n": 1,
+        "status": "watch"
+      },
+      "medium": null,
+      "hard": null
+    },
+    "business": {
+      "easy": null,
+      "medium": {
+        "score_pct": 100.0,
+        "n": 1,
+        "status": "good"
+      },
+      "hard": null
+    },
+    "membership": {
+      "easy": {
+        "score_pct": 80.0,
+        "n": 2,
+        "status": "good"
+      },
+      "medium": {
+        "score_pct": 100.0,
+        "n": 1,
+        "status": "good"
+      },
+      "hard": null
+    },
+    "orders": {
+      "easy": {
+        "score_pct": 100.0,
+        "n": 2,
+        "status": "good"
+      },
+      "medium": null,
+      "hard": null
+    },
+    "payments": {
+      "easy": {
+        "score_pct": 90.0,
+        "n": 2,
+        "status": "good"
+      },
+      "medium": {
+        "score_pct": 90.0,
+        "n": 2,
+        "status": "good"
+      },
+      "hard": null
+    },
+    "products": {
+      "easy": {
+        "score_pct": 100.0,
+        "n": 1,
+        "status": "good"
+      },
+      "medium": null,
+      "hard": {
+        "score_pct": 60.0,
+        "n": 1,
+        "status": "watch"
+      }
+    },
+    "promotions": {
+      "easy": null,
+      "medium": {
+        "score_pct": 80.0,
+        "n": 2,
+        "status": "good"
+      },
+      "hard": null
+    },
+    "returns": {
+      "easy": {
+        "score_pct": 93.3,
+        "n": 3,
+        "status": "good"
+      },
+      "medium": {
+        "score_pct": 80.0,
+        "n": 1,
+        "status": "good"
+      },
+      "hard": null
+    },
+    "rewards": {
+      "easy": {
+        "score_pct": 90.0,
+        "n": 2,
+        "status": "good"
+      },
+      "medium": {
+        "score_pct": 80.0,
+        "n": 1,
+        "status": "good"
+      },
+      "hard": null
+    },
+    "shipping": {
+      "easy": {
+        "score_pct": 90.0,
+        "n": 2,
+        "status": "good"
+      },
+      "medium": null,
+      "hard": null
+    },
+    "sustainability": {
+      "easy": {
+        "score_pct": 80.0,
+        "n": 1,
+        "status": "good"
+      },
+      "medium": null,
+      "hard": null
+    },
+    "warranty": {
+      "easy": {
+        "score_pct": 100.0,
+        "n": 1,
+        "status": "good"
+      },
+      "medium": {
+        "score_pct": 100.0,
+        "n": 2,
+        "status": "good"
+      },
+      "hard": {
+        "score_pct": 100.0,
+        "n": 2,
+        "status": "good"
+      }
+    }
+  },
+  "week2_priority_cells": [
+    {
+      "cell": "account \u00d7 easy",
+      "score_pct": 60.0,
+      "status": "watch",
+      "queries": [
+        "Is the Acmera app safe to use?"
+      ]
+    },
+    {
+      "cell": "products \u00d7 hard",
+      "score_pct": 60.0,
+      "status": "watch",
+      "queries": [
+        "I use my laptop at a cafe and my Wi-Fi adapter was compromised in a network attack, damaging my system. How can I protect my laptop?"
+      ]
+    },
+    {
+      "cell": "warranty \u00d7 hard",
+      "score_pct": 100.0,
+      "status": "good",
+      "queries": [
+        "Will warranty apply if my laptop is stolen?",
+        "I bought an Acmera product second-hand. Will the service center service it for free under warranty?"
+      ]
+    }
+  ]
+}
