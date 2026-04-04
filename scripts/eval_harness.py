@@ -27,11 +27,13 @@ import argparse
 sys.path.insert(0, os.path.dirname(__file__))
 
 from openai import OpenAI
+from langfuse import Langfuse
 from dotenv import load_dotenv
 
 load_dotenv()
 
 client = OpenAI()
+langfuse = Langfuse()
 
 SCRIPT_DIR = os.path.dirname(__file__)
 
@@ -172,7 +174,7 @@ Respond with JSON only, no markdown fences:
 # SESSION 1: EVAL RUNNER
 # =========================================================================
 
-def run_eval(include_hard=False):
+def run_eval(include_hard=False, attach_scores=True):
     """
     Run the full evaluation:
     1. Load golden dataset (+ hard queries if --include-hard)
@@ -223,6 +225,9 @@ def run_eval(include_hard=False):
         })
 
         print(f"         hit={hit}  mrr={mrr:.2f}  faith={faith['score']}  correct={correct['score']}")
+
+        if attach_scores and rag_result["trace_id"]:
+            attach_langfuse_scores(rag_result["trace_id"], faith, correct, hit)
 
     # --- Scorecard ---
     n = len(results)
@@ -345,7 +350,13 @@ def attach_langfuse_scores(trace_id, faithfulness_result, correctness_result, re
 
     TODO: Implement in Session 2 homework.
     """
-    pass
+    langfuse.score(trace_id=trace_id, name="faithfulness",
+                   value=faithfulness_result["score"] / 5)
+    langfuse.score(trace_id=trace_id, name="correctness",
+                   value=correctness_result["score"] / 5)
+    langfuse.score(trace_id=trace_id, name="retrieval_hit",
+                   value=1.0 if retrieval_hit else 0.0)
+    langfuse.flush()
 
 
 # =========================================================================
@@ -386,9 +397,11 @@ if __name__ == "__main__":
                         help="Save current scores as baseline_scores.json")
     parser.add_argument("--category", type=str,
                         help="Filter to a specific category (e.g. 'membership')")
+    parser.add_argument("--no-langfuse", action="store_true",
+                        help="Skip attaching scores to LangFuse (used in CI)")
     args = parser.parse_args()
 
-    results = run_eval(include_hard=args.include_hard)
+    results = run_eval(include_hard=args.include_hard, attach_scores=not args.no_langfuse)
 
     if not results:
         sys.exit(1)
