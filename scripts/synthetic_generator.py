@@ -207,7 +207,62 @@ def critique_questions(questions: list) -> list:
 
     TODO: Implement in Session 2 (stretch).
     """
-    pass
+    prompt = """You are a quality reviewer for a RAG evaluation dataset.
+
+For each question below, rate it and decide whether to keep, rewrite, or drop it.
+
+Criteria:
+- realism (1-5): Does it sound like something a real customer would actually ask?
+  5 = completely natural, 1 = sounds like a test case written by an engineer
+- difficulty (1-5): How hard is it for a RAG system to answer correctly?
+  5 = requires multi-hop reasoning or inference, 1 = direct keyword lookup
+- flag:
+  "keep"    — good question, ready to use
+  "rewrite" — valid intent but phrasing needs improvement
+  "drop"    — too vague, unanswerable, duplicate, or tests nothing useful
+
+Questions:
+{questions}
+
+Respond ONLY with a valid JSON array, one object per question, in the same order:
+[{{"id": "...", "realism": 1-5, "difficulty": 1-5, "flag": "keep|rewrite|drop", "note": "one line"}}]"""
+
+    formatted = "\n".join(
+        f'{i+1}. [id={q["id"]}] {q["query"]}' for i, q in enumerate(questions)
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt.format(questions=formatted)}],
+        temperature=0.0,
+        max_tokens=1000,
+    )
+    raw = response.choices[0].message.content.strip()
+    raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+    critiques = json.loads(raw)
+
+    # Attach critique to each question by matching id
+    critique_by_id = {c["id"]: c for c in critiques}
+    for q in questions:
+        q["critique"] = critique_by_id.get(q["id"], {})
+
+    # Print critique table
+    print(f"\n{'ID':<8} {'Flag':<9} {'Real':>5} {'Diff':>5}  Note")
+    print("-" * 70)
+    for q in questions:
+        c = q["critique"]
+        flag = c.get("flag", "?")
+        colour = "\033[92m" if flag == "keep" else ("\033[93m" if flag == "rewrite" else "\033[91m")
+        reset = "\033[0m"
+        print(f"  {q['id']:<6} {colour}{flag:<9}{reset} {c.get('realism','?'):>5} {c.get('difficulty','?'):>5}  {c.get('note','')[:55]}")
+
+    kept     = [q for q in questions if q.get("critique", {}).get("flag") == "keep"]
+    rewrites = [q for q in questions if q.get("critique", {}).get("flag") == "rewrite"]
+    drops    = [q for q in questions if q.get("critique", {}).get("flag") == "drop"]
+    print(f"\n  keep={len(kept)}  rewrite={len(rewrites)}  drop={len(drops)}  "
+          f"(drop rate: {len(drops)/len(questions):.0%})")
+
+    return questions
 
 
 # =========================================================================
@@ -248,6 +303,14 @@ def main():
 
         for q in questions:
             print(f"  [{q['id']}] [{q['difficulty']}] {q['query'][:70]}")
+
+        if args.critique:
+            questions = critique_questions(questions)
+            before = len(questions)
+            questions = [q for q in questions if q.get("critique", {}).get("flag") != "drop"]
+            dropped = before - len(questions)
+            if dropped:
+                print(f"  Removed {dropped} dropped question(s). {len(questions)} remaining.")
 
         all_new.extend(questions)
 
