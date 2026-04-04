@@ -184,7 +184,70 @@ def run_eval(include_hard=False):
 
     TODO: Implement in Session 1 homework.
     """
-    pass
+    from rag import ask
+
+    dataset = load_golden_dataset()
+    if not dataset:
+        return
+
+    if not include_hard:
+        dataset = [q for q in dataset if q.get("difficulty") != "hard"]
+
+    print(f"\nRunning eval on {len(dataset)} queries...\n")
+
+    results = []
+    for q in dataset:
+        print(f"  [{q['id']}] {q['query'][:60]}...")
+
+        rag_result = ask(q["query"])
+
+        hit = check_retrieval_hit(rag_result["retrieved_chunks"], q["expected_source"])
+        mrr = calculate_mrr(rag_result["retrieved_chunks"], q["expected_source"])
+        faith = judge_faithfulness(q["query"], rag_result["answer"], rag_result["context"])
+        correct = judge_correctness(q["query"], rag_result["answer"], q["expected_answer"])
+
+        results.append({
+            "id": q["id"],
+            "query": q["query"],
+            "category": q.get("category", "unknown"),
+            "difficulty": q.get("difficulty", "easy"),
+            "expected_source": q["expected_source"],
+            "expected_answer": q["expected_answer"],
+            "answer": rag_result["answer"],
+            "trace_id": rag_result["trace_id"],
+            "retrieval_hit": hit,
+            "mrr": mrr,
+            "faithfulness": faith,
+            "correctness": correct,
+            "elapsed_seconds": rag_result["elapsed_seconds"],
+        })
+
+        print(f"         hit={hit}  mrr={mrr:.2f}  faith={faith['score']}  correct={correct['score']}")
+
+    # --- Scorecard ---
+    n = len(results)
+    hit_rate = sum(1 for r in results if r["retrieval_hit"]) / n
+    avg_mrr = sum(r["mrr"] for r in results) / n
+    avg_faith = sum(r["faithfulness"]["score"] for r in results) / n
+    avg_correct = sum(r["correctness"]["score"] for r in results) / n
+
+    print("\n" + "=" * 50)
+    print("EVAL SCORECARD")
+    print("=" * 50)
+    print(f"  Queries evaluated : {n}")
+    print(f"  Retrieval hit rate: {hit_rate:.0%}")
+    print(f"  Mean Reciprocal Rank (MRR): {avg_mrr:.2f}")
+    print(f"  Avg faithfulness  : {avg_faith:.2f} / 5")
+    print(f"  Avg correctness   : {avg_correct:.2f} / 5")
+    print("=" * 50)
+
+    # --- Save results ---
+    out_path = os.path.join(SCRIPT_DIR, "eval_results.json")
+    with open(out_path, "w") as f:
+        json.dump(results, f, indent=2)
+    print(f"\nResults saved to {out_path}")
+
+    return results
 
 
 # =========================================================================
@@ -261,12 +324,7 @@ if __name__ == "__main__":
                         help="Filter to a specific category (e.g. 'membership')")
     args = parser.parse_args()
 
-    print("Eval harness skeleton loaded.")
-    print()
-    print("Session 1 functions: check_retrieval_hit, calculate_mrr,")
-    print("                     judge_faithfulness, judge_correctness, run_eval")
-    print()
-    print("Session 2 functions: run_stratified_eval, attach_langfuse_scores, save_baseline")
-    print()
-    print("Implement Session 1 functions first, then run:")
-    print("  python scripts/eval_harness.py")
+    results = run_eval(include_hard=args.include_hard)
+
+    if results and args.save_baseline:
+        print("\n--save-baseline: implement save_baseline() in Session 2.")
