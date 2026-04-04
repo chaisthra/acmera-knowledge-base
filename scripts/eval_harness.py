@@ -100,7 +100,35 @@ def judge_faithfulness(query, answer, context):
 
     TODO: Implement in Session 1 homework.
     """
-    pass
+    prompt = f"""You are an evaluation judge. Score whether the answer is grounded in the provided context.
+
+Rubric:
+- Score 5: Every claim in the answer is explicitly supported by the context.
+- Score 4: Almost all claims supported; minor unsupported details.
+- Score 3: Some claims are supported but others are not in the context.
+- Score 2: Most claims are not supported by the context.
+- Score 1: Answer contains fabricated information not present in the context.
+
+Question: {query}
+
+Context:
+{context}
+
+Answer:
+{answer}
+
+Respond with JSON only, no markdown fences:
+{{"score": <1-5>, "reason": "<one sentence explanation>"}}"""
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.0,
+        max_tokens=200,
+    )
+    raw = response.choices[0].message.content.strip()
+    raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+    return json.loads(raw)
 
 
 def judge_correctness(query, answer, expected_answer):
