@@ -1,0 +1,91 @@
+{
+  "generated_at": "2026-04-04",
+  "description": "Failure taxonomy for 5 lowest-scoring queries from the 30-query baseline eval run.",
+  "summary": {
+    "retrieval_failures": 2,
+    "generation_failures": 3,
+    "pattern": "2 of 5 are retrieval-side (miss + wrong ranking) → hybrid search is the right lever. 2 of 5 are generation-side incomplete extraction → context engineering / prompt changes. 1 is a corpus gap (no security content) → known blind spot."
+  },
+  "failures": [
+    {
+      "id": "q18",
+      "query": "I use my laptop at a cafe and my Wi-Fi adapter was compromised in a network attack, damaging my system. How can I protect my laptop?",
+      "category": "products",
+      "difficulty": "hard",
+      "scores": {
+        "correctness": 3,
+        "faithfulness": 1,
+        "retrieval_hit": true,
+        "mrr": 1.0
+      },
+      "failure_type": "Hallucination",
+      "reason": "Right doc retrieved at rank 1, but the ProBook guide has no security guidance. The model fabricated firewall/VPN advice not present in any chunk.",
+      "root_cause": "Corpus gap — no network security content exists.",
+      "week2_fix": "Add a corpus document covering network security, or add a system-prompt guardrail to refuse out-of-scope security advice."
+    },
+    {
+      "id": "q10",
+      "query": "Is the Acmera app safe to use?",
+      "category": "account",
+      "difficulty": "easy",
+      "scores": {
+        "correctness": 3,
+        "faithfulness": 5,
+        "retrieval_hit": true,
+        "mrr": 0.5
+      },
+      "failure_type": "Wrong interpretation",
+      "reason": "Retrieved the account management doc but landed at rank 2. Model answered faithfully from what it saw but gave an incomplete answer — missed password requirements, auto-lock behavior, and tokenized payment storage.",
+      "root_cause": "Wrong chunk ranked first; security section was in a lower-ranked chunk.",
+      "week2_fix": "Improve chunk ranking so the security section surfaces at rank 1. Re-ranking or hybrid search should help."
+    },
+    {
+      "id": "q26",
+      "query": "What is the return window for items bought during a flash sale?",
+      "category": "promotions",
+      "difficulty": "medium",
+      "scores": {
+        "correctness": 3,
+        "faithfulness": 5,
+        "retrieval_hit": true,
+        "mrr": 1.0
+      },
+      "failure_type": "Wrong interpretation",
+      "reason": "Right doc, right rank, faithful answer — but the model dropped the restocking fee and the Premium member exception entirely. This is a multi-fact answer (3 distinct rules) that the model partially collapsed.",
+      "root_cause": "Model under-extracted from context when multiple conditions were present.",
+      "week2_fix": "Context engineering — prompt instruction to enumerate all conditions before answering."
+    },
+    {
+      "id": "q28",
+      "query": "Do referral wallet credits expire?",
+      "category": "rewards",
+      "difficulty": "easy",
+      "scores": {
+        "correctness": 4,
+        "faithfulness": 5,
+        "retrieval_hit": true,
+        "mrr": 0.5
+      },
+      "failure_type": "Wrong ranking",
+      "reason": "The 90-day expiry fact spans two docs (16_referral_program.md and 13_acmera_wallet.md). Model retrieved wallet doc at rank 2, missed the 'applied before regular balance' detail that only appears there.",
+      "root_cause": "Answer requires facts from two documents; naive cosine retrieval only surfaced one.",
+      "week2_fix": "Hybrid search or re-ranking to surface both docs when a question spans two sources."
+    },
+    {
+      "id": "q14",
+      "query": "My laptop charger was bitten by a mouse and is damaged. Where do I go for help?",
+      "category": "warranty",
+      "difficulty": "medium",
+      "scores": {
+        "correctness": 5,
+        "faithfulness": 5,
+        "retrieval_hit": false,
+        "mrr": 0.0
+      },
+      "failure_type": "Retrieval miss",
+      "reason": "Consumer language ('charger bitten by mouse') has no vocabulary overlap with warranty policy terms ('physical damage', 'accessories', 'non-compatible'). Embedding similarity failed to bridge the gap.",
+      "root_cause": "Pure vocabulary mismatch — dense retrieval alone cannot handle this.",
+      "week2_fix": "Hybrid search with BM25 keyword matching would catch 'charger' + 'damage' even without semantic overlap."
+    }
+  ]
+}
