@@ -139,7 +139,33 @@ def judge_correctness(query, answer, expected_answer):
 
     TODO: Implement in Session 1 homework.
     """
-    pass
+    prompt = f"""You are an evaluation judge. Score whether the generated answer correctly addresses the question compared to the expected answer.
+
+Rubric:
+- Score 5: Generated answer is fully correct and covers all key points of the expected answer.
+- Score 4: Mostly correct with minor omissions or imprecise details.
+- Score 3: Partially correct — captures some key points but misses others.
+- Score 2: Mostly incorrect or significantly incomplete.
+- Score 1: Wrong or completely unrelated to the expected answer.
+
+Question: {query}
+
+Expected answer: {expected_answer}
+
+Generated answer: {answer}
+
+Respond with JSON only, no markdown fences:
+{{"score": <1-5>, "reason": "<one sentence explanation>"}}"""
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.0,
+        max_tokens=200,
+    )
+    raw = response.choices[0].message.content.strip()
+    raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+    return json.loads(raw)
 
 
 # =========================================================================
