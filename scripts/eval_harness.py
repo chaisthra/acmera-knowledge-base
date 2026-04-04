@@ -77,7 +77,10 @@ def calculate_mrr(retrieved_chunks, expected_source):
 
     TODO: Implement in Session 1 homework.
     """
-    pass
+    for rank, chunk in enumerate(retrieved_chunks, start=1):
+        if chunk["doc_name"] == expected_source:
+            return 1.0 / rank
+    return 0.0
 
 
 # =========================================================================
