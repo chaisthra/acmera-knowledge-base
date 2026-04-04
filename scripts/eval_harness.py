@@ -65,7 +65,7 @@ def check_retrieval_hit(retrieved_chunks, expected_source):
     TODO: Implement in Session 1 homework.
     Hint: iterate retrieved_chunks, check if any chunk["doc_name"] == expected_source
     """
-    pass
+    return any(c["doc_name"] == expected_source for c in retrieved_chunks)
 
 
 def calculate_mrr(retrieved_chunks, expected_source):
