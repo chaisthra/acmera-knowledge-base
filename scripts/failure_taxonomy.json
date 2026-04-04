@@ -4,7 +4,7 @@
   "summary": {
     "retrieval_failures": 2,
     "generation_failures": 3,
-    "pattern": "2 of 5 are retrieval-side (miss + wrong ranking) → hybrid search is the right lever. 2 of 5 are generation-side incomplete extraction → context engineering / prompt changes. 1 is a corpus gap (no security content) → known blind spot."
+    "pattern": "2 of 5 are retrieval-side (miss + wrong ranking) \u2192 hybrid search is the right lever. 2 of 5 are generation-side incomplete extraction \u2192 context engineering / prompt changes. 1 is a corpus gap (no security content) \u2192 known blind spot."
   },
   "failures": [
     {
@@ -14,13 +14,13 @@
       "difficulty": "hard",
       "scores": {
         "correctness": 3,
-        "faithfulness": 1,
+        "faithfulness": 2,
         "retrieval_hit": true,
         "mrr": 1.0
       },
       "failure_type": "Hallucination",
       "reason": "Right doc retrieved at rank 1, but the ProBook guide has no security guidance. The model fabricated firewall/VPN advice not present in any chunk.",
-      "root_cause": "Corpus gap — no network security content exists.",
+      "root_cause": "Corpus gap \u2014 no network security content exists.",
       "week2_fix": "Add a corpus document covering network security, or add a system-prompt guardrail to refuse out-of-scope security advice."
     },
     {
@@ -29,13 +29,13 @@
       "category": "account",
       "difficulty": "easy",
       "scores": {
-        "correctness": 3,
+        "correctness": 4,
         "faithfulness": 5,
         "retrieval_hit": true,
         "mrr": 0.5
       },
       "failure_type": "Wrong interpretation",
-      "reason": "Retrieved the account management doc but landed at rank 2. Model answered faithfully from what it saw but gave an incomplete answer — missed password requirements, auto-lock behavior, and tokenized payment storage.",
+      "reason": "Retrieved the account management doc but landed at rank 2. Model answered faithfully from what it saw but gave an incomplete answer \u2014 missed password requirements, auto-lock behavior, and tokenized payment storage.",
       "root_cause": "Wrong chunk ranked first; security section was in a lower-ranked chunk.",
       "week2_fix": "Improve chunk ranking so the security section surfaces at rank 1. Re-ranking or hybrid search should help."
     },
@@ -51,9 +51,9 @@
         "mrr": 1.0
       },
       "failure_type": "Wrong interpretation",
-      "reason": "Right doc, right rank, faithful answer — but the model dropped the restocking fee and the Premium member exception entirely. This is a multi-fact answer (3 distinct rules) that the model partially collapsed.",
+      "reason": "Right doc, right rank, faithful answer \u2014 but the model dropped the restocking fee and the Premium member exception entirely. This is a multi-fact answer (3 distinct rules) that the model partially collapsed.",
       "root_cause": "Model under-extracted from context when multiple conditions were present.",
-      "week2_fix": "Context engineering — prompt instruction to enumerate all conditions before answering."
+      "week2_fix": "Context engineering \u2014 prompt instruction to enumerate all conditions before answering."
     },
     {
       "id": "q28",
@@ -78,13 +78,13 @@
       "difficulty": "medium",
       "scores": {
         "correctness": 5,
-        "faithfulness": 5,
+        "faithfulness": 4,
         "retrieval_hit": false,
         "mrr": 0.0
       },
       "failure_type": "Retrieval miss",
       "reason": "Consumer language ('charger bitten by mouse') has no vocabulary overlap with warranty policy terms ('physical damage', 'accessories', 'non-compatible'). Embedding similarity failed to bridge the gap.",
-      "root_cause": "Pure vocabulary mismatch — dense retrieval alone cannot handle this.",
+      "root_cause": "Pure vocabulary mismatch \u2014 dense retrieval alone cannot handle this.",
       "week2_fix": "Hybrid search with BM25 keyword matching would catch 'charger' + 'damage' even without semantic overlap."
     }
   ]

@@ -32,22 +32,6 @@
     }
   },
   {
-    "id": "s003",
-    "query": "are you kidding me? why can't I just get my money back in my wallet instead of waiting for days?",
-    "expected_answer": "Only Gold members can get instant wallet credit refunds. Silver members have to wait for the standard 2-day processing for refunds back to their original payment method.",
-    "expected_source": "15_slack_support_chat.md",
-    "difficulty": "medium",
-    "category": "refunds",
-    "persona": "frustrated",
-    "critique": {
-      "id": "s003",
-      "realism": 4,
-      "difficulty": 3,
-      "flag": "rewrite",
-      "note": "Phrasing is informal; could be more straightforward."
-    }
-  },
-  {
     "id": "s004",
     "query": "I missed the return window by a day! can’t you just take this laptop back?",
     "expected_answer": "Since it's only one day over, if there's a manufacturing defect, we can consider a return as a goodwill exception. Use your judgment on this.",
@@ -69,7 +53,7 @@
     "expected_answer": "As a Premium member, you shouldn't be charged a restocking fee for returns. They're exempt from promotional restrictions and fees.",
     "expected_source": "15_slack_support_chat.md",
     "difficulty": "easy",
-    "category": "refunds",
+    "category": "returns",
     "persona": "frustrated",
     "critique": {
       "id": "s005",
@@ -96,28 +80,12 @@
     }
   },
   {
-    "id": "s007",
-    "query": "I thought I could return stuff anytime as a Premium member. why the hassle?",
-    "expected_answer": "As a Premium member, you have more flexibility with returns, but there are still guidelines for promotional purchases. In your case, you can return it within the 45-day window.",
-    "expected_source": "15_slack_support_chat.md",
-    "difficulty": "medium",
-    "category": "returns",
-    "persona": "frustrated",
-    "critique": {
-      "id": "s007",
-      "realism": 4,
-      "difficulty": 3,
-      "flag": "rewrite",
-      "note": "Could be clearer; needs more context about Premium membership."
-    }
-  },
-  {
     "id": "s008",
     "query": "how is it fair that I have to wait for a refund when I got a faulty product?",
     "expected_answer": "If the product is faulty, that's covered under warranty. Depending on the situation, we can expedite a refund if the defect is confirmed.",
     "expected_source": "15_slack_support_chat.md",
     "difficulty": "medium",
-    "category": "refunds",
+    "category": "returns",
     "persona": "frustrated",
     "critique": {
       "id": "s008",
