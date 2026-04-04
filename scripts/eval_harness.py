@@ -269,7 +269,62 @@ def run_stratified_eval(results):
 
     TODO: Implement in Session 2 homework.
     """
-    pass
+    from collections import defaultdict
+
+    # --- By category ---
+    by_cat = defaultdict(list)
+    for r in results:
+        by_cat[r["category"]].append(r)
+
+    print("\n" + "=" * 70)
+    print("BREAKDOWN BY CATEGORY")
+    print(f"{'Category':<16} {'N':>3}  {'Hit%':>6}  {'MRR':>5}  {'Faith':>6}  {'Correct':>7}")
+    print("-" * 70)
+
+    category_breakdown = {}
+    for cat in sorted(by_cat):
+        rows = by_cat[cat]
+        n = len(rows)
+        hit = sum(1 for r in rows if r["retrieval_hit"]) / n
+        mrr = sum(r["mrr"] for r in rows) / n
+        faith = sum(r["faithfulness"]["score"] for r in rows) / n
+        correct = sum(r["correctness"]["score"] for r in rows) / n
+        print(f"  {cat:<14} {n:>3}  {hit:>5.0%}  {mrr:>5.2f}  {faith:>6.2f}  {correct:>7.2f}")
+        category_breakdown[cat] = {
+            "n": n,
+            "hit_rate": round(hit, 4),
+            "avg_mrr": round(mrr, 4),
+            "avg_faithfulness": round(faith, 4),
+            "avg_correctness": round(correct, 4),
+        }
+
+    # --- By difficulty ---
+    by_diff = defaultdict(list)
+    for r in results:
+        by_diff[r["difficulty"]].append(r)
+
+    print()
+    print("BREAKDOWN BY DIFFICULTY")
+    print(f"{'Difficulty':<12} {'N':>3}  {'Hit%':>6}  {'Correct':>7}")
+    print("-" * 40)
+    for diff in ["easy", "medium", "hard"]:
+        if diff not in by_diff:
+            continue
+        rows = by_diff[diff]
+        n = len(rows)
+        hit = sum(1 for r in rows if r["retrieval_hit"]) / n
+        correct = sum(r["correctness"]["score"] for r in rows) / n
+        print(f"  {diff:<10} {n:>3}  {hit:>5.0%}  {correct:>7.2f}")
+
+    print("=" * 70)
+
+    # --- Worst 3 categories by correctness ---
+    ranked = sorted(category_breakdown.items(), key=lambda x: x[1]["avg_correctness"])
+    print("\nWorst 3 categories by correctness:")
+    for i, (cat, scores) in enumerate(ranked[:3], 1):
+        print(f"  {i}. {cat}: {scores['avg_correctness']:.2f}/5 correctness, {scores['hit_rate']:.0%} hit rate")
+
+    return category_breakdown
 
 
 # =========================================================================
@@ -307,7 +362,16 @@ def save_baseline(summary_scores, category_breakdown):
 
     TODO: Implement in Session 2 homework.
     """
-    pass
+    import datetime
+    baseline = {
+        "saved_at": datetime.datetime.utcnow().isoformat() + "Z",
+        "summary": summary_scores,
+        "categories": category_breakdown,
+    }
+    path = os.path.join(SCRIPT_DIR, "baseline_scores.json")
+    with open(path, "w") as f:
+        json.dump(baseline, f, indent=2)
+    print(f"\nBaseline saved to {path}")
 
 
 # =========================================================================
@@ -326,5 +390,18 @@ if __name__ == "__main__":
 
     results = run_eval(include_hard=args.include_hard)
 
-    if results and args.save_baseline:
-        print("\n--save-baseline: implement save_baseline() in Session 2.")
+    if not results:
+        sys.exit(1)
+
+    category_breakdown = run_stratified_eval(results)
+
+    if args.save_baseline:
+        n = len(results)
+        summary_scores = {
+            "n_queries": n,
+            "retrieval_hit_rate": round(sum(1 for r in results if r["retrieval_hit"]) / n, 4),
+            "avg_mrr": round(sum(r["mrr"] for r in results) / n, 4),
+            "avg_faithfulness": round(sum(r["faithfulness"]["score"] for r in results) / n, 4),
+            "avg_correctness": round(sum(r["correctness"]["score"] for r in results) / n, 4),
+        }
+        save_baseline(summary_scores, category_breakdown)
