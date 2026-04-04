@@ -1,0 +1,96 @@
+{
+  "saved_at": "2026-04-04T05:18:47.142066Z",
+  "summary": {
+    "n_queries": 30,
+    "retrieval_hit_rate": 0.9667,
+    "avg_mrr": 0.855,
+    "avg_faithfulness": 4.8667,
+    "avg_correctness": 4.4667
+  },
+  "categories": {
+    "account": {
+      "n": 1,
+      "hit_rate": 1.0,
+      "avg_mrr": 0.5,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 3.0
+    },
+    "business": {
+      "n": 1,
+      "hit_rate": 1.0,
+      "avg_mrr": 1.0,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 5.0
+    },
+    "membership": {
+      "n": 3,
+      "hit_rate": 1.0,
+      "avg_mrr": 1.0,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 4.3333
+    },
+    "orders": {
+      "n": 2,
+      "hit_rate": 1.0,
+      "avg_mrr": 1.0,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 5.0
+    },
+    "payments": {
+      "n": 4,
+      "hit_rate": 1.0,
+      "avg_mrr": 1.0,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 4.5
+    },
+    "products": {
+      "n": 2,
+      "hit_rate": 1.0,
+      "avg_mrr": 1.0,
+      "avg_faithfulness": 3.0,
+      "avg_correctness": 4.0
+    },
+    "promotions": {
+      "n": 2,
+      "hit_rate": 1.0,
+      "avg_mrr": 1.0,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 4.0
+    },
+    "returns": {
+      "n": 4,
+      "hit_rate": 1.0,
+      "avg_mrr": 0.6125,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 4.5
+    },
+    "rewards": {
+      "n": 3,
+      "hit_rate": 1.0,
+      "avg_mrr": 0.8333,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 4.3333
+    },
+    "shipping": {
+      "n": 2,
+      "hit_rate": 1.0,
+      "avg_mrr": 1.0,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 4.5
+    },
+    "sustainability": {
+      "n": 1,
+      "hit_rate": 1.0,
+      "avg_mrr": 1.0,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 4.0
+    },
+    "warranty": {
+      "n": 5,
+      "hit_rate": 0.8,
+      "avg_mrr": 0.64,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 5.0
+    }
+  }
+}
