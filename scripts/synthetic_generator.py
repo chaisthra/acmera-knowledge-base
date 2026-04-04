@@ -128,7 +128,28 @@ def generate_questions(doc_name: str, doc_text: str, persona: str = "standard", 
 
     TODO: Implement in Session 2.
     """
-    pass
+    prompt_template = PERSONA_PROMPTS[persona]
+    prompt = prompt_template.format(
+        doc_name=doc_name,
+        doc_text=doc_text[:3000],
+        count=count,
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.8,
+        max_tokens=2000,
+    )
+    raw = response.choices[0].message.content.strip()
+    raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+    questions = json.loads(raw)
+
+    for q in questions:
+        q["expected_source"] = doc_name
+        q["persona"] = persona
+
+    return questions
 
 
 def assign_ids(questions: list, existing_dataset: list, prefix: str = "s") -> list:
@@ -143,7 +164,15 @@ def assign_ids(questions: list, existing_dataset: list, prefix: str = "s") -> li
 
     TODO: Implement in Session 2.
     """
-    pass
+    existing_ids = {entry["id"] for entry in existing_dataset}
+    counter = 1
+    for q in questions:
+        while f"{prefix}{counter:03d}" in existing_ids:
+            counter += 1
+        q["id"] = f"{prefix}{counter:03d}"
+        existing_ids.add(q["id"])
+        counter += 1
+    return questions
 
 
 def load_golden_dataset() -> list:
@@ -196,9 +225,42 @@ def main():
     parser.add_argument("--merge", action="store_true", help="Merge into golden_dataset.json")
     args = parser.parse_args()
 
-    print("Synthetic generator skeleton loaded.")
-    print("Functions to implement: generate_questions, assign_ids, critique_questions")
-    print("\nWe'll build these together in Session 2.")
+    # Collect docs to process
+    if args.doc:
+        doc_paths = [os.path.join(CORPUS_DIR, args.doc)]
+    elif args.all_docs:
+        doc_paths = sorted(glob.glob(os.path.join(CORPUS_DIR, "*.md")))
+    else:
+        parser.print_help()
+        sys.exit(1)
+
+    existing = load_golden_dataset()
+    all_new = []
+
+    for doc_path in doc_paths:
+        doc_name = os.path.basename(doc_path)
+        with open(doc_path) as f:
+            doc_text = f.read()
+
+        print(f"\nGenerating {args.count} questions from {doc_name} (persona={args.persona})...")
+        questions = generate_questions(doc_name, doc_text, persona=args.persona, count=args.count)
+        questions = assign_ids(questions, existing + all_new)
+
+        for q in questions:
+            print(f"  [{q['id']}] [{q['difficulty']}] {q['query'][:70]}")
+
+        all_new.extend(questions)
+
+    print(f"\nGenerated {len(all_new)} questions total.")
+
+    if args.merge:
+        combined = existing + all_new
+        save_golden_dataset(combined)
+    else:
+        out_path = os.path.join(SCRIPT_DIR, "synthetic_questions.json")
+        with open(out_path, "w") as f:
+            json.dump(all_new, f, indent=2, ensure_ascii=False)
+        print(f"Saved to {out_path} (use --merge to add to golden_dataset.json)")
 
 
 if __name__ == "__main__":
