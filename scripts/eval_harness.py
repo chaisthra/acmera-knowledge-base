@@ -174,7 +174,7 @@ Respond with JSON only, no markdown fences:
 # SESSION 1: EVAL RUNNER
 # =========================================================================
 
-def run_eval(include_hard=False, attach_scores=True):
+def run_eval(include_hard=False, attach_scores=True, limit=None, mode="dense", save_as=None):
     """
     Run the full evaluation:
     1. Load golden dataset (+ hard queries if --include-hard)
@@ -183,8 +183,6 @@ def run_eval(include_hard=False, attach_scores=True):
     4. Score generation (faithfulness, correctness)
     5. Print scorecard
     6. Save results to eval_results.json
-
-    TODO: Implement in Session 1 homework.
     """
     from rag import ask
 
@@ -195,13 +193,16 @@ def run_eval(include_hard=False, attach_scores=True):
     if not include_hard:
         dataset = [q for q in dataset if q.get("difficulty") != "hard"]
 
+    if limit:
+        dataset = dataset[:limit]
+
     print(f"\nRunning eval on {len(dataset)} queries...\n")
 
     results = []
     for q in dataset:
         print(f"  [{q['id']}] {q['query'][:60]}...")
 
-        rag_result = ask(q["query"])
+        rag_result = ask(q["query"], mode=mode)
 
         hit = check_retrieval_hit(rag_result["retrieved_chunks"], q["expected_source"])
         mrr = calculate_mrr(rag_result["retrieved_chunks"], q["expected_source"])
@@ -251,6 +252,12 @@ def run_eval(include_hard=False, attach_scores=True):
     with open(out_path, "w") as f:
         json.dump(results, f, indent=2)
     print(f"\nResults saved to {out_path}")
+
+    if save_as:
+        save_path = os.path.join(SCRIPT_DIR, save_as)
+        with open(save_path, "w") as f:
+            json.dump(results, f, indent=2)
+        print(f"Also saved to {save_path}")
 
     return results
 
@@ -399,9 +406,16 @@ if __name__ == "__main__":
                         help="Filter to a specific category (e.g. 'membership')")
     parser.add_argument("--no-langfuse", action="store_true",
                         help="Skip attaching scores to LangFuse (used in CI)")
+    parser.add_argument("--limit", type=int, default=None,
+                        help="Cap number of queries evaluated (e.g. --limit 50)")
+    parser.add_argument("--mode", choices=["dense", "hybrid"], default="dense",
+                        help="Retrieval mode: dense (default) or hybrid (BM25 + RRF)")
+    parser.add_argument("--save-as", type=str, default=None,
+                        help="Also save results to this filename in scripts/ (e.g. eval_dense.json)")
     args = parser.parse_args()
 
-    results = run_eval(include_hard=args.include_hard, attach_scores=not args.no_langfuse)
+    results = run_eval(include_hard=args.include_hard, attach_scores=not args.no_langfuse,
+                       limit=args.limit, mode=args.mode, save_as=args.save_as)
 
     if not results:
         sys.exit(1)

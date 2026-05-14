@@ -4,3 +4,4 @@ psycopg2-binary
 pgvector
 python-dotenv
 rich
+rank-bm25

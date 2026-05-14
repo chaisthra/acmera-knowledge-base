@@ -1,10 +1,12 @@
 """
-Ingest documents into pgvector with naive fixed-size chunking.
+Ingest documents into pgvector.
 Run: python scripts/ingest.py
+Run with strategy: python scripts/ingest.py --strategy sliding_window
 """
 import os
 import glob
 import json
+import argparse
 from openai import OpenAI
 import psycopg2
 from pgvector.psycopg2 import register_vector
@@ -14,8 +16,6 @@ load_dotenv()
 
 client = OpenAI()
 
-CHUNK_SIZE = 500
-CHUNK_OVERLAP = 0
 CORPUS_DIR = os.path.join(os.path.dirname(__file__), "..", "corpus")
 
 
@@ -31,21 +31,15 @@ def get_connection():
     return conn
 
 
-def naive_chunk(text, chunk_size=CHUNK_SIZE):
-    chunks = []
-    for i in range(0, len(text), chunk_size):
-        chunk = text[i:i + chunk_size].strip()
-        if chunk:
-            chunks.append(chunk)
-    return chunks
-
-
 def embed_texts(texts):
     response = client.embeddings.create(model="text-embedding-3-small", input=texts)
     return [item.embedding for item in response.data]
 
 
-def ingest():
+def ingest(strategy="fixed_size"):
+    from chunker import get_chunker
+    chunk_fn = get_chunker(strategy)
+
     conn = get_connection()
     cur = conn.cursor()
     cur.execute("DELETE FROM chunks;")
@@ -58,7 +52,7 @@ def ingest():
         with open(filepath, "r") as f:
             content = f.read()
 
-        chunks = naive_chunk(content)
+        chunks = chunk_fn(content)
         print(f"  {doc_name}: {len(chunks)} chunks")
 
         for batch_start in range(0, len(chunks), 20):
@@ -70,6 +64,7 @@ def ingest():
                 metadata = json.dumps({
                     "doc_name": doc_name,
                     "chunk_index": chunk_index,
+                    "strategy": strategy,
                 })
                 cur.execute(
                     """INSERT INTO chunks (doc_name, chunk_index, content, embedding, metadata)
@@ -82,8 +77,12 @@ def ingest():
     conn.commit()
     cur.close()
     conn.close()
-    print(f"\nDone: {len(doc_files)} documents, {total_chunks} chunks.")
+    print(f"\nDone: {len(doc_files)} documents, {total_chunks} chunks  [strategy={strategy}]")
 
 
 if __name__ == "__main__":
-    ingest()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--strategy", default="fixed_size",
+                        choices=["fixed_size", "sliding_window", "sentence_aware"])
+    args = parser.parse_args()
+    ingest(strategy=args.strategy)

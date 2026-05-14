@@ -21,7 +21,8 @@
     "expected_answer": "All electronics come with a minimum 1-year manufacturer warranty covering defects in materials and workmanship under normal use.",
     "expected_source": "04_warranty_policy.md",
     "difficulty": "easy",
-    "category": "warranty"
+    "category": "warranty",
+    "label":"ground_truth"
   },
   {
     "id": "q04",
@@ -29,7 +30,8 @@
     "expected_answer": "Premium Gold requires spending ₹75,000 in a calendar year or maintaining Premium Silver for 3+ consecutive years.",
     "expected_source": "02_premium_membership.md",
     "difficulty": "easy",
-    "category": "membership"
+    "category": "membership",
+    "label":"ground_truth"
   },
   {
     "id": "q05",
@@ -37,7 +39,8 @@
     "expected_answer": "Opened software, digital downloads, gift cards, perishable goods, and personalized items cannot be returned.",
     "expected_source": "01_return_policy.md",
     "difficulty": "easy",
-    "category": "returns"
+    "category": "returns",
+    "label":"ground_truth"
   },
   {
     "id": "q06",
@@ -45,7 +48,8 @@
     "expected_answer": "No. Refunds are processed only after the returned item is received and inspected at the warehouse. If the item fails inspection due to signs of wear, damage, or missing accessories, the refund will not be issued.",
     "expected_source": "01_return_policy.md",
     "difficulty": "medium",
-    "category": "returns"
+    "category": "returns",
+    "label":"ground_truth"
   },
   {
     "id": "q07",
@@ -53,7 +57,8 @@
     "expected_answer": "Acmera offers three options: Standard Shipping (5-7 business days, free over ₹999, else ₹99), Express Shipping (2-3 business days, ₹199, free for Premium Gold members), and Same-Day Delivery (select metro cities, orders before 12 PM delivered by 9 PM, ₹399).",
     "expected_source": "03_shipping_policy.md",
     "difficulty": "easy",
-    "category": "shipping"
+    "category": "shipping",
+    "label":"ground_truth"
   },
   {
     "id": "q08",
@@ -65,11 +70,12 @@
   },
   {
     "id": "q09",
-    "query": "Is Acmera sustainable?",
+    "query": "Is Acmera sustainable?", 
     "expected_answer": "Yes. Acmera ships in 100% recyclable packaging, has eliminated single-use plastics since January 2025, and offsets 100% of shipping-related carbon emissions. They also offer a trade-in program for electronics and sell refurbished products through Acmera Renewed. Customers who choose standard shipping get a ₹10 Acmera Wallet credit.",
     "expected_source": "18_sustainability.md",
     "difficulty": "easy",
-    "category": "sustainability"
+    "category": "sustainability",
+    "label":"ground_truth"
   },
   {
     "id": "q10",
@@ -85,7 +91,8 @@
     "expected_answer": "Existing customers can refer friends using a unique referral code. When the referred person signs up and makes a first purchase of ₹1,000+, the referrer gets ₹500 Acmera Wallet credit and the referee gets ₹300 off their first order. Premium Silver members earn ₹750 per referral, Premium Gold earn ₹1,000. Up to 20 referrals per calendar year.",
     "expected_source": "16_referral_program.md",
     "difficulty": "easy",
-    "category": "rewards"
+    "category": "rewards",
+    "label":"ground_truth"
   },
   {
     "id": "q12",
@@ -93,7 +100,8 @@
     "expected_answer": "You won't get a discount — you earn Acmera Wallet credit per referral. For 4 successful referrals, a standard customer earns ₹500 × 4 = ₹2,000 in wallet credits. The referred friends each get ₹300 off their first order. Referral wallet credits have a 90-day expiry.",
     "expected_source": "16_referral_program.md",
     "difficulty": "medium",
-    "category": "rewards"
+    "category": "rewards",
+    "label":"ground_truth"
   },
   {
     "id": "q13",
@@ -109,7 +117,8 @@
     "expected_answer": "Physical damage to accessories is not covered under warranty. You would need to purchase a replacement charger. You can contact Acmera support to discuss paid repair or replacement options, but this will not be covered for free.",
     "expected_source": "04_warranty_policy.md",
     "difficulty": "medium",
-    "category": "warranty"
+    "category": "warranty",
+    "label":"ground_truth"
   },
   {
     "id": "q15",
@@ -117,7 +126,8 @@
     "expected_answer": "No. The Acmera warranty only covers defects in materials and workmanship under normal use. Theft is not a manufacturing defect and is not covered under the standard warranty or any extended warranty plan.",
     "expected_source": "04_warranty_policy.md",
     "difficulty": "hard",
-    "category": "warranty"
+    "category": "warranty",
+    "label":"ground_truth"
   },
   {
     "id": "q16",
@@ -238,5 +248,613 @@
     "expected_source": "02_premium_membership.md",
     "difficulty": "easy",
     "category": "membership"
+  },
+  {
+    "id": "s001",
+    "query": "How long do I have to return a product I bought from Acmera?",
+    "expected_answer": "You have 30 calendar days from the delivery date to return a product purchased from Acmera.",
+    "expected_source": "01_return_policy.md",
+    "difficulty": "easy",
+    "category": "returns",
+    "persona": "standard",
+    "critique": {
+      "id": "s001",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "Natural question about return policy."
+    }
+  },
+  {
+    "id": "s002",
+    "query": "What is the return policy for items purchased during the holiday season?",
+    "expected_answer": "Items purchased between November 15 and December 31 can be returned until January 31 of the following year, but all other return conditions still apply.",
+    "expected_source": "01_return_policy.md",
+    "difficulty": "medium",
+    "category": "returns",
+    "persona": "standard",
+    "critique": {
+      "id": "s002",
+      "realism": 5,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "Relevant question regarding holiday return policy."
+    }
+  },
+  {
+    "id": "s003",
+    "query": "What benefits do Premium Silver members get regarding shipping?",
+    "expected_answer": "Premium Silver members receive free standard shipping on all orders over ₹500 and enjoy priority processing, with orders being picked and shipped within 4 hours during business days.",
+    "expected_source": "02_premium_membership.md",
+    "difficulty": "easy",
+    "category": "shipping",
+    "persona": "standard",
+    "critique": {
+      "id": "s003",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "Natural question about membership benefits."
+    }
+  },
+  {
+    "id": "s004",
+    "query": "How can a member maintain their Premium Gold status, and what happens if they fall below the spending threshold?",
+    "expected_answer": "To maintain Premium Gold status, a member must either spend ₹75,000 in a calendar year or maintain Premium Silver status for 3 or more consecutive years. If they fall below the spending threshold, they may be downgraded but retain their current tier benefits for a 90-day grace period.",
+    "expected_source": "02_premium_membership.md",
+    "difficulty": "medium",
+    "category": "membership",
+    "persona": "standard",
+    "critique": {
+      "id": "s004",
+      "realism": 5,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "Involves understanding membership maintenance and consequences."
+    }
+  },
+  {
+    "id": "s005",
+    "query": "What are the delivery times and costs for express shipping?",
+    "expected_answer": "Express shipping costs ₹199 for all orders and is delivered within 2-3 business days. It's free for Premium Gold members.",
+    "expected_source": "03_shipping_policy.md",
+    "difficulty": "easy",
+    "category": "shipping",
+    "persona": "standard",
+    "critique": {
+      "id": "s005",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "Natural question about shipping details."
+    }
+  },
+  {
+    "id": "s006",
+    "query": "How long will it take for my order to arrive if I live in a remote area?",
+    "expected_answer": "Delivery to remote or rural pin codes may take an additional 2-3 business days beyond the estimated delivery time, and a remote area surcharge of ₹149 may apply.",
+    "expected_source": "03_shipping_policy.md",
+    "difficulty": "medium",
+    "category": "shipping",
+    "persona": "standard",
+    "critique": {
+      "id": "s006",
+      "realism": 5,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "Realistic inquiry regarding delivery to a remote area."
+    }
+  },
+  {
+    "id": "s007",
+    "query": "How long does the standard warranty last for Acmera electronics, and what does it cover?",
+    "expected_answer": "The standard warranty lasts for 1 year from the date of purchase and covers defects in materials and workmanship under normal use conditions, including hardware malfunctions, battery defects (if capacity drops below 80% within the warranty period), display issues not caused by physical damage, and software defects present at the time of purchase.",
+    "expected_source": "04_warranty_policy.md",
+    "difficulty": "easy",
+    "category": "warranty",
+    "persona": "standard",
+    "critique": {
+      "id": "s007",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "Clear and relevant question about warranty details."
+    }
+  },
+  {
+    "id": "s008",
+    "query": "If I want to purchase an extended warranty after I've received my product, what are my options and costs?",
+    "expected_answer": "You can purchase an extended warranty within 30 days of delivery. The options are: Acmera Shield for an additional cost of 8% of the product price, which extends coverage to 3 years, or Acmera Shield Plus for 12% of the product price, which extends coverage to 4 years and includes accidental damage protection.",
+    "expected_source": "04_warranty_policy.md",
+    "difficulty": "medium",
+    "category": "warranty",
+    "persona": "standard",
+    "critique": {
+      "id": "s008",
+      "realism": 5,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "Valid inquiry about purchasing options for extended warranty."
+    }
+  },
+  {
+    "id": "s009",
+    "query": "What payment methods can I use for my online order at Acmera?",
+    "expected_answer": "You can use credit and debit cards (Visa, Mastercard, American Express, and RuPay), UPI apps (Google Pay, PhonePe, Paytm, and BHIM), net banking from major Indian banks, Acmera Wallet, EMI options for orders above ₹5,000, and Cash on Delivery for orders between ₹200 and ₹25,000.",
+    "expected_source": "05_payment_methods.md",
+    "difficulty": "easy",
+    "category": "payments",
+    "persona": "standard",
+    "critique": {
+      "id": "s009",
+      "realism": 5,
+      "difficulty": 1,
+      "flag": "keep",
+      "note": "This is a common customer inquiry about payment options."
+    }
+  },
+  {
+    "id": "s010",
+    "query": "How long does it take for a UPI payment to be processed during peak hours?",
+    "expected_answer": "UPI payments are processed instantly, but net banking may take up to 30 minutes during peak hours.",
+    "expected_source": "05_payment_methods.md",
+    "difficulty": "medium",
+    "category": "payments",
+    "persona": "standard",
+    "critique": {
+      "id": "s010",
+      "realism": 4,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "Relevant question about payment processing time, slightly more complex."
+    }
+  },
+  {
+    "id": "s011",
+    "query": "How can I track my order after I place it?",
+    "expected_answer": "You can track your order through the Acmera app or website by going to 'My Orders' and selecting your order to see real-time status updates and estimated delivery time.",
+    "expected_source": "06_support_faq.md",
+    "difficulty": "easy",
+    "category": "orders",
+    "persona": "standard",
+    "critique": {
+      "id": "s011",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "This is a common customer inquiry."
+    }
+  },
+  {
+    "id": "s012",
+    "query": "If I returned an item, how long should I wait for my refund as a Premium member?",
+    "expected_answer": "As a Premium member, the refund process takes 2 business days after we receive and inspect your returned item.",
+    "expected_source": "06_support_faq.md",
+    "difficulty": "medium",
+    "category": "refunds",
+    "persona": "standard",
+    "critique": {
+      "id": "s012",
+      "realism": 4,
+      "difficulty": 3,
+      "flag": "rewrite",
+      "note": "Phrasing could be clearer regarding the refund process."
+    }
+  },
+  {
+    "id": "s013",
+    "query": "What is the return policy for items bought during a clearance sale?",
+    "expected_answer": "Items purchased during clearance events must be returned within 15 calendar days from delivery and are subject to a 10% restocking fee. However, if an item is marked as 'Final Sale', it cannot be returned or exchanged.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "medium",
+    "category": "returns",
+    "persona": "standard",
+    "critique": {
+      "id": "s013",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "Clear and realistic question about return policy."
+    }
+  },
+  {
+    "id": "s014",
+    "query": "When does Acmera hold its Independence Day Sale, and how long does it typically last?",
+    "expected_answer": "The Independence Day Sale occurs in August and usually lasts for 5-7 days.",
+    "expected_source": "07_promotional_events.md",
+    "difficulty": "easy",
+    "category": "promotions",
+    "persona": "standard",
+    "critique": {
+      "id": "s014",
+      "realism": 5,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "Natural question regarding a specific sale event."
+    }
+  },
+  {
+    "id": "s015",
+    "query": "I bought a laptop on September 2, 2025, but I want to return it now. Can I do that as a Premium Gold member?",
+    "expected_answer": "Yes, as a Premium Gold member, you have a 60-day return window. Since you purchased the laptop on September 2, 2025, and are requesting a return on October 15, 2025, your return is approved.",
+    "expected_source": "08_support_tickets.md",
+    "difficulty": "medium",
+    "category": "returns",
+    "persona": "standard",
+    "critique": {
+      "id": "s015",
+      "realism": 4,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "The question is realistic and requires some understanding of membership policies."
+    }
+  },
+  {
+    "id": "s016",
+    "query": "I ordered a SmartHome Hub Pro that arrived damaged. How quickly can I expect a replacement?",
+    "expected_answer": "A replacement unit was shipped via express delivery and was delivered by October 20, 2025, just two days after the damage was reported.",
+    "expected_source": "08_support_tickets.md",
+    "difficulty": "easy",
+    "category": "products",
+    "persona": "standard",
+    "critique": {
+      "id": "s016",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "The question is natural and straightforward regarding replacement policies."
+    }
+  },
+  {
+    "id": "s017",
+    "query": "What is the price and warranty period for the Acmera ProBook X15 laptop?",
+    "expected_answer": "The Acmera ProBook X15 is priced at ₹78,999 and comes with a 1 year standard warranty, which can be extended to 4 years with Shield Plus.",
+    "expected_source": "09_electronics_catalog.md",
+    "difficulty": "easy",
+    "category": "products",
+    "persona": "standard",
+    "critique": {
+      "id": "s017",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "Natural question about product details."
+    }
+  },
+  {
+    "id": "s018",
+    "query": "How long can I expect the battery life of the Acmera ProBook Air 14, and what is its display resolution?",
+    "expected_answer": "The Acmera ProBook Air 14 has a battery life of up to 12 hours and features a display resolution of 2560x1600.",
+    "expected_source": "09_electronics_catalog.md",
+    "difficulty": "medium",
+    "category": "products",
+    "persona": "standard",
+    "critique": {
+      "id": "s018",
+      "realism": 5,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "Realistic inquiry covering multiple aspects of the product."
+    }
+  },
+  {
+    "id": "s019",
+    "query": "What do I need to do to create an Acmera account?",
+    "expected_answer": "To create an Acmera account, you need to provide a valid email address or phone number, or use Google/Apple sign-in. Account creation is free, and email verification is required to access support and return features.",
+    "expected_source": "10_account_management.md",
+    "difficulty": "easy",
+    "category": "account",
+    "persona": "standard",
+    "critique": {
+      "id": "s019",
+      "realism": 5,
+      "difficulty": 1,
+      "flag": "keep",
+      "note": "This is a straightforward and common question."
+    }
+  },
+  {
+    "id": "s020",
+    "query": "How does Acmera ensure the security of my account?",
+    "expected_answer": "Acmera uses two-factor authentication (2FA) for all account logins, allowing customers to choose between SMS-based or app-based authentication. Passwords must be at least 12 characters long and include uppercase, lowercase, and numeric characters. Suspicious login attempts result in an automatic account lock, requiring identity verification through the registered email to unlock.",
+    "expected_source": "10_account_management.md",
+    "difficulty": "medium",
+    "category": "account",
+    "persona": "standard",
+    "critique": {
+      "id": "s020",
+      "realism": 5,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "This question is realistic and requires some explanation."
+    }
+  },
+  {
+    "id": "s021",
+    "query": "What is the maximum discount a support agent can offer without needing approval?",
+    "expected_answer": "The maximum discount a support agent can offer without needing manager approval is 10%.",
+    "expected_source": "11_internal_pricing.md",
+    "difficulty": "easy",
+    "category": "payments",
+    "persona": "standard",
+    "critique": {
+      "id": "s021",
+      "realism": 4,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "Realistic question about support agent authority."
+    }
+  },
+  {
+    "id": "s022",
+    "query": "If a Premium Gold member is at risk of canceling their membership, what specific offers can an agent provide to retain them?",
+    "expected_answer": "An agent can offer a one-time 20% discount on their next order, a complimentary 3-month Shield warranty extension on a recent purchase, or ₹2,000 Acmera Wallet credit.",
+    "expected_source": "11_internal_pricing.md",
+    "difficulty": "medium",
+    "category": "membership",
+    "persona": "standard",
+    "critique": {
+      "id": "s022",
+      "realism": 5,
+      "difficulty": 4,
+      "flag": "keep",
+      "note": "Natural question regarding customer retention strategies."
+    }
+  },
+  {
+    "id": "s023",
+    "query": "What is the discount for ordering 75 units through the Acmera Corporate Gifting program?",
+    "expected_answer": "A 15% discount off the retail price is applied for orders of 50-99 units.",
+    "expected_source": "12_corporate_gifting.md",
+    "difficulty": "easy",
+    "category": "orders",
+    "persona": "standard",
+    "critique": {
+      "id": "s023",
+      "realism": 4,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "The question is specific and realistic for a customer inquiry."
+    }
+  },
+  {
+    "id": "s024",
+    "query": "If a business wants to customize their gifts with logos, what is the minimum order quantity and how long will it take for fulfillment?",
+    "expected_answer": "The minimum order quantity for customization is 50 units, and it adds 7-10 business days to the fulfillment time.",
+    "expected_source": "12_corporate_gifting.md",
+    "difficulty": "medium",
+    "category": "products",
+    "persona": "standard",
+    "critique": {
+      "id": "s024",
+      "realism": 5,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "This question is clear and reflects a common customer concern."
+    }
+  },
+  {
+    "id": "s025",
+    "query": "What happens to my Acmera Wallet balance if I don't use my account for over a year?",
+    "expected_answer": "If your account is inactive for 12 consecutive months, you'll receive a notification. After 18 months of inactivity, your wallet balance will be forfeited.",
+    "expected_source": "13_acmera_wallet.md",
+    "difficulty": "medium",
+    "category": "account",
+    "persona": "standard",
+    "critique": {
+      "id": "s025",
+      "realism": 4,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "The question is realistic and moderately difficult."
+    }
+  },
+  {
+    "id": "s026",
+    "query": "Can I get a refund to my Acmera Wallet if I am a Premium Gold member?",
+    "expected_answer": "Yes, Premium Gold members can choose to receive all refunds as wallet credit regardless of the original payment method.",
+    "expected_source": "13_acmera_wallet.md",
+    "difficulty": "easy",
+    "category": "returns",
+    "persona": "standard",
+    "critique": {
+      "id": "s026",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "The question is natural and straightforward."
+    }
+  },
+  {
+    "id": "s027",
+    "query": "What should I do if my ProBook won't turn on?",
+    "expected_answer": "First, connect the charger and wait 15 minutes. Then, perform a hard reset by holding the power button for 15 seconds. If the charging LED is not lit, try a different outlet. If it still doesn't work, it may be a hardware defect under warranty.",
+    "expected_source": "14_probook_troubleshooting.md",
+    "difficulty": "easy",
+    "category": "products",
+    "persona": "standard",
+    "critique": {
+      "id": "s027",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "This is a common issue that users may face."
+    }
+  },
+  {
+    "id": "s028",
+    "query": "When is the battery health considered a defect eligible for warranty replacement?",
+    "expected_answer": "If the battery capacity is below 80% within the first year of use, it is considered a defect and is eligible for warranty replacement.",
+    "expected_source": "14_probook_troubleshooting.md",
+    "difficulty": "medium",
+    "category": "warranty",
+    "persona": "standard",
+    "critique": {
+      "id": "s028",
+      "realism": 4,
+      "difficulty": 3,
+      "flag": "rewrite",
+      "note": "Phrasing could be clearer; consider specifying the criteria for defect."
+    }
+  },
+  {
+    "id": "s029",
+    "query": "I want to return my Acmera Pixel S24 phone, but I bought it during a sale. Can I still return it as a Premium Silver member?",
+    "expected_answer": "Yes, as a Premium Silver member, you can return the Acmera Pixel S24 phone within 45 days regardless of the promotional return restrictions.",
+    "expected_source": "15_slack_support_chat.md",
+    "difficulty": "easy",
+    "category": "returns",
+    "persona": "standard",
+    "critique": {
+      "id": "s029",
+      "realism": 5,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "Natural question about return policy for a sale item."
+    }
+  },
+  {
+    "id": "s030",
+    "query": "I have a SoundPods Pro that I want to return because one earbud is defective, but I’m outside the 15-day return window. What should I do?",
+    "expected_answer": "You should go through the warranty claim process since the product is defective. The return policy time frame does not apply to defective items.",
+    "expected_source": "15_slack_support_chat.md",
+    "difficulty": "medium",
+    "category": "warranty",
+    "persona": "standard",
+    "critique": {
+      "id": "s030",
+      "realism": 5,
+      "difficulty": 4,
+      "flag": "keep",
+      "note": "Realistic scenario involving a defective product and return policy."
+    }
+  },
+  {
+    "id": "s031",
+    "query": "If I refer a friend who makes their first purchase for ₹900, will I still receive any rewards?",
+    "expected_answer": "No, you will not receive rewards because the referred friend's first purchase must be ₹1,000 or more to qualify for the referral reward.",
+    "expected_source": "16_referral_program.md",
+    "difficulty": "easy",
+    "category": "rewards",
+    "persona": "standard",
+    "critique": {
+      "id": "s031",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "Natural question about referral rewards."
+    }
+  },
+  {
+    "id": "s032",
+    "query": "What are the referral rewards for a Premium Gold member, and how many people can they refer in a year?",
+    "expected_answer": "A Premium Gold member earns ₹1,000 for each referral and can refer up to 20 people per calendar year.",
+    "expected_source": "16_referral_program.md",
+    "difficulty": "medium",
+    "category": "membership",
+    "persona": "standard",
+    "critique": {
+      "id": "s032",
+      "realism": 4,
+      "difficulty": 3,
+      "flag": "rewrite",
+      "note": "Phrasing could be clearer regarding the referral limits."
+    }
+  },
+  {
+    "id": "s033",
+    "query": "What are the features included in the Basic cloud storage plan for the SmartHome Camera 360?",
+    "expected_answer": "The Basic cloud storage plan for the SmartHome Camera 360 includes a 7-day recording history and motion alerts for ₹99 per month.",
+    "expected_source": "17_smart_home_ecosystem.md",
+    "difficulty": "easy",
+    "category": "products",
+    "persona": "standard",
+    "critique": {
+      "id": "s033",
+      "realism": 5,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "Clear and specific question about product features."
+    }
+  },
+  {
+    "id": "s034",
+    "query": "When is the SmartHome Hub Pro expected to become compatible with Apple HomeKit?",
+    "expected_answer": "The SmartHome Hub Pro is planned to become compatible with Apple HomeKit in Q2 2026.",
+    "expected_source": "17_smart_home_ecosystem.md",
+    "difficulty": "medium",
+    "category": "products",
+    "persona": "standard",
+    "critique": {
+      "id": "s034",
+      "realism": 4,
+      "difficulty": 3,
+      "flag": "rewrite",
+      "note": "Phrasing could be improved for clarity."
+    }
+  },
+  {
+    "id": "s035",
+    "query": "What is the maximum trade-in credit I can receive for a laptop when I trade it in at Acmera?",
+    "expected_answer": "Up to ₹25,000 credit depending on condition and model.",
+    "expected_source": "18_sustainability.md",
+    "difficulty": "easy",
+    "category": "sustainability",
+    "persona": "standard",
+    "critique": {
+      "id": "s035",
+      "realism": 4,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "The question is realistic and straightforward."
+    }
+  },
+  {
+    "id": "s036",
+    "query": "What types of packaging does Acmera use for its products, and what significant change regarding single-use plastics was made starting in January 2025?",
+    "expected_answer": "Acmera products ship in 100% recyclable packaging, and since January 2025, single-use plastics have been eliminated from all shipments.",
+    "expected_source": "18_sustainability.md",
+    "difficulty": "medium",
+    "category": "sustainability",
+    "persona": "standard",
+    "critique": {
+      "id": "s036",
+      "realism": 5,
+      "difficulty": 4,
+      "flag": "keep",
+      "note": "The question is detailed and requires specific knowledge."
+    }
+  },
+  {
+    "id": "s037",
+    "query": "What is the average response time for business accounts during business hours?",
+    "expected_answer": "Under 1 hour",
+    "expected_source": "19_acmera_business.md",
+    "difficulty": "easy",
+    "category": "support",
+    "persona": "standard",
+    "critique": {
+      "id": "s037",
+      "realism": 4,
+      "difficulty": 2,
+      "flag": "keep",
+      "note": "The question is realistic and straightforward."
+    }
+  },
+  {
+    "id": "s038",
+    "query": "If a company orders 60 devices, what additional cost and time should they expect for pre-configuration services?",
+    "expected_answer": "An additional ₹500 per device and 3-5 business days to fulfillment.",
+    "expected_source": "19_acmera_business.md",
+    "difficulty": "medium",
+    "category": "orders",
+    "persona": "standard",
+    "critique": {
+      "id": "s038",
+      "realism": 5,
+      "difficulty": 3,
+      "flag": "keep",
+      "note": "The question is realistic and requires some calculation."
+    }
   }
 ]

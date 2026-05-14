@@ -1,19 +1,19 @@
 {
-  "saved_at": "2026-04-04T05:18:47.142066Z",
+  "saved_at": "2026-05-02T20:03:55.420569Z",
   "summary": {
-    "n_queries": 30,
-    "retrieval_hit_rate": 0.9667,
-    "avg_mrr": 0.855,
-    "avg_faithfulness": 4.8667,
-    "avg_correctness": 4.4667
+    "n_queries": 65,
+    "retrieval_hit_rate": 0.9846,
+    "avg_mrr": 0.9005,
+    "avg_faithfulness": 4.9385,
+    "avg_correctness": 4.6308
   },
   "categories": {
     "account": {
-      "n": 1,
+      "n": 4,
       "hit_rate": 1.0,
-      "avg_mrr": 0.5,
+      "avg_mrr": 1.0,
       "avg_faithfulness": 5.0,
-      "avg_correctness": 3.0
+      "avg_correctness": 4.5
     },
     "business": {
       "n": 1,
@@ -23,74 +23,88 @@
       "avg_correctness": 5.0
     },
     "membership": {
-      "n": 3,
+      "n": 6,
       "hit_rate": 1.0,
-      "avg_mrr": 1.0,
+      "avg_mrr": 0.8333,
       "avg_faithfulness": 5.0,
-      "avg_correctness": 4.3333
+      "avg_correctness": 4.6667
     },
     "orders": {
-      "n": 2,
+      "n": 5,
       "hit_rate": 1.0,
       "avg_mrr": 1.0,
       "avg_faithfulness": 5.0,
       "avg_correctness": 5.0
     },
     "payments": {
-      "n": 4,
+      "n": 7,
       "hit_rate": 1.0,
       "avg_mrr": 1.0,
-      "avg_faithfulness": 5.0,
-      "avg_correctness": 4.5
+      "avg_faithfulness": 4.5714,
+      "avg_correctness": 4.7143
     },
     "products": {
-      "n": 2,
+      "n": 8,
       "hit_rate": 1.0,
-      "avg_mrr": 1.0,
-      "avg_faithfulness": 3.0,
-      "avg_correctness": 4.0
+      "avg_mrr": 0.9375,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 4.875
     },
     "promotions": {
-      "n": 2,
+      "n": 3,
       "hit_rate": 1.0,
-      "avg_mrr": 1.0,
+      "avg_mrr": 0.6111,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 4.3333
+    },
+    "refunds": {
+      "n": 1,
+      "hit_rate": 1.0,
+      "avg_mrr": 0.5,
       "avg_faithfulness": 5.0,
       "avg_correctness": 4.0
     },
     "returns": {
-      "n": 4,
-      "hit_rate": 1.0,
-      "avg_mrr": 0.6125,
+      "n": 10,
+      "hit_rate": 0.9,
+      "avg_mrr": 0.85,
       "avg_faithfulness": 5.0,
       "avg_correctness": 4.5
     },
     "rewards": {
-      "n": 3,
-      "hit_rate": 1.0,
-      "avg_mrr": 0.8333,
-      "avg_faithfulness": 5.0,
-      "avg_correctness": 4.3333
-    },
-    "shipping": {
-      "n": 2,
+      "n": 4,
       "hit_rate": 1.0,
       "avg_mrr": 1.0,
       "avg_faithfulness": 5.0,
-      "avg_correctness": 4.5
+      "avg_correctness": 4.25
     },
-    "sustainability": {
+    "shipping": {
+      "n": 5,
+      "hit_rate": 1.0,
+      "avg_mrr": 0.9,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 4.8
+    },
+    "support": {
       "n": 1,
       "hit_rate": 1.0,
       "avg_mrr": 1.0,
       "avg_faithfulness": 5.0,
-      "avg_correctness": 4.0
+      "avg_correctness": 5.0
+    },
+    "sustainability": {
+      "n": 3,
+      "hit_rate": 1.0,
+      "avg_mrr": 1.0,
+      "avg_faithfulness": 5.0,
+      "avg_correctness": 4.6667
     },
     "warranty": {
-      "n": 5,
-      "hit_rate": 0.8,
-      "avg_mrr": 0.64,
-      "avg_faithfulness": 5.0,
-      "avg_correctness": 5.0
+      "n": 7,
+      "hit_rate": 1.0,
+      "avg_mrr": 0.8143,
+      "avg_faithfulness": 4.8571,
+      "avg_correctness": 4.4286
     }
   }
 }

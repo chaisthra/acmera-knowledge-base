@@ -27,7 +27,7 @@ load_dotenv()
 SCRIPT_DIR = os.path.dirname(__file__)
 
 DEFAULT_BASELINE = os.path.join(SCRIPT_DIR, "baseline_scores.json")
-DEFAULT_CURRENT = os.path.join(SCRIPT_DIR, "..", "eval_results.json")
+DEFAULT_CURRENT = os.path.join(SCRIPT_DIR, "eval_results.json")
 DEFAULT_THRESHOLD = 5.0  # percentage points
 
 
@@ -36,54 +36,80 @@ DEFAULT_THRESHOLD = 5.0  # percentage points
 # =========================================================================
 
 def load_baseline(path: str) -> dict:
-    """
-    Load baseline scores from JSON file.
-    Returns the parsed dict.
-
-    TODO: Implement in Session 2.
-    """
-    pass
+    with open(path) as f:
+        data = json.load(f)
+    if isinstance(data, dict) and "summary" in data:
+        return data["summary"]
+    # raw eval_results list — compute summary so any run can be used as baseline
+    n = len(data)
+    return {
+        "n_queries": n,
+        "retrieval_hit_rate": sum(1 for r in data if r["retrieval_hit"]) / n,
+        "avg_mrr": sum(r["mrr"] for r in data) / n,
+        "avg_faithfulness": sum(r["faithfulness"]["score"] for r in data) / n,
+        "avg_correctness": sum(r["correctness"]["score"] for r in data) / n,
+    }
 
 
 def load_current(path: str) -> dict:
-    """
-    Load current eval results from JSON file.
-    Note: eval_results.json wraps scores inside a "summary" key.
-    If "summary" is present, return data["summary"]. Otherwise return data directly.
-
-    TODO: Implement in Session 2.
-    """
-    pass
+    with open(path) as f:
+        data = json.load(f)
+    if isinstance(data, dict) and "summary" in data:
+        return data["summary"]
+    # raw list of per-query results — compute summary
+    n = len(data)
+    return {
+        "n_queries": n,
+        "retrieval_hit_rate": sum(1 for r in data if r["retrieval_hit"]) / n,
+        "avg_mrr": sum(r["mrr"] for r in data) / n,
+        "avg_faithfulness": sum(r["faithfulness"]["score"] for r in data) / n,
+        "avg_correctness": sum(r["correctness"]["score"] for r in data) / n,
+    }
 
 
 def check_regression(current: dict, baseline: dict, threshold: float = DEFAULT_THRESHOLD) -> list:
-    """
-    Compare current scores against baseline for these metrics:
-      - retrieval_hit_rate
-      - avg_faithfulness
-      - avg_correctness
-
-    For each metric:
-      - Calculate delta = current[metric] - baseline[metric]
-      - Mark as regression if delta < -threshold
-
-    Returns a list of dicts:
-      [{"metric": "...", "baseline": N, "current": N, "delta": N, "is_regression": bool}]
-
-    TODO: Implement in Session 2.
-    """
-    pass
+    # Each metric is normalized to 0-100% before comparing so threshold is always in percentage points.
+    # hit_rate is already 0-1 → ×100; faithfulness/correctness are 1-5 → ÷5 ×100
+    metrics = [
+        ("retrieval_hit_rate", 100),
+        ("avg_faithfulness",    20),   # (score / 5) * 100
+        ("avg_correctness",     20),
+    ]
+    results = []
+    for metric, scale in metrics:
+        b_pct = baseline[metric] * scale
+        c_pct = current[metric] * scale
+        delta = c_pct - b_pct
+        results.append({
+            "metric":       metric,
+            "baseline":     round(b_pct, 2),
+            "current":      round(c_pct, 2),
+            "delta":        round(delta, 2),
+            "is_regression": delta < -threshold,
+        })
+    return results
 
 
 def display_results(regressions: list, threshold: float):
-    """
-    Print a clear comparison table showing baseline vs current for each metric.
-    Show PASS (green) or REGRESSION (red) for each.
-    Print a headline: ✅ NO REGRESSION or ❌ REGRESSION DETECTED.
+    GREEN = "\033[92m"
+    RED   = "\033[91m"
+    RESET = "\033[0m"
 
-    TODO: Implement in Session 2.
-    """
-    pass
+    print(f"\n{'Metric':<24} {'Baseline':>10} {'Current':>10} {'Delta':>8}  Status")
+    print("-" * 65)
+    any_regression = False
+    for r in regressions:
+        status_label = f"{RED}REGRESSION{RESET}" if r["is_regression"] else f"{GREEN}PASS{RESET}"
+        delta_str = f"{r['delta']:+.2f}pp"
+        print(f"  {r['metric']:<22} {r['baseline']:>9.2f}% {r['current']:>9.2f}% {delta_str:>8}  {status_label}")
+        if r["is_regression"]:
+            any_regression = True
+
+    print()
+    if any_regression:
+        print(f"❌  REGRESSION DETECTED  (threshold: {threshold}pp)")
+    else:
+        print(f"✅  NO REGRESSION  (threshold: {threshold}pp)")
 
 
 # =========================================================================
@@ -98,9 +124,10 @@ def main():
                         help="Regression threshold in percentage points (default: 5.0)")
     args = parser.parse_args()
 
-    print("Regression checker skeleton loaded.")
-    print("Functions to implement: load_baseline, load_current, check_regression, display_results")
-    print("\nWe'll build these together in Session 2.")
+    baseline = load_baseline(args.baseline)
+    current  = load_current(args.current)
+    results  = check_regression(current, baseline, args.threshold)
+    display_results(results, args.threshold)
 
 
 if __name__ == "__main__":
