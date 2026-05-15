@@ -7,7 +7,7 @@
     "expected_source": "01_return_policy.md",
     "expected_answer": "The standard return window is 30 calendar days from the delivery date.",
     "answer": "The standard return window for products purchased from Acmera is 30 calendar days from the delivery date. The return window begins on the date the item is marked as delivered by the shipping carrier.",
-    "trace_id": "4d89d48c-16b2-4816-85c6-1b6492be112d",
+    "trace_id": "8fd7e27e-25a1-4c8f-84ba-c0dcc5adf171",
     "retrieval_hit": true,
     "mrr": 0.2,
     "faithfulness": {
@@ -18,7 +18,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and includes all key points of the expected answer."
     },
-    "elapsed_seconds": 4.01
+    "elapsed_seconds": 2.96
   },
   {
     "id": "q02",
@@ -28,7 +28,7 @@
     "expected_source": "03_shipping_policy.md",
     "expected_answer": "No, Acmera currently does not offer international shipping. Customers can use third-party forwarding services at their own cost and risk.",
     "answer": "No, Acmera currently does not offer international shipping. Customers outside India can use third-party forwarding services at their own cost and risk.",
-    "trace_id": "52175ec3-da6b-4592-b3d3-b60e65522c18",
+    "trace_id": "03b24a47-3682-435a-87f2-1dcbb8fe7a82",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -37,9 +37,9 @@
     },
     "correctness": {
       "score": 4,
-      "reason": "The generated answer is mostly correct but includes an unnecessary detail about customers being outside India, which could imply a limitation not present in the expected answer."
+      "reason": "The generated answer is mostly correct but includes an unnecessary detail about customers being outside India, which is not mentioned in the expected answer."
     },
-    "elapsed_seconds": 2.12
+    "elapsed_seconds": 1.89
   },
   {
     "id": "q03",
@@ -49,7 +49,7 @@
     "expected_source": "04_warranty_policy.md",
     "expected_answer": "All electronics come with a minimum 1-year manufacturer warranty covering defects in materials and workmanship under normal use.",
     "answer": "All electronics sold by Acmera come with a minimum 1-year manufacturer warranty from the date of purchase. This warranty covers defects in materials and workmanship under normal use conditions.",
-    "trace_id": "2c2aa3e6-76f7-4667-833d-0ba75ea5ea31",
+    "trace_id": "586e3197-24e6-4331-8a0e-c3d5bcff4a62",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -60,7 +60,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 2.21
+    "elapsed_seconds": 2.4
   },
   {
     "id": "q04",
@@ -70,7 +70,7 @@
     "expected_source": "02_premium_membership.md",
     "expected_answer": "Premium Gold requires spending \u20b975,000 in a calendar year or maintaining Premium Silver for 3+ consecutive years.",
     "answer": "The spending threshold for Premium Gold is \u20b975,000 in a calendar year.",
-    "trace_id": "c2521279-ffdc-4faf-b440-1437a173c3f9",
+    "trace_id": "fa1310ff-8ccc-44ed-ba3b-4ae7cc2ad363",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -81,7 +81,7 @@
       "score": 4,
       "reason": "The generated answer is mostly correct but omits the detail about maintaining Premium Silver for 3+ consecutive years."
     },
-    "elapsed_seconds": 2.39
+    "elapsed_seconds": 1.33
   },
   {
     "id": "q05",
@@ -90,19 +90,19 @@
     "difficulty": "easy",
     "expected_source": "01_return_policy.md",
     "expected_answer": "Opened software, digital downloads, gift cards, perishable goods, and personalized items cannot be returned.",
-    "answer": "The following items cannot be returned under any circumstances:\n\n1. Cards (including gift cards).\n2. Opened software and digital downloads.\n3. Customized items.\n4. Perishable goods.\n5. Personalized items.\n6. Electronics that do not include all original accessories, cables, and documentation.\n7. Consumable electronics accessories such as cables, screen protectors, or cases.\n\nAdditionally, items that show signs of wear, damage, or modification are not eligible for standard returns.",
-    "trace_id": "a5fe8028-bc95-4a46-9baf-6c8118c765da",
+    "answer": "The following items cannot be returned under any circumstances:\n\n1. Gift cards\n2. Opened software and digital downloads\n3. Customized items\n4. Perishable goods\n5. Personalized items\n6. Cards\n\nAdditionally, items that show signs of wear, damage, or modification are not eligible for standard returns.",
+    "trace_id": "f04de859-bbd3-48d5-8f9c-7d7986205e90",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
-      "score": 3,
-      "reason": "Some claims are supported by the context, but the inclusion of electronics without original accessories and consumable electronics accessories is not explicitly mentioned as non-returnable."
+      "score": 5,
+      "reason": "Every claim in the answer is explicitly supported by the context."
     },
     "correctness": {
       "score": 4,
-      "reason": "The generated answer includes most of the key points but adds unnecessary details and slightly miscategorizes some items."
+      "reason": "The generated answer is mostly correct but includes 'cards' which is not specified in the expected answer and has some redundancy with 'customized' and 'personalized' items."
     },
-    "elapsed_seconds": 3.27
+    "elapsed_seconds": 1.96
   },
   {
     "id": "q06",
@@ -111,19 +111,19 @@
     "difficulty": "medium",
     "expected_source": "01_return_policy.md",
     "expected_answer": "No. Refunds are processed only after the returned item is received and inspected at the warehouse. If the item fails inspection due to signs of wear, damage, or missing accessories, the refund will not be issued.",
-    "answer": "Based on the provided context, if a returned product fails inspection, you will not receive a refund. The return policy specifies that you are responsible for return shipping costs unless the return is due to a product defect or fulfillment error. If the product is not defective and fails inspection, it typically means the return is not accepted, and therefore, a refund would not be issued.",
-    "trace_id": "27dfa333-0b09-4643-b60d-ea20538e5f8b",
+    "answer": "Based on the provided context, if a returned product fails inspection, it is not explicitly stated whether you will receive a refund. The context primarily discusses return shipping costs and warranty processes, but does not detail the outcomes of failed inspections for returns. Therefore, I cannot provide a definitive answer regarding refunds in this situation.",
+    "trace_id": "a16b5e2c-60cc-4023-8eb4-6a14eaa5d645",
     "retrieval_hit": false,
     "mrr": 0.0,
     "faithfulness": {
-      "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context regarding return policies and conditions for refunds."
+      "score": 3,
+      "reason": "Some claims about return policies and warranty processes are supported, but the specific outcome of a refund if a product fails inspection is not addressed in the context."
     },
     "correctness": {
-      "score": 5,
-      "reason": "The generated answer accurately reflects the expected answer by stating that a refund will not be issued if the returned product fails inspection and includes relevant details about return shipping costs."
+      "score": 2,
+      "reason": "The generated answer is mostly incorrect as it fails to address the specific outcome of refunds related to failed inspections."
     },
-    "elapsed_seconds": 3.67
+    "elapsed_seconds": 3.01
   },
   {
     "id": "q07",
@@ -132,19 +132,19 @@
     "difficulty": "easy",
     "expected_source": "03_shipping_policy.md",
     "expected_answer": "Acmera offers three options: Standard Shipping (5-7 business days, free over \u20b9999, else \u20b999), Express Shipping (2-3 business days, \u20b9199, free for Premium Gold members), and Same-Day Delivery (select metro cities, orders before 12 PM delivered by 9 PM, \u20b9399).",
-    "answer": "Acmera offers three shipping options for domestic orders within India:\n\n1. **Standard Shipping**: Delivered within 5-7 business days. Free on orders over \u20b9999; otherwise, a flat \u20b999 shipping fee applies.\n\n2. **Express Shipping**: Delivered within 2-3 business days. Available for \u20b9199 on all orders, and free for Premium Gold members.\n\n3. **Same-Day Delivery**: Available in select metro cities (Mumbai, Delhi NCR, Bangalore, Hyderabad, Chennai, Pune).",
-    "trace_id": "bf49b7de-b7a2-4fca-afbf-77f31fc0de98",
+    "answer": "Acmera offers three shipping options for domestic orders within India:\n\n1. **Standard Shipping**: Delivered within 5-7 business days. Free on orders over \u20b9999; a flat \u20b999 shipping fee applies to orders under \u20b9999.\n\n2. **Express Shipping**: Delivered within 2-3 business days. Available for \u20b9199 on all orders, and free for Premium Gold members.\n\n3. **Same-Day Delivery**: Available in select metro cities (Mumbai, Delhi NCR, Bangalore, Hyderabad, Chennai, Pune).",
+    "trace_id": "24575138-1137-480e-a2f8-f5504fe877e0",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
       "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context."
+      "reason": "Every claim in the answer is explicitly supported by the context provided in the shipping policy."
     },
     "correctness": {
       "score": 5,
-      "reason": "The generated answer accurately details all three shipping options, including delivery times, costs, and conditions, matching the expected answer."
+      "reason": "The generated answer accurately details all three shipping options, including delivery times, fees, and conditions, matching the expected answer."
     },
-    "elapsed_seconds": 6.33
+    "elapsed_seconds": 3.15
   },
   {
     "id": "q08",
@@ -153,19 +153,19 @@
     "difficulty": "medium",
     "expected_source": "12_corporate_gifting.md",
     "expected_answer": "Acmera has a Corporate Gifting program for businesses with a valid GST number. Bulk discounts apply: 10% for 10-49 units, 15% for 50-99, 20% + free express for 100+. Orders of 50+ units can include logo customization and branded packaging. You can set up a corporate account with centralized billing and net-30 payment terms. Contact corporate@acmera.com for large orders.",
-    "answer": "To use Acmera for Diwali gifting for your company, you can take advantage of the Corporate Gifting program. Here\u2019s how you can proceed:\n\n1. **Register Your Business**: Ensure that your business is registered with a valid GST number, as the Corporate Gifting program is available only to registered businesses.\n\n2. **Bulk Orders**: If you plan to purchase products in bulk, you can qualify for bulk pricing:\n   - For orders of 10-49 units, you will receive a 10% discount off the retail price.\n   - For orders of 50-99 units, the discount increases to 15%.\n   - For orders of 100+ units, you will receive a 20% discount plus free express shipping.\n\n3. **Select Products**: Choose the products you wish to gift and determine the quantities based on the bulk pricing tiers.\n\n4. **Place Your Order**: Once you have selected your products and quantities, you can place your order through the Acmera platform.\n\n5. **Delivery Timing**: Since Diwali typically falls in October/November, make sure to place your order in advance to ensure timely delivery.\n\nIf you need further assistance or have specific product inquiries, feel free to reach out to Acmera's customer support.",
-    "trace_id": "d694b39d-95ad-4b6b-a728-b42db4b5e3e1",
+    "answer": "To use Acmera for Diwali gifting for your company, you can take advantage of the Corporate Gifting program. Here\u2019s how you can proceed:\n\n1. **Register Your Business**: Ensure that your business is registered with a valid GST number, as the Corporate Gifting program is available only to registered businesses.\n\n2. **Bulk Orders**: If you plan to purchase products in bulk, you can qualify for bulk pricing:\n   - For orders of 10-49 units, you will receive a 10% discount off the retail price.\n   - For orders of 50-99 units, the discount increases to 15%.\n   - For orders of 100+ units, you will receive a 20% discount off the retail price, plus free express shipping.\n\n3. **Select Products**: Choose the products you wish to gift and determine the quantity based on the discounts available.\n\n4. **Place Your Order**: Once you have selected your products and quantities, you can place your order through the Acmera platform.\n\n5. **Plan Ahead**: Since Diwali Dhamaka sales typically occur in October/November, consider timing your order to take advantage of any promotional events that may offer additional savings.\n\nIf you need further assistance or have specific product inquiries, feel free to ask!",
+    "trace_id": "ac56993f-5aba-42f7-bb20-b9e2a93dae74",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
       "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context regarding the Corporate Gifting program, registration requirements, bulk pricing, and delivery timing for Diwali."
+      "reason": "Every claim in the answer is explicitly supported by the context, including the registration requirement, bulk pricing details, and the timing of Diwali Dhamaka sales."
     },
     "correctness": {
       "score": 5,
-      "reason": "The generated answer fully addresses the question by outlining the steps to use Acmera for Diwali gifting, including registration, bulk discounts, product selection, and order placement, while also mentioning the importance of timely delivery."
+      "reason": "The generated answer fully addresses the question by outlining the steps to use Acmera for Diwali gifting, including details about the Corporate Gifting program, bulk discounts, and the necessity of a valid GST number."
     },
-    "elapsed_seconds": 6.55
+    "elapsed_seconds": 5.77
   },
   {
     "id": "q09",
@@ -174,8 +174,8 @@
     "difficulty": "easy",
     "expected_source": "18_sustainability.md",
     "expected_answer": "Yes. Acmera ships in 100% recyclable packaging, has eliminated single-use plastics since January 2025, and offsets 100% of shipping-related carbon emissions. They also offer a trade-in program for electronics and sell refurbished products through Acmera Renewed. Customers who choose standard shipping get a \u20b910 Acmera Wallet credit.",
-    "answer": "Yes, Acmera is committed to sustainability. All products ship in 100% recyclable packaging, and since January 2025, the company has eliminated single-use plastics from all shipments. Acmera uses soy-based inks and FSC-certified cardboard for packaging. For electronics, molded pulp inserts are used instead of expanded polystyrene (EPS) to minimize environmental impact. Additionally, Acmera offsets 100% of shipping-related carbon emissions through verified carbon credit programs.",
-    "trace_id": "01b4e89a-1be0-435c-a3d0-6dca0335be73",
+    "answer": "Yes, Acmera is committed to sustainability. All products ship in 100% recyclable packaging, and since January 2025, the company has eliminated single-use plastics from all shipments. They use soy-based inks and FSC-certified cardboard for packaging. For electronics, Acmera employs molded pulp inserts instead of expanded polystyrene (EPS) to minimize environmental impact.\n\nAdditionally, Acmera offsets 100% of shipping-related carbon emissions through verified carbon credit programs, and customers can see the estimated carbon footprint of their order at checkout.",
+    "trace_id": "7e74a0e3-7d88-48bc-b974-989f4683fab6",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -184,30 +184,9 @@
     },
     "correctness": {
       "score": 4,
-      "reason": "The generated answer is mostly correct but omits details about the trade-in program and the \u20b910 Acmera Wallet credit for standard shipping."
+      "reason": "The generated answer is mostly correct and covers key points, but it omits the trade-in program and the \u20b910 Acmera Wallet credit for standard shipping."
     },
-    "elapsed_seconds": 2.23
-  },
-  {
-    "id": "q10",
-    "query": "Is the Acmera app safe to use?",
-    "category": "account",
-    "difficulty": "easy",
-    "expected_source": "10_account_management.md",
-    "expected_answer": "Yes. Acmera uses two-factor authentication (2FA) for all logins via SMS or app-based authentication. Passwords must be at least 12 characters. Suspicious login attempts trigger an automatic account lock. Payment details are stored as tokenized data, not raw card numbers.",
-    "answer": "Yes, the Acmera app is designed with safety in mind. It uses two-factor authentication (2FA) for all account logins, which enhances security. Customers can choose between SMS-based or app-based authentication. Additionally, account passwords must meet specific criteria (at least 12 characters, including uppercase, lowercase, and numeric characters) to ensure strong security.\n\nFurthermore, video footage captured by Acmera devices is encrypted in transit and at rest, and Acmera does not access or review customer video footage unless compelled by law enforcement with a valid legal order. Customers also have the ability to delete all stored footage at any time through the app.",
-    "trace_id": "4edb5622-0a47-4a4e-8871-166712088872",
-    "retrieval_hit": true,
-    "mrr": 0.25,
-    "faithfulness": {
-      "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context."
-    },
-    "correctness": {
-      "score": 4,
-      "reason": "The generated answer is mostly correct and covers key points about 2FA and password requirements, but it omits details about account lock on suspicious logins and tokenization of payment details."
-    },
-    "elapsed_seconds": 2.87
+    "elapsed_seconds": 3.31
   },
   {
     "id": "q11",
@@ -217,18 +196,18 @@
     "expected_source": "16_referral_program.md",
     "expected_answer": "Existing customers can refer friends using a unique referral code. When the referred person signs up and makes a first purchase of \u20b91,000+, the referrer gets \u20b9500 Acmera Wallet credit and the referee gets \u20b9300 off their first order. Premium Silver members earn \u20b9750 per referral, Premium Gold earn \u20b91,000. Up to 20 referrals per calendar year.",
     "answer": "The Acmera Referral Program allows existing customers to refer friends and earn rewards. Each customer receives a unique referral code in their Account Settings. When a new customer signs up using this referral code and makes their first purchase of \u20b91,000 or more, the referrer receives \u20b9500 in Acmera Wallet credit, while the new customer (referee) gets \u20b9300 off their first order.\n\nKey details include:\n- Customers can refer up to 20 people per calendar year.\n- The referred customer must be a genuinely new Acmera customer (no previous account).\n- Self-referrals are not allowed, and Acmera monitors for referral abuse.\n- Referral credits expire in 90 days and cannot be combined with other promotional offers.\n- If the referred customer's first order is canceled or returned, the referral reward is revoked. \n\nPremium members earn enhanced rewards: \u20b9750 per referral for Premium Silver members and \u20b91,000 per referral for Premium Gold members.",
-    "trace_id": "16bf4ef3-396f-484c-9213-56d850554adc",
+    "trace_id": "42ba83ef-8580-4fec-a7c1-b090d3640d9d",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
       "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context."
+      "reason": "Every claim in the answer is explicitly supported by the context provided."
     },
     "correctness": {
       "score": 5,
       "reason": "The generated answer accurately covers all key points of the expected answer, including the referral process, rewards for both referrer and referee, membership tiers, and additional details about the program."
     },
-    "elapsed_seconds": 5.12
+    "elapsed_seconds": 4.76
   },
   {
     "id": "q12",
@@ -237,8 +216,8 @@
     "difficulty": "medium",
     "expected_source": "16_referral_program.md",
     "expected_answer": "You won't get a discount \u2014 you earn Acmera Wallet credit per referral. For 4 successful referrals, a standard customer earns \u20b9500 \u00d7 4 = \u20b92,000 in wallet credits. The referred friends each get \u20b9300 off their first order. Referral wallet credits have a 90-day expiry.",
-    "answer": "No, you will not receive a discount for the referrals themselves. However, for each new customer who signs up using your referral code and makes their first purchase of \u20b91,000 or more, you will earn \u20b9500 in Acmera Wallet credit. You can refer up to 20 people per calendar year, and there is no limit on the total rewards you can earn from these referrals.",
-    "trace_id": "0210f991-5a1d-446b-9d9d-e526f981896a",
+    "answer": "No, you will not receive a discount for referring 4 people. Instead, you will earn referral rewards. For each new customer who signs up using your referral code and makes their first purchase of \u20b91,000 or more, you will receive \u20b9500 in Acmera Wallet credit. You can refer up to 20 people per calendar year, and there is no limit on the total rewards you can earn.",
+    "trace_id": "becb12cd-1e9b-4cb2-ae7d-65cfe88bf078",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -247,9 +226,9 @@
     },
     "correctness": {
       "score": 4,
-      "reason": "The generated answer is mostly correct but omits the specific details about the total wallet credit earned for 4 referrals and the discount for referred friends."
+      "reason": "The generated answer is mostly correct but omits the specific details about the total wallet credits earned and the expiry of those credits."
     },
-    "elapsed_seconds": 2.56
+    "elapsed_seconds": 3.12
   },
   {
     "id": "q13",
@@ -258,8 +237,8 @@
     "difficulty": "easy",
     "expected_source": "14_probook_troubleshooting.md",
     "expected_answer": "Connect the charger and wait 15 minutes before trying to power on. Check if the charging LED is lit \u2014 if not, try a different power outlet. You can also do a hard reset by holding the power button for 15 seconds. If the issue persists, it may be a hardware defect covered under warranty \u2014 contact Acmera support.",
-    "answer": "If your Acmera ProBook is not charging, follow these steps:\n\n1. Ensure the laptop is charged by connecting the charger and waiting for 15 minutes before attempting to power it on.\n2. Perform a hard reset by holding the power button for 15 seconds, then release and press it again.\n3. Check if the charging LED is lit when the charger is connected. If it is not lit, try using a different power outlet.\n\nIf the issue persists after these steps, it may indicate a hardware defect covered under warranty. In that case, please contact Acmera support for further assistance.",
-    "trace_id": "33c1c9b4-ad35-44b4-9f11-21d3224662b2",
+    "answer": "If your Acmera ProBook is not charging, please follow these steps:\n\n1. Ensure the laptop is charged by connecting the charger and waiting for 15 minutes before attempting to power it on.\n2. Perform a hard reset by holding the power button for 15 seconds, then release it and press it again.\n3. Check if the charging LED is lit when the charger is connected. If it is not lit, try using a different power outlet.\n4. If the issue persists after these steps, it may indicate a hardware defect covered under warranty. In that case, please contact Acmera support for further assistance.",
+    "trace_id": "355340d3-6d13-4da2-bb19-787a89c00b90",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -270,7 +249,7 @@
       "score": 5,
       "reason": "The generated answer fully addresses the question and includes all key points from the expected answer."
     },
-    "elapsed_seconds": 3.34
+    "elapsed_seconds": 3.38
   },
   {
     "id": "q14",
@@ -279,19 +258,19 @@
     "difficulty": "medium",
     "expected_source": "04_warranty_policy.md",
     "expected_answer": "Physical damage to accessories is not covered under warranty. You would need to purchase a replacement charger. You can contact Acmera support to discuss paid repair or replacement options, but this will not be covered for free.",
-    "answer": "Since the damage to your laptop charger is not covered under warranty (as it is due to external factors and not a manufacturing defect), you will need to purchase a replacement charger. You can visit our website or contact Acmera support for assistance in finding the right charger for your laptop model.",
-    "trace_id": "a620e0d6-51a2-4116-9519-128a324b746b",
+    "answer": "Since the damage to your laptop charger is due to an incident (a mouse bite), it would not be covered under warranty, as warranties typically do not cover damage caused by accidents or external factors. \n\nYou should consider purchasing a replacement charger through our website or contacting customer support for assistance in finding a compatible charger. If you need further help, please provide your order number and details about the charger.",
+    "trace_id": "0ce4b171-dcb6-4c34-ab47-cf9b3d20405a",
     "retrieval_hit": true,
     "mrr": 0.5,
     "faithfulness": {
       "score": 4,
-      "reason": "The answer correctly states that the damage is not covered under warranty and suggests contacting support, but it lacks explicit context about purchasing a replacement charger."
+      "reason": "The answer correctly states that the damage is not covered under warranty and suggests contacting customer support, but it lacks specific details from the context about the warranty claim process."
     },
     "correctness": {
-      "score": 5,
-      "reason": "The generated answer correctly addresses all key points of the expected answer, including warranty coverage and options for replacement."
+      "score": 4,
+      "reason": "The generated answer correctly states that the damage is not covered under warranty and suggests purchasing a replacement, but it lacks specific mention of contacting Acmera support for repair or replacement options."
     },
-    "elapsed_seconds": 2.16
+    "elapsed_seconds": 2.71
   },
   {
     "id": "q16",
@@ -301,7 +280,7 @@
     "expected_source": "04_warranty_policy.md",
     "expected_answer": "Yes, likely. Display issues not caused by physical damage are covered under the standard 1-year warranty. Green lines on screen indicate a hardware defect. Since 5 months is within the warranty period, you can file a warranty claim through Acmera support. Repair or replacement typically takes 7-14 business days.",
     "answer": "Since it has been 5 months since your purchase, you are outside the 30-day return window for a full refund. However, you can file a warranty claim for the issue with the green lines on your screen. Please contact Acmera support with your order number and a description of the issue. If the issue cannot be resolved remotely, a prepaid shipping label will be provided for the defective item, and repairs or replacements typically take 7-14 business days after receiving the item.",
-    "trace_id": "65181784-39cc-41b2-a4f9-2e16891805be",
+    "trace_id": "35b8c90b-621b-48f0-abd9-dbff6292d630",
     "retrieval_hit": true,
     "mrr": 0.5,
     "faithfulness": {
@@ -310,9 +289,9 @@
     },
     "correctness": {
       "score": 4,
-      "reason": "The generated answer is mostly correct but omits the detail that display issues are covered under the standard 1-year warranty."
+      "reason": "The generated answer is mostly correct but omits the detail that display issues not caused by physical damage are covered under the warranty."
     },
-    "elapsed_seconds": 4.99
+    "elapsed_seconds": 2.83
   },
   {
     "id": "q19",
@@ -321,19 +300,19 @@
     "difficulty": "easy",
     "expected_source": "01_return_policy.md",
     "expected_answer": "No. The standard return window is 30 calendar days from delivery (45 days for Premium Silver, 60 days for Premium Gold). After 9 months, the return window is long closed. If the product has a defect, you would need to file a warranty claim instead.",
-    "answer": "No, you cannot get a refund for a product returned after 9 months. The standard return window is 30 days, with extended windows of 45 days for Premium Silver members and 60 days for Premium Gold members. After these periods, returns are not accepted. If the product is defective and you are within the return window, you may return it for a full refund, but after the return window, you would need to file a warranty claim instead.",
-    "trace_id": "10b0a43a-323c-4a9f-9b71-493b52a064d2",
+    "answer": "No, you cannot get a refund for a product returned after 9 months. The standard return window is 30 days, while Premium Silver members have 45 days and Premium Gold members have 60 days to return items for a refund. After these periods, returns are not accepted. If the product is defective and you're within the return window, you can return it for a full refund. Otherwise, you would need to file a warranty claim.",
+    "trace_id": "429bb644-7647-4ec7-80c1-193c70fe041a",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
       "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context regarding the return policy and the timeframes for refunds."
+      "reason": "Every claim in the answer is explicitly supported by the context regarding the return policy and the time frames for refunds."
     },
     "correctness": {
-      "score": 5,
-      "reason": "The generated answer is fully correct and covers all key points of the expected answer."
+      "score": 4,
+      "reason": "The generated answer is mostly correct but inaccurately states that defective products can be returned for a full refund if within the return window, which is misleading."
     },
-    "elapsed_seconds": 2.62
+    "elapsed_seconds": 3.51
   },
   {
     "id": "q20",
@@ -342,8 +321,8 @@
     "difficulty": "easy",
     "expected_source": "05_payment_methods.md",
     "expected_answer": "Yes. No-cost EMI is available on select products for orders above \u20b95,000. It is supported on credit cards from HDFC, ICICI, SBI, Axis, and Kotak banks. Tenure options are 3, 6, 9, or 12 months depending on the product and card issuer.",
-    "answer": "Yes, you can buy a laptop on no-cost EMI if the order amount is above \u20b95,000. No-cost EMI is available on select products, including laptops, using credit cards from HDFC, ICICI, SBI, Axis, and Kotak banks. You can choose from tenure options of 3, 6, 9, or 12 months, depending on the product and card issuer.",
-    "trace_id": "40137292-9c5c-46d7-9b77-51789f73be0f",
+    "answer": "Yes, you can buy a laptop on no-cost EMI if the order amount is above \u20b95,000 and the laptop is eligible for this payment option. EMI is available on credit cards from HDFC, ICICI, SBI, Axis, and Kotak banks, with tenure options of 3, 6, 9, or 12 months depending on the product and card issuer.",
+    "trace_id": "0262531e-15dc-41fa-b1b1-92d0b869eaa8",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -354,7 +333,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 2.55
+    "elapsed_seconds": 3.42
   },
   {
     "id": "q21",
@@ -364,7 +343,7 @@
     "expected_source": "05_payment_methods.md",
     "expected_answer": "If an amount is debited but the order is not confirmed, a refund is initiated automatically within 24 hours. Bank processing may take an additional 5-7 business days. You do not need to contact support \u2014 the refund is automatic.",
     "answer": "If your payment fails but an amount is debited from your account, a refund will be initiated automatically within 24 hours. Please note that bank processing may take an additional 5-7 business days for the amount to reflect back in your account.",
-    "trace_id": "ee1a2be2-8573-4329-880d-9bab445c7f13",
+    "trace_id": "69948ef9-5bd0-4793-a272-a79a427772eb",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -375,7 +354,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 1.55
+    "elapsed_seconds": 1.97
   },
   {
     "id": "q22",
@@ -384,8 +363,8 @@
     "difficulty": "easy",
     "expected_source": "05_payment_methods.md",
     "expected_answer": "Yes. COD is available for orders between \u20b9200 and \u20b925,000. A \u20b949 convenience fee applies. COD is not available for same-day delivery orders or orders to remote pin codes.",
-    "answer": "Yes, Cash on Delivery (COD) is available for orders between \u20b9200 and \u20b925,000. There is a \u20b949 convenience fee for using COD. However, please note that COD is not available for same-day delivery orders or orders to remote pin codes.",
-    "trace_id": "d1f2e590-289e-475c-a223-b67db7e16179",
+    "answer": "Yes, Cash on Delivery (COD) is available for orders between \u20b9200 and \u20b925,000. There is a \u20b949 COD convenience fee that applies to these orders. However, COD is not available for same-day delivery orders or orders to remote pin codes.",
+    "trace_id": "5b7dfb7b-6e45-45e5-95d8-8c2262c057fb",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -396,7 +375,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 2.55
+    "elapsed_seconds": 2.5
   },
   {
     "id": "q23",
@@ -405,8 +384,8 @@
     "difficulty": "easy",
     "expected_source": "06_support_faq.md",
     "expected_answer": "Only if the order has not yet been shipped. Contact support immediately with your order number. Once the package is handed to the carrier, the delivery address cannot be changed.",
-    "answer": "You can change your delivery address only if the order has not yet been shipped. If you need to make a change, contact our support team immediately with your order number. Once the package is handed to the carrier, the delivery address cannot be modified.",
-    "trace_id": "ce249ff7-c9cc-4b56-a1e4-8552925157bb",
+    "answer": "Yes, you can change your delivery address only if the order has not yet been shipped. You need to contact our support team immediately with your order number to request the change. Once the package is handed to the carrier, the delivery address cannot be modified.",
+    "trace_id": "fe52825f-5b2c-4119-80ee-074ce4ec485c",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -417,7 +396,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 2.76
+    "elapsed_seconds": 2.53
   },
   {
     "id": "q24",
@@ -427,7 +406,7 @@
     "expected_source": "06_support_faq.md",
     "expected_answer": "Report the damage within 48 hours of delivery through the app or by contacting support. Include photos of the damaged product and packaging. Acmera will arrange a free replacement or full refund \u2014 in most cases you do not need to return the damaged item.",
     "answer": "You should report the damage within 48 hours of delivery through the app or by contacting support. Make sure to include photos of the damaged product and packaging. Acmera will arrange a free replacement or full refund, and in most cases, you won't need to return the damaged item.",
-    "trace_id": "b3232fc1-a302-4de3-90f8-5ab2f5b43f5d",
+    "trace_id": "c819bf27-2826-4830-97e9-080c77a3ad78",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -438,7 +417,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 1.69
+    "elapsed_seconds": 1.74
   },
   {
     "id": "q25",
@@ -447,19 +426,19 @@
     "difficulty": "medium",
     "expected_source": "07_promotional_events.md",
     "expected_answer": "Yes, standard customers can request a one-time price adjustment if the item goes on sale within 7 days of purchase. Premium members can request price adjustments within 14 days. Price matching is not available during or after promotional events themselves.",
-    "answer": "As a standard customer, you can request a one-time price adjustment if the item goes on sale within 7 days of your purchase. Please contact customer support to initiate this request. If you are a Premium member, you have a 14-day window for price adjustments.",
-    "trace_id": "74f20e6d-354b-4736-922e-3812de5f3ffa",
+    "answer": "As a standard customer, you can request a one-time price adjustment if the item goes on sale within 7 days of your purchase. You should contact customer support to initiate this request.",
+    "trace_id": "37c39d13-21eb-4ab4-a7de-e91cf3eefe7c",
     "retrieval_hit": true,
     "mrr": 0.5,
     "faithfulness": {
       "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context regarding price adjustments for standard and premium members."
+      "reason": "The answer accurately states that standard customers can request a one-time price adjustment if the item goes on sale within 7 days, which is explicitly supported by the context."
     },
     "correctness": {
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 2.34
+    "elapsed_seconds": 1.65
   },
   {
     "id": "q26",
@@ -469,7 +448,7 @@
     "expected_source": "07_promotional_events.md",
     "expected_answer": "Items bought during flash sales have a reduced 15-day return window and a 10% restocking fee. Premium members (Silver and Gold) are exempt from both \u2014 their standard extended return window applies and no restocking fee is charged.",
     "answer": "Items purchased during a flash sale have a reduced return window of 15 days. However, if you are a Premium member, you are exempt from this restriction and can utilize your standard extended return window.",
-    "trace_id": "d900688f-48bf-4782-a813-97c0161c864f",
+    "trace_id": "a506f311-d1b8-4a7d-a313-a3596e984ad9",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -480,7 +459,7 @@
       "score": 4,
       "reason": "The generated answer is mostly correct but omits the detail about the 10% restocking fee."
     },
-    "elapsed_seconds": 2.15
+    "elapsed_seconds": 1.95
   },
   {
     "id": "q27",
@@ -490,7 +469,7 @@
     "expected_source": "13_acmera_wallet.md",
     "expected_answer": "No. Wallet balance cannot be withdrawn as cash or transferred to a bank account. It can only be used for purchases on the Acmera platform. If you delete your account, any remaining wallet balance is forfeited.",
     "answer": "No, the wallet balance cannot be withdrawn as cash or transferred to a bank account. It can only be used for purchases on the Acmera platform.",
-    "trace_id": "8f16a89a-a32f-4792-9c52-664935ae095f",
+    "trace_id": "f44d1689-d87a-4cd5-b2c9-3521b5aee890",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -501,7 +480,7 @@
       "score": 4,
       "reason": "The generated answer is mostly correct but omits the detail about forfeiting the wallet balance if the account is deleted."
     },
-    "elapsed_seconds": 1.73
+    "elapsed_seconds": 1.59
   },
   {
     "id": "q28",
@@ -511,7 +490,7 @@
     "expected_source": "13_acmera_wallet.md",
     "expected_answer": "Yes. Promotional wallet credits \u2014 including referral rewards \u2014 expire 90 days from the date of issue. They are applied before your regular wallet balance during checkout.",
     "answer": "Yes, referral wallet credits expire after 90 days from the date of issue.",
-    "trace_id": "70d081b1-3016-4cc9-a67f-fb035057060f",
+    "trace_id": "78320b88-5799-44f6-b7a7-c6104e7a79db",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -532,7 +511,7 @@
     "expected_source": "02_premium_membership.md",
     "expected_answer": "Yes. Premium members (both Silver and Gold) can return opened electronics within their extended return window, provided the item is in functional condition with all original accessories included. For Premium Gold, the return window is 60 days from delivery.",
     "answer": "Yes, as a Premium Gold member, you can return an opened laptop within your extended 60-day return window, provided the laptop is in functional condition and includes all original accessories.",
-    "trace_id": "77b85aca-502d-4bdf-a847-32e21a708108",
+    "trace_id": "748ef933-6d72-4f18-8479-685e68828581",
     "retrieval_hit": true,
     "mrr": 0.5,
     "faithfulness": {
@@ -543,7 +522,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 5.5
+    "elapsed_seconds": 1.6
   },
   {
     "id": "q30",
@@ -553,18 +532,18 @@
     "expected_source": "02_premium_membership.md",
     "expected_answer": "Premium members' refunds are processed within 2 business days of the item being received at the warehouse, compared to 5-7 business days for standard customers. Premium Gold members can also request instant store credit, issued immediately upon return shipment tracking confirmation.",
     "answer": "Premium members have their refunds processed within 2 business days of the item being received at our warehouse.",
-    "trace_id": "583155c0-11df-49c3-8bab-741a778da9ee",
+    "trace_id": "bec94dc8-4b98-4443-a6be-fb97299ffd73",
     "retrieval_hit": true,
     "mrr": 0.5,
     "faithfulness": {
       "score": 5,
-      "reason": "The answer is explicitly supported by the context, stating that refunds for Premium members are processed within 2 business days of the item being received."
+      "reason": "The answer is explicitly supported by the context, stating that refunds for Premium members are processed within 2 business days."
     },
     "correctness": {
       "score": 4,
       "reason": "The generated answer is mostly correct but omits the comparison to standard customers and the detail about Premium Gold members requesting instant store credit."
     },
-    "elapsed_seconds": 1.46
+    "elapsed_seconds": 1.29
   },
   {
     "id": "s001",
@@ -574,7 +553,7 @@
     "expected_source": "01_return_policy.md",
     "expected_answer": "You have 30 calendar days from the delivery date to return a product purchased from Acmera.",
     "answer": "You have 30 calendar days from the delivery date to return a product purchased from Acmera. The return window begins on the date the item is marked as delivered by the shipping carrier.",
-    "trace_id": "3684f555-743a-498a-9958-de36bd981034",
+    "trace_id": "07c7ed20-f0fa-4dd4-bed5-7aa7de015fd6",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -585,7 +564,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 1.4
+    "elapsed_seconds": 1.41
   },
   {
     "id": "s002",
@@ -595,7 +574,7 @@
     "expected_source": "01_return_policy.md",
     "expected_answer": "Items purchased between November 15 and December 31 can be returned until January 31 of the following year, but all other return conditions still apply.",
     "answer": "Items purchased between November 15 and December 31 have an extended return window until January 31 of the following year. All other return conditions still apply during this extended window.",
-    "trace_id": "f8776f93-ec64-4641-a6a7-75fb80b94a42",
+    "trace_id": "fd31c8c2-74bb-4577-b701-120189bcd85e",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -604,9 +583,9 @@
     },
     "correctness": {
       "score": 5,
-      "reason": "The generated answer is fully correct and covers all key points of the expected answer."
+      "reason": "The generated answer accurately reflects the key points of the expected answer regarding the return policy for holiday purchases."
     },
-    "elapsed_seconds": 1.5
+    "elapsed_seconds": 1.51
   },
   {
     "id": "s003",
@@ -615,8 +594,8 @@
     "difficulty": "easy",
     "expected_source": "02_premium_membership.md",
     "expected_answer": "Premium Silver members receive free standard shipping on all orders over \u20b9500 and enjoy priority processing, with orders being picked and shipped within 4 hours during business days.",
-    "answer": "Premium Silver members receive the following shipping benefits:\n\n- Free standard shipping on all orders over \u20b9500.\n- Priority processing, meaning orders are picked and shipped within 4 hours during business days, compared to 24-48 hour processing times for standard customers. \n\nAdditionally, during peak seasons, Premium members' orders receive prioritized handling.",
-    "trace_id": "0aef2425-a902-4479-be6c-f1752923bbde",
+    "answer": "Premium Silver members receive the following shipping benefits:\n\n- Free standard shipping on all orders over \u20b9500.\n- Priority processing, meaning orders are picked and shipped within 4 hours during business days, compared to 24-48 hour processing times for standard customers. \n\nAdditionally, during peak seasons, Premium members' orders are prioritized.",
+    "trace_id": "8c519966-bcde-43d9-9f8e-eaef0ed878a6",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -625,9 +604,9 @@
     },
     "correctness": {
       "score": 5,
-      "reason": "The generated answer fully addresses the question by accurately detailing the shipping benefits of Premium Silver members, including free shipping, priority processing, and additional handling during peak seasons."
+      "reason": "The generated answer fully addresses the question by accurately detailing the shipping benefits for Premium Silver members, including free shipping, priority processing, and additional information about peak seasons."
     },
-    "elapsed_seconds": 2.07
+    "elapsed_seconds": 2.06
   },
   {
     "id": "s004",
@@ -636,8 +615,8 @@
     "difficulty": "medium",
     "expected_source": "02_premium_membership.md",
     "expected_answer": "To maintain Premium Gold status, a member must either spend \u20b975,000 in a calendar year or maintain Premium Silver status for 3 or more consecutive years. If they fall below the spending threshold, they may be downgraded but retain their current tier benefits for a 90-day grace period.",
-    "answer": "To maintain Premium Gold status, a member must either spend \u20b975,000 in a calendar year or maintain Premium Silver status for 3 or more consecutive years. \n\nIf a member falls below the spending threshold during their annual review, they will be notified 30 days before the downgrade takes effect. They will have a 90-day grace period during which they retain their current tier benefits. Any additional spending during this grace period will count toward reinstating their previous tier.",
-    "trace_id": "99ee4c5a-693d-4c24-b681-3770eca6b04a",
+    "answer": "To maintain Premium Gold status, a member must either spend \u20b975,000 in a calendar year or maintain Premium Silver status for 3 or more consecutive years. \n\nIf a member falls below the spending threshold during the annual review, they will be notified 30 days before the downgrade takes effect. They will have a 90-day grace period during which they retain their current tier benefits. Any additional spending during this grace period will count toward reinstating their previous tier.",
+    "trace_id": "f958df2e-fedd-4370-8580-439404de915b",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -648,7 +627,7 @@
       "score": 5,
       "reason": "The generated answer fully addresses how to maintain Premium Gold status and accurately describes the consequences of falling below the spending threshold, including the grace period and notification details."
     },
-    "elapsed_seconds": 2.45
+    "elapsed_seconds": 3.81
   },
   {
     "id": "s005",
@@ -657,8 +636,8 @@
     "difficulty": "easy",
     "expected_source": "03_shipping_policy.md",
     "expected_answer": "Express shipping costs \u20b9199 for all orders and is delivered within 2-3 business days. It's free for Premium Gold members.",
-    "answer": "For express shipping with Acmera, the delivery time is within 2-3 business days. The cost for express shipping is \u20b9199 on all orders. However, it is free for Premium Gold members.",
-    "trace_id": "b9a4bc3c-b93e-4217-a4d8-298bb401ee42",
+    "answer": "Express shipping is delivered within 2-3 business days and costs \u20b9199 on all orders. For Premium Gold members, express shipping is free.",
+    "trace_id": "5583c0bf-97ce-42c2-8c11-a5c9344345e1",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -667,9 +646,9 @@
     },
     "correctness": {
       "score": 5,
-      "reason": "The generated answer is fully correct and covers all key points of the expected answer."
+      "reason": "The generated answer fully matches the expected answer, covering all key points accurately."
     },
-    "elapsed_seconds": 1.79
+    "elapsed_seconds": 1.3
   },
   {
     "id": "s006",
@@ -679,18 +658,18 @@
     "expected_source": "03_shipping_policy.md",
     "expected_answer": "Delivery to remote or rural pin codes may take an additional 2-3 business days beyond the estimated delivery time, and a remote area surcharge of \u20b9149 may apply.",
     "answer": "If you live in a remote area, delivery may take an additional 2-3 business days beyond the estimated delivery time. Additionally, a remote area surcharge of \u20b9149 may apply, which will be displayed at checkout before payment.",
-    "trace_id": "524da88e-24ca-48b2-b62f-708c2f3accc1",
+    "trace_id": "fcd52331-b0ab-425f-ad6f-15e396aca0b5",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
       "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context regarding delivery times and surcharges for remote areas."
+      "reason": "Every claim in the answer is explicitly supported by the context."
     },
     "correctness": {
       "score": 5,
-      "reason": "The generated answer fully addresses the question by providing the additional delivery time and mentioning the remote area surcharge, just like the expected answer."
+      "reason": "The generated answer fully addresses the question by providing the additional delivery time and mentioning the remote area surcharge."
     },
-    "elapsed_seconds": 1.66
+    "elapsed_seconds": 3.11
   },
   {
     "id": "s007",
@@ -700,7 +679,7 @@
     "expected_source": "04_warranty_policy.md",
     "expected_answer": "The standard warranty lasts for 1 year from the date of purchase and covers defects in materials and workmanship under normal use conditions, including hardware malfunctions, battery defects (if capacity drops below 80% within the warranty period), display issues not caused by physical damage, and software defects present at the time of purchase.",
     "answer": "The standard warranty for Acmera electronics lasts for a minimum of 1 year from the date of purchase. It covers defects in materials and workmanship under normal use conditions. However, it does not cover modifications or repairs, normal wear and tear, cosmetic damage, or damage caused by use with non-compatible accessories.",
-    "trace_id": "1bb0b965-6473-4ed4-be9d-28386a174b6d",
+    "trace_id": "c12fac0a-2475-4a09-9099-fc835c24c1f1",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -708,10 +687,10 @@
       "reason": "Every claim in the answer is explicitly supported by the context."
     },
     "correctness": {
-      "score": 4,
-      "reason": "The generated answer is mostly correct but omits specific details about battery defects and display issues."
+      "score": 3,
+      "reason": "The generated answer captures the warranty duration and some coverage aspects but misses specific details about what is included and excluded."
     },
-    "elapsed_seconds": 3.43
+    "elapsed_seconds": 3.33
   },
   {
     "id": "s008",
@@ -721,7 +700,7 @@
     "expected_source": "04_warranty_policy.md",
     "expected_answer": "You can purchase an extended warranty within 30 days of delivery. The options are: Acmera Shield for an additional cost of 8% of the product price, which extends coverage to 3 years, or Acmera Shield Plus for 12% of the product price, which extends coverage to 4 years and includes accidental damage protection.",
     "answer": "You can purchase an extended warranty within 30 days of delivery. The options and costs are as follows:\n\n- **Acmera Shield (2-year)**: This extends your total coverage to 3 years and costs 8% of the product price.\n- **Acmera Shield Plus (3-year)**: This extends your total coverage to 4 years and includes accidental damage protection, costing 12% of the product price.\n\nPlease note that extended warranty plans are non-refundable and non-transferable.",
-    "trace_id": "e9c8e384-fd86-4f10-9dfe-88a30023a4b2",
+    "trace_id": "9d8d9d9c-c2e9-429b-a1f0-61b4fd3a4496",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -732,7 +711,7 @@
       "score": 4,
       "reason": "The generated answer is mostly correct but inaccurately states the duration of the Acmera Shield and Acmera Shield Plus options."
     },
-    "elapsed_seconds": 2.26
+    "elapsed_seconds": 2.74
   },
   {
     "id": "s009",
@@ -741,8 +720,8 @@
     "difficulty": "easy",
     "expected_source": "05_payment_methods.md",
     "expected_answer": "You can use credit and debit cards (Visa, Mastercard, American Express, and RuPay), UPI apps (Google Pay, PhonePe, Paytm, and BHIM), net banking from major Indian banks, Acmera Wallet, EMI options for orders above \u20b95,000, and Cash on Delivery for orders between \u20b9200 and \u20b925,000.",
-    "answer": "You can use the following payment methods for your online order at Acmera:\n\n1. **Credit and Debit Cards**: Visa, Mastercard, American Express, and RuPay (both domestic and international cards are accepted).\n2. **UPI**: All major UPI apps, including Google Pay, PhonePe, Paytm, and BHIM.\n3. **Net Banking**: Available for all major Indian banks.\n\nAll card transactions are secured with 3D Secure authentication, and UPI payments are processed instantly.",
-    "trace_id": "3a3f145f-f2b9-4ba0-859c-b9353dd1f4a3",
+    "answer": "You can use the following payment methods for your online order at Acmera:\n\n1. **Credit and Debit Cards**: Visa, Mastercard, American Express, and RuPay (both domestic and international cards are accepted).\n2. **UPI**: All major UPI apps are supported, including Google Pay, PhonePe, Paytm, and BHIM. UPI payments are processed instantly.\n3. **Net Banking**: Available for all major Indian banks.",
+    "trace_id": "d4895fe2-4ef9-48fe-b260-50eb66a1bbb6",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -753,7 +732,7 @@
       "score": 4,
       "reason": "The generated answer is mostly correct but omits details about Acmera Wallet, EMI options, and Cash on Delivery."
     },
-    "elapsed_seconds": 2.19
+    "elapsed_seconds": 2.71
   },
   {
     "id": "s010",
@@ -763,7 +742,7 @@
     "expected_source": "05_payment_methods.md",
     "expected_answer": "UPI payments are processed instantly, but net banking may take up to 30 minutes during peak hours.",
     "answer": "UPI payments are processed instantly, even during peak hours.",
-    "trace_id": "dcfae935-28dc-4c4b-ad42-d9e0a3c6c314",
+    "trace_id": "76991965-92ff-4dc6-9f2d-f3eb628f4549",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -774,7 +753,7 @@
       "score": 4,
       "reason": "The generated answer correctly states that UPI payments are processed instantly but omits the detail about net banking potentially taking longer during peak hours."
     },
-    "elapsed_seconds": 1.73
+    "elapsed_seconds": 1.3
   },
   {
     "id": "s011",
@@ -783,8 +762,8 @@
     "difficulty": "easy",
     "expected_source": "06_support_faq.md",
     "expected_answer": "You can track your order through the Acmera app or website by going to 'My Orders' and selecting your order to see real-time status updates and estimated delivery time.",
-    "answer": "You can track your order through the Acmera app or website. Simply go to \"My Orders\" and select the order you want to track. You will see real-time status updates and estimated delivery time. Additionally, you will receive SMS and email notifications at each stage of the order process.",
-    "trace_id": "afd64b98-78e0-4158-a268-f506e0b8ef7c",
+    "answer": "You can track your order through the Acmera app or website. Simply go to \"My Orders\" and select the order you want to track. You'll see real-time status updates and estimated delivery time. Additionally, you will receive SMS and email notifications at each stage of the order process.",
+    "trace_id": "7083fa24-d1f6-45df-8236-d141775a35c8",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -795,7 +774,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer, including tracking through the app or website and receiving notifications."
     },
-    "elapsed_seconds": 2.06
+    "elapsed_seconds": 2.51
   },
   {
     "id": "s012",
@@ -805,7 +784,7 @@
     "expected_source": "06_support_faq.md",
     "expected_answer": "As a Premium member, the refund process takes 2 business days after we receive and inspect your returned item.",
     "answer": "As a Premium member, the refund processing takes 2 business days once your returned item is received at our warehouse. If you haven't received your refund after this period, you should check the status of your return through the returns portal.",
-    "trace_id": "74d374d5-9a2a-4af2-b692-03e5ff473144",
+    "trace_id": "7b26ace5-c88c-40bf-8fbe-55fa7421b93c",
     "retrieval_hit": true,
     "mrr": 0.5,
     "faithfulness": {
@@ -816,7 +795,7 @@
       "score": 5,
       "reason": "The generated answer accurately reflects the expected answer and includes additional helpful information about checking the status of the return."
     },
-    "elapsed_seconds": 1.87
+    "elapsed_seconds": 1.79
   },
   {
     "id": "s013",
@@ -825,8 +804,8 @@
     "difficulty": "medium",
     "expected_source": "07_promotional_events.md",
     "expected_answer": "Items purchased during clearance events must be returned within 15 calendar days from delivery and are subject to a 10% restocking fee. However, if an item is marked as 'Final Sale', it cannot be returned or exchanged.",
-    "answer": "Items bought during a clearance sale are subject to a modified return policy:\n\n- **Return window**: 15 calendar days from delivery (the standard return window is 30 days).\n- **Restocking fee**: A 10% restocking fee applies to all returns of promotional items, including clearance items.\n\nHowever, Premium members (both Silver and Gold) are exempt from the reduced return window and the restocking fee; they can return clearance items under the standard extended return window. Note that some clearance items may be marked as \"Final Sale\" and are not eligible for return or exchange.",
-    "trace_id": "7df7d88e-af6d-450c-aaa6-aa653d47dbff",
+    "answer": "Items bought during a clearance sale are subject to a reduced return window of 15 calendar days from delivery, compared to the standard 30 days. Additionally, a 10% restocking fee applies to all returns of promotional items, including those from clearance sales. However, Premium members are exempt from both the reduced return window and the restocking fee, allowing them to utilize their standard extended return window for these purchases. Please note that some clearance items may be marked as \"Final Sale\" and are not eligible for return or exchange.",
+    "trace_id": "c9ce8a41-a478-420b-825f-f0b1520fdba8",
     "retrieval_hit": true,
     "mrr": 0.5,
     "faithfulness": {
@@ -834,10 +813,10 @@
       "reason": "Every claim in the answer is explicitly supported by the context."
     },
     "correctness": {
-      "score": 5,
-      "reason": "The generated answer accurately reflects the return policy for clearance items, including the return window, restocking fee, and the condition regarding 'Final Sale' items."
+      "score": 4,
+      "reason": "The generated answer is mostly correct but includes additional details about Premium members that are not part of the expected answer."
     },
-    "elapsed_seconds": 3.07
+    "elapsed_seconds": 2.69
   },
   {
     "id": "s014",
@@ -847,7 +826,7 @@
     "expected_source": "07_promotional_events.md",
     "expected_answer": "The Independence Day Sale occurs in August and usually lasts for 5-7 days.",
     "answer": "Acmera holds its Independence Day Sale in August, and it typically lasts for 5-7 days.",
-    "trace_id": "c1edaef6-b2bb-4ee7-92bb-f6703fe9ba8d",
+    "trace_id": "61cf8375-2701-4381-aa61-cdc097e2755f",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -858,7 +837,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and matches all key points of the expected answer."
     },
-    "elapsed_seconds": 1.42
+    "elapsed_seconds": 2.51
   },
   {
     "id": "s015",
@@ -867,19 +846,19 @@
     "difficulty": "medium",
     "expected_source": "08_support_tickets.md",
     "expected_answer": "Yes, as a Premium Gold member, you have a 60-day return window. Since you purchased the laptop on September 2, 2025, and are requesting a return on October 15, 2025, your return is approved.",
-    "answer": "Yes, as a Premium Gold member, you can return the laptop. You have a 60-day return window, which means you can return it until November 1, 2025. Since you are within this window, you can proceed with the return.",
-    "trace_id": "9612533f-488c-417b-9eac-96bceecbd64e",
+    "answer": "Yes, as a Premium Gold member, you can return the laptop. You have a 60-day return window, which means you can return it until November 1, 2025. Since you are within this window, you are eligible to return the laptop even if it has been opened, as long as it is in functional condition and includes all original accessories.",
+    "trace_id": "9205fd0c-d21f-4574-b4e4-5361797c540a",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
       "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context, including the 60-day return window for Premium Gold members and the specific dates."
+      "reason": "Every claim in the answer is explicitly supported by the context, including the 60-day return window for Premium Gold members and the conditions for returning opened electronics."
     },
     "correctness": {
-      "score": 5,
-      "reason": "The generated answer correctly states the return policy and confirms that the return is approved within the specified timeframe."
+      "score": 4,
+      "reason": "The generated answer is mostly correct but includes an unnecessary detail about the condition of the laptop and accessories."
     },
-    "elapsed_seconds": 2.35
+    "elapsed_seconds": 1.87
   },
   {
     "id": "s016",
@@ -888,19 +867,19 @@
     "difficulty": "easy",
     "expected_source": "08_support_tickets.md",
     "expected_answer": "A replacement unit was shipped via express delivery and was delivered by October 20, 2025, just two days after the damage was reported.",
-    "answer": "If you reported the damage within 24 hours of delivery, a replacement unit will typically be shipped via express delivery at no charge. Based on previous cases, you can expect the replacement to be delivered within a few days after the report is confirmed. However, the exact delivery date may vary.",
-    "trace_id": "fd113e50-f90e-4552-91f7-1c766222be29",
+    "answer": "If you reported the damage within 24 hours of delivery, a replacement unit will typically be shipped via express delivery at no charge. Based on previous cases, you can expect the replacement to be delivered within a few days after the report is confirmed. In the context of similar cases, replacements have been delivered promptly, often within a week.",
+    "trace_id": "44327c23-3666-4dff-b5a2-493b2128c7ea",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
       "score": 4,
-      "reason": "The answer is mostly supported by the context, mentioning express delivery and the typical timeframe for replacements, but it lacks a specific delivery date for the replacement."
+      "reason": "The answer is mostly supported by the context, mentioning express delivery and prompt replacements, but it lacks specific details about the exact delivery date for the replacement."
     },
     "correctness": {
       "score": 3,
-      "reason": "The generated answer captures some key points about the replacement process but does not provide a specific delivery date as expected."
+      "reason": "The generated answer provides some relevant information about the replacement process but does not specify the exact delivery date or timeframe as stated in the expected answer."
     },
-    "elapsed_seconds": 2.06
+    "elapsed_seconds": 1.9
   },
   {
     "id": "s017",
@@ -909,8 +888,8 @@
     "difficulty": "easy",
     "expected_source": "09_electronics_catalog.md",
     "expected_answer": "The Acmera ProBook X15 is priced at \u20b978,999 and comes with a 1 year standard warranty, which can be extended to 4 years with Shield Plus.",
-    "answer": "The price of the Acmera ProBook X15 laptop is \u20b978,999. It comes with a standard warranty period of 1 year, which can be extended to 4 years with the Acmera Shield Plus warranty plan.",
-    "trace_id": "e2d8a5c1-7859-4170-8d4a-d8535514eea1",
+    "answer": "The price of the Acmera ProBook X15 laptop is \u20b978,999. It comes with a standard warranty period of 1 year, which can be extended to a total of 4 years with the Acmera Shield Plus warranty plan.",
+    "trace_id": "6243e744-22c3-4a4d-8ef2-3ce2098f7307",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -921,7 +900,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 1.78
+    "elapsed_seconds": 1.85
   },
   {
     "id": "s018",
@@ -931,7 +910,7 @@
     "expected_source": "09_electronics_catalog.md",
     "expected_answer": "The Acmera ProBook Air 14 has a battery life of up to 12 hours and features a display resolution of 2560x1600.",
     "answer": "The Acmera ProBook Air 14 has a battery life of up to 12 hours and features a display resolution of 2560x1600.",
-    "trace_id": "d257a558-4385-48ae-9e13-897e5a4061ed",
+    "trace_id": "a901a09a-d6d6-4452-9629-25f4ae7d61ff",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -942,7 +921,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and matches all key points of the expected answer."
     },
-    "elapsed_seconds": 1.75
+    "elapsed_seconds": 1.7
   },
   {
     "id": "s019",
@@ -951,8 +930,8 @@
     "difficulty": "easy",
     "expected_source": "10_account_management.md",
     "expected_answer": "To create an Acmera account, you need to provide a valid email address or phone number, or use Google/Apple sign-in. Account creation is free, and email verification is required to access support and return features.",
-    "answer": "To create an Acmera account, you need to provide either your email address, phone number, or use Google/Apple sign-in. The account creation is free and will give you access to features like order tracking, wishlists, and personalized recommendations. \n\nAdditionally, a valid phone number is required for order notifications and delivery coordination, and you will need to verify your email to access support and return features.",
-    "trace_id": "555d9941-8a14-4629-bf30-20d4181f493f",
+    "answer": "To create an Acmera account, you need to provide either your email address, phone number, or use Google/Apple sign-in. The account creation is free and will give you access to features like order tracking, wishlists, and personalized recommendations. Additionally, a valid phone number is required for order notifications and delivery coordination, and you must verify your email to access support and return features.",
+    "trace_id": "24a6edd4-b301-47ad-9d2c-0c897ab779e8",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -960,10 +939,10 @@
       "reason": "Every claim in the answer is explicitly supported by the context."
     },
     "correctness": {
-      "score": 5,
-      "reason": "The generated answer correctly addresses all key points of the expected answer, including the methods for account creation, the requirement for email verification, and additional relevant details."
+      "score": 4,
+      "reason": "The generated answer is mostly correct but includes additional details about order notifications and delivery coordination that were not in the expected answer."
     },
-    "elapsed_seconds": 2.55
+    "elapsed_seconds": 2.37
   },
   {
     "id": "s020",
@@ -972,8 +951,8 @@
     "difficulty": "medium",
     "expected_source": "10_account_management.md",
     "expected_answer": "Acmera uses two-factor authentication (2FA) for all account logins, allowing customers to choose between SMS-based or app-based authentication. Passwords must be at least 12 characters long and include uppercase, lowercase, and numeric characters. Suspicious login attempts result in an automatic account lock, requiring identity verification through the registered email to unlock.",
-    "answer": "Acmera ensures the security of your account through the following measures:\n\n1. **Two-Factor Authentication (2FA)**: All account logins require 2FA, which can be set up using either SMS-based or app-based authentication. This adds an extra layer of security beyond just your password.\n\n2. **Password Requirements**: Your account password must be at least 12 characters long and include a mix of uppercase letters, lowercase letters, and numeric characters, making it more difficult for unauthorized users to gain access.\n\n3. **Automatic Account Lock**: If there are suspicious login attempts, your account will be automatically locked. To unlock it, you must verify your identity through your registered email.\n\nThese measures help protect your account from unauthorized access and enhance overall security.",
-    "trace_id": "cc9b8e68-3f2d-4f22-90c9-faa8ccebe99a",
+    "answer": "Acmera ensures the security of your account through the following measures:\n\n1. **Two-Factor Authentication (2FA)**: All account logins require 2FA, which can be set up using either SMS-based or app-based authentication. This adds an extra layer of security beyond just your password.\n\n2. **Password Requirements**: Account passwords must be at least 12 characters long and include a mix of uppercase letters, lowercase letters, and numeric characters, making them more difficult to guess.\n\n3. **Automatic Account Lock**: If there are suspicious login attempts, your account will be automatically locked. To unlock it, you must verify your identity through your registered email.\n\nThese measures help protect your account from unauthorized access and enhance overall security.",
+    "trace_id": "a0a0b04e-2e5b-48e7-b342-2dd1d341c923",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -984,7 +963,7 @@
       "score": 5,
       "reason": "The generated answer fully addresses the question by accurately detailing the security measures Acmera employs, including 2FA, password requirements, and automatic account lock."
     },
-    "elapsed_seconds": 4.01
+    "elapsed_seconds": 3.6
   },
   {
     "id": "s021",
@@ -993,8 +972,8 @@
     "difficulty": "easy",
     "expected_source": "11_internal_pricing.md",
     "expected_answer": "The maximum discount a support agent can offer without needing manager approval is 10%.",
-    "answer": "A support agent can offer a maximum discount of 10% without needing manager approval.",
-    "trace_id": "b57487fa-d116-4923-a886-d321d4aa13a9",
+    "answer": "A support agent can offer a maximum discount of up to 10% without needing manager approval.",
+    "trace_id": "cfffe45d-ca7e-455a-979f-f8165a19ec9a",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -1005,7 +984,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and matches the expected answer exactly."
     },
-    "elapsed_seconds": 1.57
+    "elapsed_seconds": 1.33
   },
   {
     "id": "s022",
@@ -1015,7 +994,7 @@
     "expected_source": "11_internal_pricing.md",
     "expected_answer": "An agent can offer a one-time 20% discount on their next order, a complimentary 3-month Shield warranty extension on a recent purchase, or \u20b92,000 Acmera Wallet credit.",
     "answer": "If a Premium Gold member threatens to cancel or downgrade their membership, an agent can offer the following retention incentives:\n\n- A one-time 20% discount on their next order.\n- A complimentary 3-month Shield warranty extension on a recent purchase.\n- \u20b92,000 Acmera Wallet credit.\n\nThese offers are reactive tools and should not be proactively mentioned.",
-    "trace_id": "fb773cf5-ffcd-4db8-9b9c-755d1d3d7bb4",
+    "trace_id": "63f67ee3-520d-4a00-9f05-0c9f37d69800",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -1024,9 +1003,9 @@
     },
     "correctness": {
       "score": 5,
-      "reason": "The generated answer correctly lists all the specific offers that an agent can provide to retain a Premium Gold member, matching the expected answer perfectly."
+      "reason": "The generated answer correctly lists all the specific offers that can be provided to retain a Premium Gold member, matching the expected answer perfectly."
     },
-    "elapsed_seconds": 2.0
+    "elapsed_seconds": 1.75
   },
   {
     "id": "s023",
@@ -1036,7 +1015,7 @@
     "expected_source": "12_corporate_gifting.md",
     "expected_answer": "A 15% discount off the retail price is applied for orders of 50-99 units.",
     "answer": "For an order of 75 units through the Acmera Corporate Gifting program, you would qualify for a 15% discount off the retail price.",
-    "trace_id": "53791095-e9f3-4b9e-a3a9-5a6f7720c4bf",
+    "trace_id": "fb593318-8334-44f9-a903-e9254a2a48e0",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -1047,7 +1026,7 @@
       "score": 5,
       "reason": "The generated answer correctly states the discount percentage and specifies that it applies to an order of 75 units."
     },
-    "elapsed_seconds": 2.29
+    "elapsed_seconds": 1.79
   },
   {
     "id": "s024",
@@ -1057,7 +1036,7 @@
     "expected_source": "12_corporate_gifting.md",
     "expected_answer": "The minimum order quantity for customization is 50 units, and it adds 7-10 business days to the fulfillment time.",
     "answer": "To customize gifts with logos, a business must place an order of at least 50 units. Customization adds 7-10 business days to the fulfillment time.",
-    "trace_id": "ed0a0ea1-c792-47e8-afdf-68f6ae994e0e",
+    "trace_id": "aa7a2b7b-da59-4362-ac17-f9f995f8006f",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -1068,7 +1047,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 1.87
+    "elapsed_seconds": 1.41
   },
   {
     "id": "s025",
@@ -1077,8 +1056,8 @@
     "difficulty": "medium",
     "expected_source": "13_acmera_wallet.md",
     "expected_answer": "If your account is inactive for 12 consecutive months, you'll receive a notification. After 18 months of inactivity, your wallet balance will be forfeited.",
-    "answer": "If your Acmera account remains inactive for 12 consecutive months, you will receive a notification. After 18 months of inactivity, your wallet balance will be forfeited. Therefore, it's important to use your account periodically to avoid losing your balance.",
-    "trace_id": "b2ba9527-8fdc-46f7-bc80-4aceded88666",
+    "answer": "If your Acmera account remains inactive for 12 consecutive months, you will receive a notification. After 18 months of inactivity, your wallet balance will be forfeited. Therefore, it's important to use your account within that timeframe to avoid losing your balance.",
+    "trace_id": "84b34175-2912-43d7-89b0-c9fe55143c75",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -1089,7 +1068,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 1.63
+    "elapsed_seconds": 1.51
   },
   {
     "id": "s026",
@@ -1098,8 +1077,8 @@
     "difficulty": "easy",
     "expected_source": "13_acmera_wallet.md",
     "expected_answer": "Yes, Premium Gold members can choose to receive all refunds as wallet credit regardless of the original payment method.",
-    "answer": "Yes, as a Premium Gold member, you can choose to receive all refunds as wallet credit, regardless of the original payment method. This is the fastest refund method available, and the credit will appear instantly in your Acmera Wallet.",
-    "trace_id": "074c4bdd-8317-4bc3-a549-e3148d2ad709",
+    "answer": "Yes, as a Premium Gold member, you can choose to receive all refunds as wallet credit, regardless of the original payment method. This is the fastest refund method available, and the credit appears instantly in your Acmera Wallet.",
+    "trace_id": "fec9c245-fefc-49ec-811a-1c8500b7b744",
     "retrieval_hit": true,
     "mrr": 0.5,
     "faithfulness": {
@@ -1108,9 +1087,9 @@
     },
     "correctness": {
       "score": 5,
-      "reason": "The generated answer is fully correct and covers all key points of the expected answer."
+      "reason": "The generated answer is fully correct and covers all key points of the expected answer, including the option for refunds as wallet credit and the mention of it being the fastest method."
     },
-    "elapsed_seconds": 1.56
+    "elapsed_seconds": 2.57
   },
   {
     "id": "s027",
@@ -1119,19 +1098,19 @@
     "difficulty": "easy",
     "expected_source": "14_probook_troubleshooting.md",
     "expected_answer": "First, connect the charger and wait 15 minutes. Then, perform a hard reset by holding the power button for 15 seconds. If the charging LED is not lit, try a different outlet. If it still doesn't work, it may be a hardware defect under warranty.",
-    "answer": "If your ProBook won't turn on, follow these steps:\n\n1. Ensure the laptop is charged by connecting the charger and waiting for 15 minutes before attempting to power it on again.\n2. Perform a hard reset by holding the power button for 15 seconds, then release it and press the button again.\n3. Check if the charging LED is lit when the charger is connected. If it is not lit, try using a different power outlet.\n4. If the issue persists after trying the above steps, it may indicate a hardware defect covered under warranty. In that case, you should contact support for further assistance.",
-    "trace_id": "6240977b-515b-4317-b1a4-d948464456d2",
+    "answer": "If your ProBook won't turn on, follow these steps:\n\n1. Ensure the laptop is charged by connecting the charger and waiting for 15 minutes before attempting to power it on.\n2. Perform a hard reset by holding the power button for 15 seconds, then release and press it again.\n3. Check if the charging LED is lit when the charger is connected. If it is not lit, try using a different power outlet.\n4. If the issue persists after trying the above steps, it may be a hardware defect covered under warranty. In that case, contact support for further assistance.",
+    "trace_id": "1ec10492-fd73-4f18-82b7-6e11596d6e1f",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
       "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context provided in the troubleshooting guide."
+      "reason": "Every claim in the answer is explicitly supported by the context provided."
     },
     "correctness": {
       "score": 5,
-      "reason": "The generated answer fully addresses the question and includes all key points from the expected answer."
+      "reason": "The generated answer fully addresses the question by including all key steps and details from the expected answer."
     },
-    "elapsed_seconds": 7.15
+    "elapsed_seconds": 3.61
   },
   {
     "id": "s028",
@@ -1141,18 +1120,18 @@
     "expected_source": "14_probook_troubleshooting.md",
     "expected_answer": "If the battery capacity is below 80% within the first year of use, it is considered a defect and is eligible for warranty replacement.",
     "answer": "Battery health is considered a defect eligible for warranty replacement if it drops below 80% within the first year of purchase.",
-    "trace_id": "c09dd53b-2988-4b14-bf5b-4f965eeb6d6b",
+    "trace_id": "56bc8980-ad40-4a42-b61f-3b37be90084f",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
       "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context."
+      "reason": "The answer is explicitly supported by the context stating that battery health below 80% within the first year is considered a defect covered under warranty."
     },
     "correctness": {
       "score": 5,
       "reason": "The generated answer accurately reflects the key point of the expected answer regarding battery capacity and warranty eligibility."
     },
-    "elapsed_seconds": 1.79
+    "elapsed_seconds": 1.89
   },
   {
     "id": "s029",
@@ -1161,19 +1140,19 @@
     "difficulty": "easy",
     "expected_source": "15_slack_support_chat.md",
     "expected_answer": "Yes, as a Premium Silver member, you can return the Acmera Pixel S24 phone within 45 days regardless of the promotional return restrictions.",
-    "answer": "Yes, as a Premium Silver member, you can return your Acmera Pixel S24 phone even though you purchased it during a sale. Premium members are exempt from promotional return restrictions. Since you are within the 45-day return window for Silver members, you can proceed with the return.",
-    "trace_id": "0d3e58fa-6934-46ff-9209-082f38583b88",
+    "answer": "Yes, as a Premium Silver member, you can return your Acmera Pixel S24 phone even though you bought it during a sale. Premium members are exempt from promotional return restrictions. Since you purchased the phone 40 days ago, you are within the 45-day return window for Silver members. You can proceed with the return.",
+    "trace_id": "f4aaf224-cc2e-49ae-9dfa-09b3bd08caab",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
       "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context."
+      "reason": "Every claim in the answer is explicitly supported by the context, including the exemption from promotional return restrictions for Premium members and the applicable return window."
     },
     "correctness": {
       "score": 5,
-      "reason": "The generated answer is fully correct and covers all key points of the expected answer."
+      "reason": "The generated answer is fully correct and covers all key points of the expected answer, including the return policy and the time frame."
     },
-    "elapsed_seconds": 2.39
+    "elapsed_seconds": 3.06
   },
   {
     "id": "s030",
@@ -1183,7 +1162,7 @@
     "expected_source": "15_slack_support_chat.md",
     "expected_answer": "You should go through the warranty claim process since the product is defective. The return policy time frame does not apply to defective items.",
     "answer": "Since your SoundPods Pro is defective, you should proceed with the warranty claim process. The return policy does not apply to genuinely defective products, so you can seek a repair or replacement under warranty. If the defect is confirmed, a refund may also be issued as a goodwill gesture.",
-    "trace_id": "cce938ec-ef33-444b-aa9e-038ffa3d512c",
+    "trace_id": "eb9dab86-e784-419e-93fe-2464898adff0",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -1194,7 +1173,7 @@
       "score": 5,
       "reason": "The generated answer fully addresses the question by correctly stating the warranty claim process and clarifying that the return policy does not apply to defective items."
     },
-    "elapsed_seconds": 2.21
+    "elapsed_seconds": 2.12
   },
   {
     "id": "s031",
@@ -1203,19 +1182,19 @@
     "difficulty": "easy",
     "expected_source": "16_referral_program.md",
     "expected_answer": "No, you will not receive rewards because the referred friend's first purchase must be \u20b91,000 or more to qualify for the referral reward.",
-    "answer": "No, you will not receive any rewards if your friend makes their first purchase for \u20b9900. The referred customer must make their first purchase of \u20b91,000 or more for you to receive the referral reward.",
-    "trace_id": "5ac79d8d-ea20-474f-8d92-f8f50da6288f",
+    "answer": "No, you will not receive any rewards if your friend makes their first purchase for \u20b9900. The referred customer must make their first purchase of \u20b91,000 or more for you to earn the referral reward of \u20b9500.",
+    "trace_id": "d8049eb9-b85c-4465-838a-245b1ca3b7d0",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
       "score": 5,
-      "reason": "The answer is explicitly supported by the context, which states that the referred customer must make their first purchase of \u20b91,000 or more for the referrer to receive a reward."
+      "reason": "The answer is fully supported by the context, which states that the referred customer must make their first purchase of \u20b91,000 or more for the referrer to earn rewards."
     },
     "correctness": {
-      "score": 5,
-      "reason": "The generated answer is fully correct and accurately explains the requirement for the referral reward."
+      "score": 4,
+      "reason": "The generated answer is mostly correct but includes an imprecise detail about the referral reward amount."
     },
-    "elapsed_seconds": 1.83
+    "elapsed_seconds": 1.95
   },
   {
     "id": "s032",
@@ -1225,7 +1204,7 @@
     "expected_source": "16_referral_program.md",
     "expected_answer": "A Premium Gold member earns \u20b91,000 for each referral and can refer up to 20 people per calendar year.",
     "answer": "A Premium Gold member earns \u20b91,000 per referral. They can refer up to 20 people per calendar year. Each referral must result in a genuine first purchase by a new customer.",
-    "trace_id": "46e87f93-af0a-4bfd-a6ab-ff5c6426e7d8",
+    "trace_id": "0a197d7a-2911-44d0-baa7-793028042904",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -1236,7 +1215,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 1.58
+    "elapsed_seconds": 1.52
   },
   {
     "id": "s033",
@@ -1246,7 +1225,7 @@
     "expected_source": "17_smart_home_ecosystem.md",
     "expected_answer": "The Basic cloud storage plan for the SmartHome Camera 360 includes a 7-day recording history and motion alerts for \u20b999 per month.",
     "answer": "The Basic cloud storage plan for the SmartHome Camera 360 includes the following features:\n\n- 7-day recording history\n- Motion alerts\n\nThis plan is available for \u20b999 per month and is per camera.",
-    "trace_id": "327cb86b-fcef-42ed-b7d0-c4f1f6c3509f",
+    "trace_id": "fc0e4c3e-1a42-43a1-b126-a4ca00ad430c",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -1257,7 +1236,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and covers all key points of the expected answer."
     },
-    "elapsed_seconds": 2.93
+    "elapsed_seconds": 9.62
   },
   {
     "id": "s034",
@@ -1267,7 +1246,7 @@
     "expected_source": "17_smart_home_ecosystem.md",
     "expected_answer": "The SmartHome Hub Pro is planned to become compatible with Apple HomeKit in Q2 2026.",
     "answer": "The SmartHome Hub Pro is expected to become compatible with Apple HomeKit in Q2 2026.",
-    "trace_id": "cc23101e-4b63-4e6f-b337-b61d54dd6fa1",
+    "trace_id": "37181053-1230-49c9-93f1-e65f1e58206f",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -1278,7 +1257,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and matches the expected answer exactly."
     },
-    "elapsed_seconds": 1.58
+    "elapsed_seconds": 2.2
   },
   {
     "id": "s035",
@@ -1288,7 +1267,7 @@
     "expected_source": "18_sustainability.md",
     "expected_answer": "Up to \u20b925,000 credit depending on condition and model.",
     "answer": "The maximum trade-in credit you can receive for a laptop when you trade it in at Acmera is up to \u20b925,000, depending on the condition and model of the device.",
-    "trace_id": "09ddda14-a484-4da1-8032-7d7d06113ac9",
+    "trace_id": "1d7dc3c4-d657-4df4-894c-467dcec88116",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -1299,7 +1278,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and matches the expected answer in detail."
     },
-    "elapsed_seconds": 1.5
+    "elapsed_seconds": 1.47
   },
   {
     "id": "s036",
@@ -1309,7 +1288,7 @@
     "expected_source": "18_sustainability.md",
     "expected_answer": "Acmera products ship in 100% recyclable packaging, and since January 2025, single-use plastics have been eliminated from all shipments.",
     "answer": "Acmera uses 100% recyclable packaging for all its products. Starting in January 2025, Acmera eliminated single-use plastics from all shipments. Additionally, product packaging utilizes soy-based inks and FSC-certified cardboard, and for electronics, molded pulp inserts are used instead of expanded polystyrene (EPS).",
-    "trace_id": "ee4b57db-c1f0-45cb-a028-9de5eabca661",
+    "trace_id": "ab22b63e-8fe7-4871-94a6-71450f829c4c",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -1320,7 +1299,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct, covering all key points of the expected answer and providing additional relevant details."
     },
-    "elapsed_seconds": 2.06
+    "elapsed_seconds": 1.96
   },
   {
     "id": "s037",
@@ -1330,7 +1309,7 @@
     "expected_source": "19_acmera_business.md",
     "expected_answer": "Under 1 hour",
     "answer": "The average response time for business accounts during business hours is under 1 hour.",
-    "trace_id": "0ca13327-92ce-4833-bf59-cd2a5f55a01e",
+    "trace_id": "8981eaf0-3cdc-42e4-81ce-aa5b351e4fc6",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
@@ -1341,7 +1320,7 @@
       "score": 5,
       "reason": "The generated answer is fully correct and matches the expected answer exactly."
     },
-    "elapsed_seconds": 1.48
+    "elapsed_seconds": 1.52
   },
   {
     "id": "s038",
@@ -1350,18 +1329,18 @@
     "difficulty": "medium",
     "expected_source": "19_acmera_business.md",
     "expected_answer": "An additional \u20b9500 per device and 3-5 business days to fulfillment.",
-    "answer": "If a company orders 60 devices, they should expect an additional cost of \u20b9500 per device for pre-configuration services. This results in a total additional cost of \u20b930,000 (60 devices x \u20b9500). \n\nAdditionally, the fulfillment time will increase by 3-5 business days due to the pre-configuration services.",
-    "trace_id": "94cf83e8-c43c-4795-8ddc-f84bbccbeee2",
+    "answer": "If a company orders 60 devices, they should expect an additional cost of \u20b9500 per device for pre-configuration services. This totals to \u20b930,000 (60 devices x \u20b9500). Additionally, the fulfillment time will increase by 3-5 business days due to the pre-configuration process.",
+    "trace_id": "d8ccbe70-4dc1-4a56-b2e8-cf1215fa1ee7",
     "retrieval_hit": true,
     "mrr": 1.0,
     "faithfulness": {
       "score": 5,
-      "reason": "Every claim in the answer is explicitly supported by the context regarding the additional cost and time for pre-configuration services."
+      "reason": "Every claim in the answer is explicitly supported by the context."
     },
     "correctness": {
       "score": 5,
-      "reason": "The generated answer correctly states the additional cost per device, calculates the total cost accurately, and includes the expected fulfillment time."
+      "reason": "The generated answer correctly states the additional cost per device, calculates the total cost, and provides the expected fulfillment time, covering all key points of the expected answer."
     },
-    "elapsed_seconds": 3.1
+    "elapsed_seconds": 2.17
   }
 ]

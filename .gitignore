@@ -5,3 +5,14 @@ __pycache__/
 .DS_Store
 eval_results.json
 .collab.md
+.venv/
+audit.jsonl
+faiss.index
+sqlite.db
+miscellaneous/
+*.jpg
+*.jpeg
+*.png
+!scripts/banner.png
+!scripts/logo.png
+.aws-sam/

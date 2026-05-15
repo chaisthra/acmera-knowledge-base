@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Acmera Knowledge Base Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+/* ── Reset & base ─────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:          #f1f5f9;
+  --surface:     #ffffff;
+  --surface-2:   #f8fafc;
+  --blue:        #2563eb;
+  --blue-light:  #eff6ff;
+  --blue-dark:   #1d4ed8;
+  --purple:      #7c3aed;
+  --text:        #0f172a;
+  --text-muted:  #64748b;
+  --border:      #e2e8f0;
+  --green:       #10b981;
+  --amber:       #f59e0b;
+  --red:         #ef4444;
+  --radius:      12px;
+  --radius-lg:   18px;
+  --shadow-sm:   0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --shadow:      0 4px 16px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:   0 20px 48px rgba(0,0,0,.10), 0 4px 12px rgba(0,0,0,.06);
+  --sidebar-w:   280px;
+  --header-h:    64px;
+}
+html, body { height: 100%; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text); background: var(--bg); overflow: hidden; }
+
+/* ── Background blobs ─────────────────────────── */
+.bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .12; }
+.blob-1 { width: 700px; height: 700px; background: radial-gradient(circle, #60a5fa, #3b82f6); top: -300px; right: -200px; }
+.blob-2 { width: 500px; height: 500px; background: radial-gradient(circle, #a78bfa, #7c3aed); bottom: -200px; left: -150px; }
+.blob-3 { width: 300px; height: 300px; background: radial-gradient(circle, #34d399, #10b981); bottom: 100px; right: 100px; }
+
+/* ── Layout ───────────────────────────────────── */
+.layout { display: flex; height: 100vh; position: relative; z-index: 1; }
+
+/* ── Sidebar ──────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width .25s ease, min-width .25s ease;
+  flex-shrink: 0;
+}
+.sidebar.collapsed { width: 0; min-width: 0; }
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-logo img { width: 32px; height: 32px; object-fit: contain; border-radius: 8px; }
+.sidebar-logo span { font-weight: 700; font-size: 15px; color: var(--text); white-space: nowrap; }
+
+.sidebar-inner { padding: 16px; flex: 1; overflow: hidden; }
+
+.config-section { margin-bottom: 24px; }
+.config-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+
+.option-group { display: flex; flex-direction: column; gap: 4px; }
+.opt-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
+}
+.opt-btn:hover { background: var(--blue-light); color: var(--blue); }
+.opt-btn.active { background: var(--blue-light); color: var(--blue); }
+.opt-btn .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 2px solid currentColor;
+  flex-shrink: 0;
+  transition: background .15s;
+}
+.opt-btn.active .dot { background: var(--blue); border-color: var(--blue); }
+
+/* Toggle */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 2px;
+}
+.toggle-row span { font-size: 13px; font-weight: 500; color: var(--text); }
+.toggle {
+  position: relative;
+  width: 38px; height: 22px;
+  background: var(--border);
+  border-radius: 11px;
+  cursor: pointer;
+  transition: background .2s;
+  border: none;
+  flex-shrink: 0;
+}
+.toggle.on { background: var(--blue); }
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 16px; height: 16px;
+  background: white;
+  border-radius: 50%;
+  transition: transform .2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.toggle.on::after { transform: translateX(16px); }
+
+
+/* ── Main area ────────────────────────────────── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+/* ── Header ───────────────────────────────────── */
+.header {
+  height: var(--header-h);
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 24px;
+  flex-shrink: 0;
+}
+.header-toggle {
+  width: 36px; height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  font-size: 16px;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.header-toggle:hover { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
+.header-title { flex: 1; min-width: 0; }
+.header-title h1 { font-size: 16px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.header-title p  { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.header-badges { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .03em;
+  display: flex; align-items: center; gap: 5px;
+}
+.badge-mode   { background: var(--blue-light); color: var(--blue); }
+.badge-cache  { background: #ecfdf5; color: var(--green); }
+.badge-cached { background: #fef3c7; color: #92400e; }
+
+/* ── Chat scroll area ─────────────────────────── */
+.chat-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  scroll-behavior: smooth;
+  background-image: url('https://ik.imagekit.io/kr7ylbnd3/banner.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: local;
+  position: relative;
+}
+.chat-scroll::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(241, 245, 249, 0.88);
+  pointer-events: none;
+  z-index: 0;
+}
+.chat-scroll > * { position: relative; z-index: 1; }
+.chat-scroll::-webkit-scrollbar { width: 5px; }
+.chat-scroll::-webkit-scrollbar-track { background: transparent; }
+.chat-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ── Welcome / suggestions ────────────────────── */
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  animation: fadeUp .4s ease;
+}
+.welcome-icon {
+  width: 72px; height: 72px;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 24px rgba(37,99,235,.25);
+}
+.welcome h2 { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.welcome p  { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; max-width: 420px; }
+
+.suggestions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 560px; }
+.sug-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+  box-shadow: var(--shadow-sm);
+}
+.sug-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); box-shadow: none; }
+
+/* ── Messages ─────────────────────────────────── */
+.message-wrap { margin-bottom: 24px; animation: fadeUp .3s ease; }
+
+.msg-user {
+  display: flex;
+  justify-content: flex-end;
+}
+.msg-user .bubble {
+  max-width: 65%;
+  background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+  color: white;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
+  font-size: 14px;
+  line-height: 1.6;
+  box-shadow: 0 4px 12px rgba(37,99,235,.25);
+}
+
+.msg-ai { display: flex; flex-direction: column; gap: 12px; }
+.ai-header { display: flex; align-items: center; gap: 10px; }
+.ai-avatar {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.ai-label { font-size: 13px; font-weight: 600; color: var(--text); }
+
+.ai-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+}
+
+/* Markdown rendering */
+.ai-card h1,.ai-card h2,.ai-card h3 { font-weight: 700; margin: 12px 0 6px; }
+.ai-card h1 { font-size: 18px; } .ai-card h2 { font-size: 16px; } .ai-card h3 { font-size: 14px; }
+.ai-card p { font-size: 14px; line-height: 1.7; color: var(--text); margin-bottom: 10px; }
+.ai-card p:last-child { margin-bottom: 0; }
+.ai-card ul,.ai-card ol { padding-left: 20px; margin-bottom: 10px; }
+.ai-card li { font-size: 14px; line-height: 1.7; color: var(--text); margin-bottom: 4px; }
+.ai-card code { background: var(--surface-2); padding: 2px 6px; border-radius: 4px; font-size: 12px; font-family: 'Fira Code', monospace; }
+.ai-card strong { font-weight: 600; }
+
+/* Metrics bar */
+.metrics-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 4px 2px;
+}
+.metric-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.metric-pill .icon { font-size: 12px; }
+.trace-link { color: var(--blue); text-decoration: none; font-size: 11px; font-weight: 500; }
+.trace-link:hover { text-decoration: underline; }
+
+/* Chunks section */
+.chunks-section { margin-top: 12px; }
+.chunks-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px 0;
+  user-select: none;
+  background: none;
+  border: none;
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
+}
+.chunks-toggle:hover { color: var(--blue); }
+.chunks-toggle .arrow { transition: transform .2s; font-size: 10px; }
+.chunks-toggle.open .arrow { transform: rotate(90deg); }
+
+/* Eval metrics grid inside chunk dropdown */
+.eval-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0 8px;
+}
+.eval-cell {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.eval-cell-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.eval-cell-value { font-size: 18px; font-weight: 700; color: var(--blue); line-height: 1; }
+
+.chunks-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.chunk-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .15s;
+}
+.chunk-card:hover { box-shadow: var(--shadow); }
+.chunk-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.chunk-score {
+  width: 50px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.score-green { background: #ecfdf5; color: #065f46; }
+.score-amber { background: #fffbeb; color: #92400e; }
+.score-red   { background: #fef2f2; color: #991b1b; }
+.chunk-meta { flex: 1; min-width: 0; }
+.chunk-name { font-size: 12px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chunk-sub  { font-size: 11px; color: var(--text-muted); }
+.chunk-arrow { font-size: 10px; color: var(--text-muted); transition: transform .2s; }
+.chunk-card.open .chunk-arrow { transform: rotate(90deg); }
+.chunk-body { padding: 0 14px 12px; font-size: 12px; line-height: 1.7; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 10px; display: none; }
+.chunk-card.open .chunk-body { display: block; }
+
+/* Typing indicator */
+.typing-dots { display: flex; gap: 4px; align-items: center; height: 20px; }
+.typing-dots span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--blue);
+  animation: bounce .9s infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: .15s; }
+.typing-dots span:nth-child(3) { animation-delay: .30s; }
+
+/* ── Input area ───────────────────────────────── */
+.input-area {
+  flex-shrink: 0;
+  padding: 16px 24px 20px;
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+}
+.input-box {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  box-shadow: var(--shadow);
+  transition: border-color .15s, box-shadow .15s;
+}
+.input-box:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.10), var(--shadow); }
+#query-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: transparent;
+  resize: none;
+  max-height: 120px;
+  min-height: 22px;
+  line-height: 1.6;
+}
+#query-input::placeholder { color: var(--text-muted); }
+.send-btn {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  font-size: 16px;
+  flex-shrink: 0;
+  transition: opacity .15s, transform .15s;
+  box-shadow: 0 2px 8px rgba(37,99,235,.3);
+}
+.send-btn:hover { opacity: .9; transform: scale(1.04); }
+.send-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+.input-hint { font-size: 11px; color: var(--text-muted); margin-top: 8px; text-align: center; }
+
+/* ── Animations ───────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40%            { transform: translateY(-6px); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Guardrail badges / banners ───────────────── */
+.conf-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.conf-high   { background: #ecfdf5; color: #065f46; }
+.conf-medium { background: #fffbeb; color: #92400e; }
+.conf-low    { background: #fef2f2; color: #991b1b; }
+
+.blocked-banner {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: #991b1b;
+}
+.blocked-banner .b-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.blocked-banner .b-cat { font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: .06em; opacity: .7; display: block; margin-bottom: 3px; }
+
+.hallucination-warning {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #92400e;
+  margin-top: 10px;
+}
+.hallucination-warning strong { font-weight: 700; }
+
+.pii-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #6d28d9;
+  background: #f5f3ff;
+  border-radius: 20px;
+  padding: 3px 9px;
+}
+
+/* ── Escalation ticket card ───────────────────── */
+.ticket-card {
+  margin-top: 12px;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #fff;
+}
+.ticket-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #fef2f2;
+  cursor: pointer;
+  user-select: none;
+}
+.ticket-header-text { flex: 1; min-width: 0; }
+.ticket-header-title { font-size: 13px; font-weight: 700; color: #991b1b; }
+.ticket-header-sub   { font-size: 11px; color: #b91c1c; margin-top: 2px; }
+.ticket-arrow { font-size: 10px; color: #991b1b; transition: transform .2s; }
+.ticket-card.open .ticket-arrow { transform: rotate(90deg); }
+.ticket-body { padding: 14px 16px; display: none; }
+.ticket-card.open .ticket-body { display: block; }
+.ticket-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.ticket-badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.tbadge-team     { background: #eff6ff; color: #1d4ed8; }
+.tbadge-priority { background: #fef2f2; color: #991b1b; }
+.tbadge-urgent   { background: #991b1b; color: #fff; }
+.tbadge-high     { background: #fef2f2; color: #991b1b; }
+.tbadge-medium   { background: #fffbeb; color: #92400e; }
+.tbadge-low      { background: #f0fdf4; color: #166534; }
+.ticket-row { margin-bottom: 8px; }
+.ticket-row-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--text-muted); margin-bottom: 2px; }
+.ticket-row-value { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+/* ── Scrollbar ────────────────────────────────── */
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 640px) {
+  .sidebar { position: absolute; z-index: 10; height: 100%; box-shadow: var(--shadow-lg); }
+  .sidebar.collapsed { box-shadow: none; }
+  .header-title p { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://ik.imagekit.io/kr7ylbnd3/logo.png" alt="Acmera" onerror="this.style.display='none'" />
+      <span>Acmera KB</span>
+    </div>
+
+    <div class="sidebar-inner">
+
+      <!-- Retrieval Strategy -->
+      <div class="config-section">
+        <div class="config-label">Retrieval Strategy</div>
+        <div class="option-group" id="mode-group">
+          <button class="opt-btn active" data-mode="dense">
+            <span class="dot"></span> Dense Retrieval
+          </button>
+          <button class="opt-btn" data-mode="hybrid">
+            <span class="dot"></span> Hybrid Retrieval
+          </button>
+          <button class="opt-btn" data-mode="advanced">
+            <span class="dot"></span> Advanced Retrieval
+          </button>
+        </div>
+      </div>
+
+      <!-- Semantic Cache -->
+      <div class="config-section">
+        <div class="config-label">Semantic Cache</div>
+        <div class="toggle-row">
+          <span>Enable cache</span>
+          <button class="toggle on" id="cache-toggle" title="Semantic cache is always active in the pipeline"></button>
+        </div>
+      </div>
+
+
+
+
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <div class="main">
+
+    <!-- Header -->
+    <header class="header">
+      <button class="header-toggle" id="toggle-btn" title="Toggle sidebar">☰</button>
+      <div class="header-title">
+        <h1>Acmera Knowledge Base Assistant</h1>
+        <p>AI-powered retrieval &amp; evaluation playground</p>
+      </div>
+      <div class="header-badges">
+        <span class="badge badge-mode" id="mode-badge">⚡ Dense</span>
+        <span class="badge badge-cache" id="cache-badge">🔵 Cache On</span>
+      </div>
+    </header>
+
+    <!-- Chat scroll -->
+    <div class="chat-scroll" id="chat">
+
+      <!-- Welcome -->
+      <div class="welcome" id="welcome">
+        <div class="welcome-icon">🤖</div>
+        <h2>How can I help you today?</h2>
+        <p>Ask anything about Acmera's products, orders, returns, shipping, or internal workflows.</p>
+        <div class="suggestions">
+          <button class="sug-btn" onclick="fillQuery('Where is my order?')">📦 Where is my order?</button>
+          <button class="sug-btn" onclick="fillQuery('What is the return policy?')">↩️ What is the return policy?</button>
+          <button class="sug-btn" onclick="fillQuery('How long does shipping take?')">🚚 How long does shipping take?</button>
+          <button class="sug-btn" onclick="fillQuery('How do I cancel my order?')">❌ How do I cancel my order?</button>
+          <button class="sug-btn" onclick="fillQuery('What payment methods are accepted?')">💳 What payment methods are accepted?</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Input -->
+    <div class="input-area">
+      <div class="input-box">
+        <textarea id="query-input" placeholder="Ask about products, orders, returns, shipping…" rows="1"></textarea>
+        <button class="send-btn" id="send-btn" title="Send">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+      <div class="input-hint">Press <kbd>Enter</kbd> to send · <kbd>Shift+Enter</kbd> for new line</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────
+let currentMode = 'dense';
+let useCache = true;
+let loading = false;
+
+const modeLabels = { dense: '⚡ Dense', hybrid: '🔀 Hybrid', advanced: '🚀 Advanced' };
+
+// ── Sidebar toggle ─────────────────────────────
+document.getElementById('toggle-btn').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('collapsed');
+});
+
+// ── Mode selection ─────────────────────────────
+document.getElementById('mode-group').addEventListener('click', e => {
+  const btn = e.target.closest('.opt-btn');
+  if (!btn) return;
+  document.querySelectorAll('#mode-group .opt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentMode = btn.dataset.mode;
+  document.getElementById('mode-badge').textContent = modeLabels[currentMode];
+});
+
+
+// ── Toggle switches ────────────────────────────
+document.getElementById('cache-toggle').addEventListener('click', function() {
+  this.classList.toggle('on');
+  useCache = this.classList.contains('on');
+  document.getElementById('cache-badge').textContent = useCache ? '🔵 Cache On' : '⭕ Cache Off';
+});
+
+// ── Auto-resize textarea ───────────────────────
+const input = document.getElementById('query-input');
+input.addEventListener('input', () => {
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+});
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendQuery(); }
+});
+document.getElementById('send-btn').addEventListener('click', sendQuery);
+
+// ── Suggested prompt ───────────────────────────
+function fillQuery(text) {
+  input.value = text;
+  input.style.height = 'auto';
+  input.focus();
+}
+
+// ── Send query ─────────────────────────────────
+async function sendQuery() {
+  const query = input.value.trim();
+  if (!query || loading) return;
+
+  loading = true;
+  document.getElementById('send-btn').disabled = true;
+  input.value = '';
+  input.style.height = 'auto';
+
+  // Hide welcome
+  const welcome = document.getElementById('welcome');
+  if (welcome) welcome.style.display = 'none';
+
+  // User bubble
+  appendUser(query);
+
+  // AI loading
+  const aiWrap = appendAILoading();
+  const chat = document.getElementById('chat');
+  chat.scrollTop = chat.scrollHeight;
+
+  try {
+    const res = await fetch('/api/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, mode: currentMode, use_cache: useCache }),
+    });
+    if (!res.ok) {
+      let detail = `Server error ${res.status}`;
+      try { const j = await res.json(); detail = j.detail || detail; } catch {}
+      throw new Error(detail);
+    }
+    const data = await res.json();
+    renderAIResponse(aiWrap, data);
+  } catch (err) {
+    renderAIError(aiWrap, err.message);
+  } finally {
+    loading = false;
+    document.getElementById('send-btn').disabled = false;
+    chat.scrollTop = chat.scrollHeight;
+  }
+}
+
+// ── Render helpers ─────────────────────────────
+function appendUser(text) {
+  const chat = document.getElementById('chat');
+  const wrap = document.createElement('div');
+  wrap.className = 'message-wrap msg-user';
+  wrap.innerHTML = `<div class="bubble">${escapeHtml(text)}</div>`;
+  chat.appendChild(wrap);
+}
+
+function appendAILoading() {
+  const chat = document.getElementById('chat');
+  const wrap = document.createElement('div');
+  wrap.className = 'message-wrap msg-ai';
+  wrap.innerHTML = `
+    <div class="ai-header">
+      <div class="ai-avatar">🤖</div>
+      <span class="ai-label">Acmera Assistant</span>
+    </div>
+    <div class="ai-card">
+      <div class="typing-dots"><span></span><span></span><span></span></div>
+    </div>`;
+  chat.appendChild(wrap);
+  return wrap;
+}
+
+function renderAIResponse(wrap, data) {
+  const cacheHit = data.cache_hit;
+  const elapsed  = data.elapsed_seconds;
+  const chunks   = data.chunks || [];
+  const modeName = modeLabels[data.mode] || data.mode;
+  const card     = wrap.querySelector('.ai-card');
+
+  // Update cache badge
+  const cacheBadge = document.getElementById('cache-badge');
+  if (cacheHit) {
+    cacheBadge.className = 'badge badge-cached';
+    cacheBadge.textContent = `⚡ Cached (${data.cache_similarity ?? ''})`;
+  }
+
+  // ── Blocked query — show red banner instead of answer ──────────────────
+  if (data.blocked) {
+    const cat = (data.block_category || 'blocked').replace(/_/g, ' ');
+    card.innerHTML = `
+      <div class="blocked-banner">
+        <span class="b-icon">🚫</span>
+        <div>
+          <span class="b-cat">${escapeHtml(cat)}</span>
+          ${escapeHtml(data.answer || 'This query was blocked.')}
+        </div>
+      </div>`;
+    return;
+  }
+
+  // ── Normal answer ───────────────────────────────────────────────────────
+  card.innerHTML = marked.parse(data.answer || '_(no answer)_');
+
+  // ── Hallucination warning ───────────────────────────────────────────────
+  if (data.has_hallucination && data.unsupported_claims && data.unsupported_claims.length > 0) {
+    const claimsHtml = data.unsupported_claims.map(c => `<li>${escapeHtml(c)}</li>`).join('');
+    card.insertAdjacentHTML('beforeend', `
+      <div class="hallucination-warning">
+        <strong>⚠ Possible hallucination detected.</strong> The following claim(s) could not be verified against the retrieved context:
+        <ul style="margin:6px 0 0 16px;">${claimsHtml}</ul>
+      </div>`);
+  }
+
+  // ── Confidence + PII badges in metrics bar ──────────────────────────────
+  let confBadge = '';
+  if (data.confidence) {
+    const confLabel = { high: '✓ High confidence', medium: '~ Medium confidence', low: '⚠ Low confidence' };
+    confBadge = `<span class="conf-badge conf-${data.confidence}">${confLabel[data.confidence] || data.confidence}</span>`;
+  }
+  const piiBadge = data.pii_redacted
+    ? `<span class="pii-notice">🔒 PII anonymized</span>`
+    : '';
+
+  const metricsHtml = `
+    <div class="metrics-bar">
+      <span class="metric-pill"><span class="icon">⏱</span>${elapsed}s</span>
+      <span class="metric-pill"><span class="icon">🔍</span>${modeName}</span>
+      ${cacheHit ? '<span class="metric-pill" style="color:var(--amber)">⚡ Cache hit</span>' : ''}
+      ${confBadge}
+      ${piiBadge}
+      ${data.trace_url ? `<a class="trace-link" href="${data.trace_url}" target="_blank" rel="noopener">🔗 Trace</a>` : ''}
+    </div>`;
+  card.insertAdjacentHTML('afterend', metricsHtml);
+
+  // ── Escalation ticket (LOW confidence) ─────────────────────────────────
+  if (data.ticket) {
+    const t = data.ticket;
+    const priCls = { urgent: 'tbadge-urgent', high: 'tbadge-high', medium: 'tbadge-medium', low: 'tbadge-low' };
+    const ticketEl = document.createElement('div');
+    ticketEl.className = 'ticket-card';
+    ticketEl.innerHTML = `
+      <div class="ticket-header" onclick="this.closest('.ticket-card').classList.toggle('open')">
+        <span style="font-size:18px">🎫</span>
+        <div class="ticket-header-text">
+          <div class="ticket-header-title">Escalation ticket generated</div>
+          <div class="ticket-header-sub">${escapeHtml(t.summary)}</div>
+        </div>
+        <span class="ticket-arrow">▶</span>
+      </div>
+      <div class="ticket-body">
+        <div class="ticket-badges">
+          <span class="ticket-badge tbadge-team">${escapeHtml(t.team)}</span>
+          <span class="ticket-badge ${priCls[t.priority] || 'tbadge-medium'}">${escapeHtml(t.priority)}</span>
+          <span class="ticket-badge" style="background:#f5f3ff;color:#6d28d9">${escapeHtml(t.customer_sentiment)}</span>
+        </div>
+        <div class="ticket-row">
+          <div class="ticket-row-label">Suggested first action</div>
+          <div class="ticket-row-value">${escapeHtml(t.suggested_action)}</div>
+        </div>
+        <div class="ticket-row">
+          <div class="ticket-row-label">What the AI tried</div>
+          <div class="ticket-row-value">${escapeHtml(t.what_was_tried)}</div>
+        </div>
+        <div class="ticket-row">
+          <div class="ticket-row-label">Context summary</div>
+          <div class="ticket-row-value">${escapeHtml(t.context_summary)}</div>
+        </div>
+      </div>`;
+    wrap.appendChild(ticketEl);
+  }
+
+  // ── Chunks + eval metrics ───────────────────────────────────────────────
+  if (chunks.length > 0) {
+    const avgScore = chunks.reduce((s, c) => s + c.score, 0) / chunks.length;
+    const topScore = Math.max(...chunks.map(c => c.score));
+
+    const mc = (label, value) => `
+      <div class="eval-cell">
+        <div class="eval-cell-label">${label}</div>
+        <div class="eval-cell-value live">${value}</div>
+      </div>`;
+
+    const section = document.createElement('div');
+    section.className = 'chunks-section';
+    section.innerHTML = `
+      <button class="chunks-toggle" onclick="toggleChunks(this)">
+        <span class="arrow">▶</span>
+        ${chunks.length} retrieved chunk${chunks.length > 1 ? 's' : ''}
+      </button>
+      <div class="chunks-body" style="display:none">
+        <div class="eval-metrics">
+          ${mc('Avg Score',  avgScore.toFixed(3))}
+          ${mc('Top Score',  topScore.toFixed(3))}
+          ${mc('# Chunks',   chunks.length)}
+        </div>
+        <div class="chunks-grid">${chunks.map(chunkCard).join('')}</div>
+      </div>`;
+    wrap.appendChild(section);
+  }
+}
+
+function renderAIError(wrap, msg) {
+  const card = wrap.querySelector('.ai-card');
+  card.innerHTML = `<span style="color:var(--red)">⚠ Error: ${escapeHtml(msg)}</span>`;
+}
+
+function chunkCard(c) {
+  const score = c.score;
+  const cls   = score > 0.8 ? 'score-green' : score > 0.7 ? 'score-amber' : 'score-red';
+  const label = c.score_type === 'cohere' ? 'CE' : c.score_type === 'rrf' ? 'RRF' : 'cos';
+  return `
+    <div class="chunk-card">
+      <div class="chunk-header" onclick="this.closest('.chunk-card').classList.toggle('open')">
+        <span class="chunk-score ${cls}">${score.toFixed(3)}</span>
+        <div class="chunk-meta">
+          <div class="chunk-name">${escapeHtml(c.doc_name)}</div>
+          <div class="chunk-sub">Chunk ${c.chunk_index} · ${label}</div>
+        </div>
+        <span class="chunk-arrow">▶</span>
+      </div>
+      <div class="chunk-body">${escapeHtml(c.content)}</div>
+    </div>`;
+}
+
+function toggleChunks(btn) {
+  btn.classList.toggle('open');
+  const body = btn.nextElementSibling;
+  body.style.display = body.style.display === 'none' ? 'block' : 'none';
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

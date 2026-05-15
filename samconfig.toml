@@ -1,0 +1,14 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "acmera-kb-dev"
+resolve_s3 = true
+s3_prefix = "acmera-kb-dev"
+region = "ap-south-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Environment=\"dev\" LangfuseHost=\"https://cloud.langfuse.com\""
+image_repositories = []
+
+[default.global.parameters]
+region = "ap-south-1"

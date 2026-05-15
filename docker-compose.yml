@@ -13,5 +13,17 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  app:
+    build: .
+    container_name: project-a-app
+    env_file: .env
+    environment:
+      PG_HOST: pgvector
+      PG_PORT: "5432"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - pgvector
+
 volumes:
   pgdata:

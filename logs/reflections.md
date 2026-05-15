@@ -19,6 +19,19 @@ All three strategies tied on retrieval hit rate (98%), which confirms chunking d
 
 ---
 
+## Week 2 / Session 4 — Pipeline Comparison: Dense vs Hybrid vs Advanced (A3 Core)
+**Date:** 2026-05-15 | **Stage:** Week 2, Session 4 | **Queries:** 64 (q10 excluded)
+
+### Dense → Hybrid → Advanced
+
+Advanced wins on every quality metric once q10 is excluded. The big story is warranty — correctness jumped from 4.29 to 4.71, which is context expansion doing its job on multi-condition policy documents. Warranty queries span multiple conditions across chunk boundaries; the `expand_context` step in the context assembler recovered the adjacent chunks that dense and hybrid retrieval left behind, giving the LLM the complete picture it needed.
+
+Perfect faithfulness (5.00) across all categories means the Cohere rerank + context assembly pipeline is delivering cleaner, tighter context to the LLM with no hallucination-inducing noise. The Cohere cross-encoder promotes the most relevant chunk to position 1 before the assembler deduplicates and compresses, so the LLM receives a focused, non-redundant context window rather than the scattered multi-document mix that pure retrieval produces.
+
+The one persistent failure is q10 — "Is the Acmera app safe to use?" — which exposes a fundamental limitation of keyword-based hybrid search. The token "safe" has zero corpus coverage, and the tokens that do match ("acmera", "app", "use") are too generic to discriminate. Dense alone handles it via embedding-space semantics, but BM25 introduces noise that RRF fusion can't overcome, and Cohere reranking can't rescue a chunk that was never retrieved in the first place. This is a retrieval problem, not a reranking or generation problem.
+
+---
+
 ## Week 2 / Session 3 — RAGAS Evaluation (A2.4)
 **Date:** 2026-05-15 | **Stage:** Week 2, Session 3 | **Mode:** Dense retrieval
 
@@ -67,5 +80,60 @@ The fallback worked exactly as expected. When the primary model fails — whethe
 More importantly, LiteLLM decouples our application code from any specific provider. If OpenAI changes their API, raises prices, or deprecates a model, we change one string — the model name — and nothing else in the codebase needs to touch. The same `litellm.completion()` call works identically across OpenAI, Anthropic, Azure, Gemini, and others. That is a meaningful engineering advantage: we built the pipeline once and can route it anywhere.
 
 One clarification worth noting: the trace ID in the output comes from **LangFuse**, not LiteLLM. LangFuse's `@observe` decorator is generating and tracking that ID. LiteLLM has its own internal logging hooks, but in our pipeline, observability is owned by LangFuse. The two work independently and don't interfere with each other.
+
+---
+
+## Week 2 / Session 4 — GPTCache Integration (A4 Core)
+**Date:** 2026-05-15 | **Stage:** Week 2, Session 4 | **Pairs tested:** 5 | **Backend:** SQLite + FAISS
+
+### Response Time Comparison
+
+| Query (cold → warm) | Cold | Warm | Result |
+|---|:---:|:---:|:---:|
+| What is the return window? → return period? | 3.598s | 0.209s | HIT |
+| Do you accept UPI? → Can I pay using UPI? | 3.834s | 0.417s | HIT |
+| How do I track my order? → How can I track? | 1.873s | 0.530s | MISS |
+| What is the membership fee? → cost of membership? | 1.980s | 0.210s | HIT |
+| How do I cancel my order? → How can I cancel? | 0.300s | 0.203s | HIT |
+| **AVERAGE** | **2.317s** | **0.314s** | **4/5 HIT** |
+
+**Speedup on cached queries: 7.4×**
+
+### GPTCache vs Custom SemanticCache
+
+GPTCache is faster and gives the same hit rate (4/5, 80%) as our custom SemanticCache at threshold 0.80. The key advantage is persistence — GPTCache writes to SQLite and FAISS on disk, so the cache survives process restarts. Our in-memory implementation resets every time the server restarts, making it useless in production. GPTCache also handles concurrent access and large cache sizes without any additional code.
+
+One issue visible in the results: "How do I cancel my order?" returned the tracking answer (0.300s cold — GPTCache's default distance threshold was lenient enough to match it against the previously stored tracking query). This is a false positive — the default `max_distance=0.1` in `SearchDistanceEvaluation` can conflate semantically different queries if their embeddings are close. Tightening the threshold to `max_distance=0.05` would reduce false positives at the cost of a lower hit rate.
+
+---
+
+## Week 2 / Session 4 — Semantic Cache Threshold Analysis (A4 Core)
+**Date:** 2026-05-15 | **Stage:** Week 2, Session 4 | **Model:** text-embedding-3-small | **Pairs tested:** 5 similar × 3 wrong-hit
+
+### Hit/Miss Table — 5 Similar Pairs × Threshold
+
+| # | Cached query | Lookup query | sim | 0.85 | 0.90 | 0.95 |
+|---|---|---|:---:|:---:|:---:|:---:|
+| 1 | What is the return window? | What is the return period? | 0.7014 | MISS | MISS | MISS |
+| 2 | Do you accept UPI? | Can I pay using UPI? | 0.8111 | MISS | MISS | MISS |
+| 3 | How do I track my order? | How can I track my order? | 0.9811 | HIT | HIT | HIT |
+| 4 | What is the membership fee? | What is the cost of membership? | 0.8252 | MISS | MISS | MISS |
+| 5 | How do I cancel my order? | How can I cancel my order? | 0.9711 | HIT | HIT | HIT |
+
+**At 0.80:** 4/5 hit | **At 0.85:** 2/5 hit | **At 0.90:** 2/5 hit | **At 0.95:** 2/5 hit
+
+### Wrong Cache Hit Test @ 0.80
+
+| Cached | Query | sim | Verdict |
+|---|---|:---:|:---:|
+| return window | how do I track my order? | 0.1549 | OK |
+| membership tier | what is the cancellation policy? | 0.2577 | OK |
+| standard 30-day return window | Premium Gold 60-day return window | 0.6933 | OK |
+
+### Threshold Choice: 0.80
+
+**0.80 is the right threshold.** At 0.85 and above, only pairs 3 and 5 hit — the ones where wording is nearly identical. Pairs 1, 2, and 4, where a single content word changes (window → period, accept → pay, fee → cost), all drop below 0.85 and miss. That is too strict for a customer support cache where common rephrasing is the norm. At 0.80, 4 of 5 pairs hit while all three wrong-hit scenarios — different topics and the dangerous tier mismatch (standard vs Premium Gold) — remain safely below threshold at 0.15–0.69.
+
+**One known failure at 0.80:** Pair 1 (0.70) misses because "window" and "period" are not close synonyms in embedding space. The fix is canonicalization — strip stop words before embedding so the model compares only content tokens. "What is the return window?" and "What is the return period?" reduce to "return window" and "return period", and since both embeddings are then normalized before cosine similarity is computed, the score would improve. This is the recommended production improvement: canonical form + normalize + cosine at 0.80.
 
 ---

@@ -1,0 +1,387 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Acmera Knowledge Base — ECS Fargate + RDS pgvector + ALB
+
+# ── Parameters ─────────────────────────────────────────────────────────────
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, prod]
+
+  DBPassword:
+    Type: String
+    NoEcho: true
+
+  OpenAIApiKey:
+    Type: String
+    NoEcho: true
+
+  LangfusePublicKey:
+    Type: String
+    NoEcho: true
+
+  LangfuseSecretKey:
+    Type: String
+    NoEcho: true
+
+  LangfuseHost:
+    Type: String
+    Default: https://cloud.langfuse.com
+
+  CohereApiKey:
+    Type: String
+    NoEcho: true
+    Default: ""
+
+# ── VPC + Networking ────────────────────────────────────────────────────────
+Resources:
+
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags: [{Key: Name, Value: !Sub "acmera-${Environment}"}]
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  # Public subnets (ALB + ECS tasks — Fargate with public IP avoids NAT cost in dev)
+  PublicSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: ap-south-1a
+      MapPublicIpOnLaunch: true
+      Tags: [{Key: Name, Value: acmera-public-a}]
+
+  PublicSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: ap-south-1b
+      MapPublicIpOnLaunch: true
+      Tags: [{Key: Name, Value: acmera-public-b}]
+
+  # Private subnets (RDS only)
+  PrivateSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.11.0/24
+      AvailabilityZone: ap-south-1a
+      Tags: [{Key: Name, Value: acmera-private-a}]
+
+  PrivateSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.12.0/24
+      AvailabilityZone: ap-south-1b
+      Tags: [{Key: Name, Value: acmera-private-b}]
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetARouteAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetA
+      RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnetBRouteAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetB
+      RouteTableId: !Ref PublicRouteTable
+
+# ── Security Groups ─────────────────────────────────────────────────────────
+
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ALB - allow HTTP from anywhere
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  ECSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ECS tasks - allow traffic from ALB only
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          SourceSecurityGroupId: !Ref ALBSecurityGroup
+
+  RDSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: RDS - allow Postgres from ECS tasks only
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref ECSSecurityGroup
+
+# ── Secrets Manager ─────────────────────────────────────────────────────────
+
+  DBSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub "acmera/${Environment}/db"
+      SecretString: !Sub |
+        {"username":"workshop","password":"${DBPassword}","dbname":"acmera_kb"}
+
+  AppSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub "acmera/${Environment}/app"
+      SecretString: !Sub |
+        {"openai_api_key":"${OpenAIApiKey}","langfuse_public_key":"${LangfusePublicKey}","langfuse_secret_key":"${LangfuseSecretKey}","cohere_api_key":"${CohereApiKey}"}
+
+# ── RDS (PostgreSQL + pgvector) ─────────────────────────────────────────────
+
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Acmera RDS subnet group
+      SubnetIds:
+        - !Ref PrivateSubnetA
+        - !Ref PrivateSubnetB
+
+  DBInstance:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Snapshot
+    Properties:
+      DBInstanceIdentifier: !Sub "acmera-${Environment}"
+      DBInstanceClass: db.t3.micro
+      Engine: postgres
+      EngineVersion: "16.6"
+      MasterUsername: workshop
+      MasterUserPassword: !Ref DBPassword
+      DBName: acmera_kb
+      AllocatedStorage: "20"
+      StorageType: gp2
+      VPCSecurityGroups: [!Ref RDSSecurityGroup]
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      MultiAZ: false
+      PubliclyAccessible: true
+      BackupRetentionPeriod: 1
+
+# ── IAM ─────────────────────────────────────────────────────────────────────
+
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: {Service: ecs-tasks.amazonaws.com}
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      Policies:
+        - PolicyName: SecretsAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource:
+                  - !Ref DBSecret
+                  - !Ref AppSecret
+
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: {Service: ecs-tasks.amazonaws.com}
+            Action: sts:AssumeRole
+
+# ── CloudWatch Logs ─────────────────────────────────────────────────────────
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/ecs/acmera-${Environment}"
+      RetentionInDays: 7
+
+# ── ECS ─────────────────────────────────────────────────────────────────────
+
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub "acmera-${Environment}"
+
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub "acmera-${Environment}"
+      Cpu: "512"
+      Memory: "1024"
+      NetworkMode: awsvpc
+      RequiresCompatibilities: [FARGATE]
+      ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+      TaskRoleArn: !GetAtt TaskRole.Arn
+      ContainerDefinitions:
+        - Name: acmera-kb
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/acmera-kb-dev:latest"
+          PortMappings:
+            - ContainerPort: 8080
+          Environment:
+            - Name: PG_HOST
+              Value: !GetAtt DBInstance.Endpoint.Address
+            - Name: PG_PORT
+              Value: "5432"
+            - Name: PG_USER
+              Value: workshop
+            - Name: PG_DATABASE
+              Value: acmera_kb
+            - Name: LANGFUSE_HOST
+              Value: !Ref LangfuseHost
+          Secrets:
+            - Name: PG_PASSWORD
+              ValueFrom: !Sub "${DBSecret}:password::"
+            - Name: OPENAI_API_KEY
+              ValueFrom: !Sub "${AppSecret}:openai_api_key::"
+            - Name: LANGFUSE_PUBLIC_KEY
+              ValueFrom: !Sub "${AppSecret}:langfuse_public_key::"
+            - Name: LANGFUSE_SECRET_KEY
+              ValueFrom: !Sub "${AppSecret}:langfuse_secret_key::"
+            - Name: COHERE_API_KEY
+              ValueFrom: !Sub "${AppSecret}:cohere_api_key::"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+
+  ECSService:
+    Type: AWS::ECS::Service
+    DependsOn: ALBListener
+    Properties:
+      ServiceName: !Sub "acmera-${Environment}"
+      Cluster: !Ref ECSCluster
+      TaskDefinition: !Ref TaskDefinition
+      DesiredCount: 1
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          Subnets:
+            - !Ref PublicSubnetA
+            - !Ref PublicSubnetB
+          SecurityGroups: [!Ref ECSSecurityGroup]
+          AssignPublicIp: ENABLED
+      LoadBalancers:
+        - ContainerName: acmera-kb
+          ContainerPort: 8080
+          TargetGroupArn: !Ref ALBTargetGroup
+
+# ── Auto Scaling ─────────────────────────────────────────────────────────────
+
+  AutoScalingTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    DependsOn: ECSService
+    Properties:
+      MinCapacity: 1
+      MaxCapacity: 3
+      ResourceId: !Sub "service/${ECSCluster}/${ECSService.Name}"
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+      RoleARN: !Sub "arn:aws:iam::${AWS::AccountId}:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
+
+  AutoScalingPolicy:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: !Sub "acmera-${Environment}-cpu60"
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId: !Ref AutoScalingTarget
+      TargetTrackingScalingPolicyConfiguration:
+        TargetValue: 60.0
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        ScaleOutCooldown: 60
+        ScaleInCooldown: 300
+
+# ── ALB ─────────────────────────────────────────────────────────────────────
+
+  ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub "acmera-${Environment}"
+      Scheme: internet-facing
+      Type: application
+      Subnets:
+        - !Ref PublicSubnetA
+        - !Ref PublicSubnetB
+      SecurityGroups: [!Ref ALBSecurityGroup]
+
+  ALBTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "acmera-${Environment}"
+      Port: 8080
+      Protocol: HTTP
+      TargetType: ip
+      VpcId: !Ref VPC
+      HealthCheckPath: /health
+      HealthCheckIntervalSeconds: 30
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref ALB
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref ALBTargetGroup
+
+# ── Outputs ─────────────────────────────────────────────────────────────────
+
+Outputs:
+  APIEndpoint:
+    Description: ALB DNS — use this to curl /health and /query
+    Value: !Sub "http://${ALB.DNSName}"
+
+  DBEndpoint:
+    Description: RDS endpoint — needed for ingest and pgvector setup
+    Value: !GetAtt DBInstance.Endpoint.Address
+
+  ECRRepository:
+    Description: ECR image URI used by the task definition
+    Value: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/acmera-kb-dev:latest"

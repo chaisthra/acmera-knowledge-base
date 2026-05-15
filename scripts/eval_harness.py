@@ -42,6 +42,45 @@ SCRIPT_DIR = os.path.dirname(__file__)
 
 
 # =========================================================================
+# REMOTE API CALL
+# =========================================================================
+
+def ask_remote(query, api_url, mode="advanced"):
+    import requests
+    response = requests.post(
+        f"{api_url}/api/ask",
+        json={"query": query, "mode": mode, "use_cache": False},
+        timeout=None,
+    )
+    response.raise_for_status()
+
+    data = response.json()
+
+    retrieved_chunks = [
+        {
+            "doc_name":    c["doc_name"],
+            "chunk_index": c["chunk_index"],
+            "content":     c["content"],
+            "similarity":  c["score"],
+        }
+        for c in data.get("chunks", [])
+    ]
+
+    context = "\n\n---\n\n".join(
+        f"[Source: {c['doc_name']}, Chunk {c['chunk_index']}]\n{c['content']}"
+        for c in retrieved_chunks
+    )
+
+    return {
+        "answer":            data["answer"],
+        "retrieved_chunks":  retrieved_chunks,
+        "context":           context,
+        "trace_id":          data.get("trace_id"),
+        "elapsed_seconds":   data.get("elapsed_seconds"),
+    }
+
+
+# =========================================================================
 # GOLDEN DATASET
 # =========================================================================
 
@@ -130,7 +169,13 @@ Respond with JSON only, no markdown fences:
     )
     raw = response.choices[0].message.content.strip()
     raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-    return json.loads(raw)
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        import re
+        score = int(re.search(r'"score"\s*:\s*(\d)', raw).group(1))
+        reason = re.search(r'"reason"\s*:\s*"([^"]*)"', raw)
+        return {"score": score, "reason": reason.group(1) if reason else ""}
 
 
 def judge_correctness(query, answer, expected_answer):
@@ -167,24 +212,31 @@ Respond with JSON only, no markdown fences:
     )
     raw = response.choices[0].message.content.strip()
     raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-    return json.loads(raw)
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        import re
+        score = int(re.search(r'"score"\s*:\s*(\d)', raw).group(1))
+        reason = re.search(r'"reason"\s*:\s*"([^"]*)"', raw)
+        return {"score": score, "reason": reason.group(1) if reason else ""}
 
 
 # =========================================================================
 # SESSION 1: EVAL RUNNER
 # =========================================================================
 
-def run_eval(include_hard=False, attach_scores=True, limit=None, mode="dense", save_as=None):
+def run_eval(include_hard=False, attach_scores=True, limit=None, mode="dense", save_as=None, skip=None, remote=False, api_url=None):
     """
     Run the full evaluation:
     1. Load golden dataset (+ hard queries if --include-hard)
-    2. Run each query through the RAG pipeline via ask()
+    2. Run each query through the RAG pipeline via ask() or ask_remote()
     3. Score retrieval (hit rate, MRR)
     4. Score generation (faithfulness, correctness)
     5. Print scorecard
     6. Save results to eval_results.json
     """
-    from rag import ask
+    if not remote:
+        from rag import ask
 
     dataset = load_golden_dataset()
     if not dataset:
@@ -193,16 +245,23 @@ def run_eval(include_hard=False, attach_scores=True, limit=None, mode="dense", s
     if not include_hard:
         dataset = [q for q in dataset if q.get("difficulty") != "hard"]
 
+    if skip:
+        skip_ids = {s.strip() for s in skip.split(",")}
+        dataset = [q for q in dataset if q["id"] not in skip_ids]
+
     if limit:
         dataset = dataset[:limit]
 
-    print(f"\nRunning eval on {len(dataset)} queries...\n")
+    print(f"\nRunning eval on {len(dataset)} queries... [{'remote: ' + api_url if remote else 'local'}]\n")
 
     results = []
     for q in dataset:
         print(f"  [{q['id']}] {q['query'][:60]}...")
 
-        rag_result = ask(q["query"], mode=mode)
+        if remote:
+            rag_result = ask_remote(q["query"], api_url=api_url, mode=mode)
+        else:
+            rag_result = ask(q["query"], mode=mode)
 
         hit = check_retrieval_hit(rag_result["retrieved_chunks"], q["expected_source"])
         mrr = calculate_mrr(rag_result["retrieved_chunks"], q["expected_source"])
@@ -408,14 +467,25 @@ if __name__ == "__main__":
                         help="Skip attaching scores to LangFuse (used in CI)")
     parser.add_argument("--limit", type=int, default=None,
                         help="Cap number of queries evaluated (e.g. --limit 50)")
-    parser.add_argument("--mode", choices=["dense", "hybrid"], default="dense",
-                        help="Retrieval mode: dense (default) or hybrid (BM25 + RRF)")
+    parser.add_argument("--mode", choices=["dense", "hybrid", "advanced"], default="dense",
+                        help="Retrieval mode: dense (default), hybrid (BM25+RRF), or advanced (hybrid+cohere+assembly)")
     parser.add_argument("--save-as", type=str, default=None,
                         help="Also save results to this filename in scripts/ (e.g. eval_dense.json)")
+    parser.add_argument("--skip", type=str, default=None,
+                        help="Comma-separated query IDs to exclude (e.g. --skip q10,q15)")
+    parser.add_argument("--remote", action="store_true",
+                        help="Call deployed HTTP API instead of importing locally")
+    parser.add_argument("--api-url", type=str, default=None,
+                        help="Base URL of deployed API (e.g. http://<alb-dns>)")
     args = parser.parse_args()
 
+    if args.remote and not args.api_url:
+        print("Error: --api-url is required when using --remote")
+        sys.exit(1)
+
     results = run_eval(include_hard=args.include_hard, attach_scores=not args.no_langfuse,
-                       limit=args.limit, mode=args.mode, save_as=args.save_as)
+                       limit=args.limit, mode=args.mode, save_as=args.save_as, skip=args.skip,
+                       remote=args.remote, api_url=args.api_url)
 
     if not results:
         sys.exit(1)

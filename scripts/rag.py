@@ -13,6 +13,7 @@ import json
 import time
 import argparse
 import litellm
+from enum import Enum
 from openai import OpenAI
 from langfuse import Langfuse
 from langfuse.decorators import observe, langfuse_context
@@ -26,10 +27,24 @@ load_dotenv()
 client = OpenAI()
 langfuse = Langfuse()
 
+class Confidence(str, Enum):
+    HIGH   = "high"    # every claim explicitly in context
+    MEDIUM = "medium"  # most claims in context, some inference
+    LOW    = "low"     # context only tangentially relates
+
+HANDOFF_MESSAGE = (
+    "I want to give you accurate information, but I don't have "
+    "enough context to answer this confidently. Please contact "
+    "our support team at support@acmera.com for accurate help."
+)
+
 TOP_K = 5
 BM25_CANDIDATES = TOP_K * 3   # wider net before RRF fusion
 GENERATION_MODEL = "gpt-4o-mini"
 FALLBACK_MODELS  = ["gpt-3.5-turbo"]
+
+from semantic_cache import SemanticCache
+_cache = SemanticCache(threshold=0.92)
 
 SYSTEM_PROMPT = """You are a helpful customer support assistant for Acmera, an Indian e-commerce company.
 Answer the customer's question based on the provided context from our documentation.
@@ -59,10 +74,7 @@ SYNONYMS = {
     "cheap":      {"discount", "offer", "sale", "promo"},
     "broken":     {"damaged", "defective", "faulty", "repair"},
     "fix":        {"repair", "troubleshoot", "resolve"},
-    # account / security queries use "safe" but docs use "security"
-    "safe":       {"security", "secure", "authentication", "protected"},
-    "secure":     {"safe", "security", "authentication"},
-    "protect":    {"secure", "safety", "security"},
+    
 }
 
 
@@ -262,10 +274,22 @@ def assemble_context(retrieved_chunks):
     return context
 
 
+CONFIDENCE_SUFFIX = """
+
+After writing your answer, append a confidence assessment on a new line in this exact format:
+CONFIDENCE: <high|medium|low>
+REASONING: <one sentence explaining why>
+
+Use:
+- high: every claim is explicitly stated in the context
+- medium: most claims are in the context, minor inference required
+- low: context is tangential or insufficient to answer confidently"""
+
+
 @observe(name="generation")
 def generate(query, context):
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT.format(context=context)},
+        {"role": "system", "content": SYSTEM_PROMPT.format(context=context) + CONFIDENCE_SUFFIX},
         {"role": "user", "content": query},
     ]
     response = litellm.completion(
@@ -275,18 +299,34 @@ def generate(query, context):
         temperature=0.1,
         max_tokens=1000,
     )
-    answer = response.choices[0].message.content
+    raw = response.choices[0].message.content
     model_used = response.model or GENERATION_MODEL
+
+    # Parse confidence from the appended lines
+    confidence = Confidence.MEDIUM
+    reasoning = ""
+    answer = raw
+    if "\nCONFIDENCE:" in raw:
+        parts = raw.split("\nCONFIDENCE:")
+        answer = parts[0].strip()
+        rest = parts[1].strip()
+        conf_line = rest.split("\n")[0].strip().lower()
+        if conf_line in ("high", "medium", "low"):
+            confidence = Confidence(conf_line)
+        if "\nREASONING:" in rest:
+            reasoning = rest.split("\nREASONING:")[1].strip().split("\n")[0]
+
     langfuse_context.update_current_observation(
         input=messages, output=answer,
         metadata={"model": model_used,
                   "prompt_tokens": response.usage.prompt_tokens,
-                  "completion_tokens": response.usage.completion_tokens},
+                  "completion_tokens": response.usage.completion_tokens,
+                  "confidence": confidence.value},
         usage={"input": response.usage.prompt_tokens,
                "output": response.usage.completion_tokens,
                "total": response.usage.total_tokens, "unit": "TOKENS"},
     )
-    return answer
+    return answer, confidence, reasoning
 
 
 # =========================================================================
@@ -294,25 +334,113 @@ def generate(query, context):
 # =========================================================================
 
 @observe(name="rag_pipeline")
-def ask(query, mode="dense"):
+def ask(query, mode="dense", use_cache=True):
+    from input_guardrail import check_input
+
     start_time = time.time()
+
+    # ── Input guardrail ──────────────────────────────────────────────────
+    guard = check_input(query)
+    if not guard["safe"]:
+        return {
+            "query": query, "answer": guard["refusal"],
+            "retrieved_chunks": [], "context": "",
+            "trace_id": None, "elapsed_seconds": 0,
+            "blocked": True, "block_category": guard["category"],
+            "pii_redacted": False,
+        }
+
+    # ── Anonymize before any LLM call ────────────────────────────────────
+    from pii_anonymizer import PiiAnonymizer, redaction_audit_log
+    import hashlib
+    anonymizer = PiiAnonymizer()
+    clean_query = anonymizer.anonymize(query)
+    pii_redacted = clean_query != query
+
+    if pii_redacted:
+        query_hash = hashlib.sha256(query.encode()).hexdigest()
+        redaction_audit_log(
+            trace_id=langfuse_context.get_current_trace_id() or "unknown",
+            pii_types=anonymizer.detected_types,
+            query_hash=query_hash,
+            intent=mode,
+        )
+
+    # Log anonymized query to Langfuse — never the original if it has PII
     langfuse_context.update_current_trace(
-        input=query, metadata={"pipeline": f"rag_{mode}", "top_k": TOP_K}
+        input=clean_query,
+        metadata={"pipeline": f"rag_{mode}", "top_k": TOP_K,
+                  "use_cache": use_cache, "pii_redacted": pii_redacted}
     )
 
-    query_embedding = embed_query(query)
+    query_embedding = embed_query(clean_query)
 
-    if mode == "hybrid":
-        retrieved_chunks = hybrid_retrieve(query, query_embedding)
+    if use_cache:
+        cache_hit = _cache.get(query_embedding)
+        if cache_hit:
+            cached_answer = anonymizer.restore(cache_hit["answer"])
+            langfuse_context.update_current_trace(
+                output=cached_answer,
+                metadata={"cache_hit": True, "cache_similarity": cache_hit["cache_similarity"],
+                          "matched_query": cache_hit["query"]}
+            )
+            langfuse.flush()
+            return {
+                "query": query, "answer": cached_answer,
+                "retrieved_chunks": [], "context": "",
+                "trace_id": langfuse_context.get_current_trace_id(),
+                "elapsed_seconds": round(time.time() - start_time, 2),
+                "cache_hit": True, "cache_similarity": cache_hit["cache_similarity"],
+                "pii_redacted": pii_redacted,
+            }
+
+    if mode == "advanced":
+        retrieved_chunks = hybrid_retrieve(clean_query, query_embedding)
+
+        from reranker import CohereReranker
+        reranker = CohereReranker()
+        retrieved_chunks = reranker.rerank(query, retrieved_chunks, top_k=TOP_K)
+
+        from context_assembler import assemble_advanced
+        all_chunks = _load_all_chunks()
+        context = assemble_advanced(retrieved_chunks, query, all_chunks)
+
+    elif mode == "hybrid":
+        retrieved_chunks = hybrid_retrieve(clean_query, query_embedding)
+        context = assemble_context(retrieved_chunks)
+
     else:
         retrieved_chunks = retrieve(query_embedding)
+        context = assemble_context(retrieved_chunks)
 
-    context = assemble_context(retrieved_chunks)
-    answer = generate(query, context)
+    answer, confidence, conf_reasoning = generate(clean_query, context)
+
+    ticket = None
+    if confidence == Confidence.LOW:
+        from support_ticket import generate_ticket
+        try:
+            t = generate_ticket(
+                query=query,
+                ai_response=answer,
+                reason="Low confidence — context insufficient to answer reliably",
+            )
+            ticket = t.model_dump()
+        except Exception:
+            pass
+        answer = HANDOFF_MESSAGE
+
+    # Restore original PII values in the answer before returning
+    answer = anonymizer.restore(answer)
+
+    if use_cache and confidence != Confidence.LOW:
+        _cache.set(clean_query, query_embedding, answer)
 
     elapsed = round(time.time() - start_time, 2)
     langfuse_context.update_current_trace(
-        output=answer, metadata={"elapsed_seconds": elapsed, "mode": mode}
+        output=answer,
+        metadata={"elapsed_seconds": elapsed, "mode": mode,
+                  "confidence": confidence.value, "conf_reasoning": conf_reasoning,
+                  "pii_redacted": pii_redacted}
     )
     trace_id = langfuse_context.get_current_trace_id()
     langfuse.flush()
@@ -321,6 +449,9 @@ def ask(query, mode="dense"):
         "query": query, "answer": answer,
         "retrieved_chunks": retrieved_chunks, "context": context,
         "trace_id": trace_id, "elapsed_seconds": elapsed,
+        "confidence": confidence.value, "conf_reasoning": conf_reasoning,
+        "pii_redacted": pii_redacted,
+        "ticket": ticket,
     }
 
 
@@ -330,7 +461,7 @@ def ask_hybrid(query):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=["dense", "hybrid"], default="dense")
+    parser.add_argument("--mode", choices=["dense", "hybrid", "advanced"], default="dense")
     parser.add_argument("--query", default="What is the standard return window for products?")
     args = parser.parse_args()
 
