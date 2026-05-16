@@ -1,0 +1,49 @@
+This is ApacheBench, Version 2.3 <$Revision: 1923142 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking acmera-dev-70623252.ap-south-1.elb.amazonaws.com (be patient)
+Completed 100 requests
+Completed 200 requests
+Finished 200 requests
+
+
+Server Software:        uvicorn
+Server Hostname:        acmera-dev-70623252.ap-south-1.elb.amazonaws.com
+Server Port:            80
+
+Document Path:          /api/ask
+Document Length:        3858 bytes
+
+Concurrency Level:      20
+Time taken for tests:   112.815 seconds
+Complete requests:      200
+Failed requests:        110
+   (Connect: 0, Receive: 0, Length: 110, Exceptions: 0)
+Total transferred:      801169 bytes
+Total body sent:        50600
+HTML transferred:       771969 bytes
+Requests per second:    1.77 [#/sec] (mean)
+Time per request:       11281.479 [ms] (mean)
+Time per request:       564.074 [ms] (mean, across all concurrent requests)
+Transfer rate:          6.94 [Kbytes/sec] received
+                        0.44 kb/s sent
+                        7.37 kb/s total
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:       26  212 512.3     27    3031
+Processing:  5452 10046 8236.9   7508   51178
+Waiting:     5451 10046 8236.9   7507   51177
+Total:       5508 10259 8207.7   7814   51205
+
+Percentage of the requests served within a certain time (ms)
+  50%   7814
+  66%   8341
+  75%   8756
+  80%   9374
+  90%  19488
+  95%  33997
+  98%  39674
+  99%  41152
+ 100%  51205 (longest request)

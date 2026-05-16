@@ -3,7 +3,7 @@
 ## Q1. RDS Endpoint URL
 
 ```
-acmera-dev.cty6eqsa8i9q.ap-south-1.rds.amazonaws.com
+<redacted>.ap-south-1.rds.amazonaws.com
 ```
 
 Connection command:

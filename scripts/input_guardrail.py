@@ -49,9 +49,12 @@ def is_on_topic(query: str) -> bool:
         messages=[{
             "role": "user",
             "content": (
-                "Is this query about Acmera's own e-commerce customer support "
-                "(orders, returns, products, payments, membership, shipping, warranty, account)? "
-                "Answer NO if the query mentions competitor brands (Flipkart, Amazon, Meesho, Myntra, Snapdeal, etc.). "
+                "You are a strict topic filter for Acmera customer support. "
+                "Answer YES only if the query is DIRECTLY about: orders, returns, refunds, payments, "
+                "products, membership tiers, shipping, warranty, or account management at Acmera. "
+                "Answer NO for: recipes, cooking, food, sports, news, coding, weather, general knowledge, "
+                "competitor policies, or anything not directly about Acmera customer support. "
+                "Answer NO if the query mentions competitor brands (Flipkart, Amazon, Meesho, Myntra, Snapdeal). "
                 f"Answer YES or NO only. Query: {query}"
             ),
         }],
