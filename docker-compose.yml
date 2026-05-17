@@ -6,7 +6,7 @@ services:
     container_name: project-a-pgvector
     environment:
       POSTGRES_USER: workshop
-      POSTGRES_PASSWORD: workshop123
+      POSTGRES_PASSWORD: 
       POSTGRES_DB: acmera_kb
     ports:
       - "5433:5432"
