@@ -158,5 +158,3 @@ project-a/
 ## Corpus
 
 19 markdown documents covering: returns, payments, membership tiers, warranty, shipping, promotions, electronics catalog, sustainability, corporate gifting, and support FAQs.
-```
-
